@@ -1,0 +1,24 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background-color: slateblue;
+}
+
+.Navbar {
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    background-color: #474056;
+    height: 8%;
+    margin: 0px;
+}
+
+.CanvasContainer {
+    background-color: slategrey;
+    height: 92%;
+    width: 100%;
+    margin: 0px;
+}
