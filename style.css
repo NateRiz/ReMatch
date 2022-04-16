@@ -1,0 +1,74 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background-color: black;
+}
+
+.Navbar {
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    background-color: #2c7da0;
+    height: 6%;
+    margin: 0px;
+}
+
+.CanvasContainer {
+    background-color: #012a4a;
+    height: 88%;
+    width: 100%;
+    margin: 0px;
+}
+
+.Bottom {
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  background-color: #2c7da0;
+  height: 6%;
+  margin: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Button {
+  color: white;
+  border-radius: 32px;
+  border: none;
+  margin: 8px;
+  padding: 12px 20px;
+  text-align: center;
+  transition-duration: .2s;
+  font-size: 16px;
+}
+
+.Button:hover {
+  cursor: pointer;
+}
+
+.Button:active {
+  transform: translateY(4px);
+}
+
+.ButtonPlay {
+  background-color: #26aa36;
+}
+
+.ButtonPlay:hover {
+  background-color: #239B31;
+}
+
+.ButtonRestart {
+  background-color: #B72A2A;
+  display: none;
+}
+
+.ButtonRestart:hover {
+  background-color: #aa2626;
+}
+
