@@ -1,5 +1,8 @@
-class Game extends Drawable{
-    constructor(context){
+import Drawable from './Drawable.js'
+import RuleGenerator from './RuleGenerator.js'
+
+export default class Game extends Drawable {
+    constructor(){
         super()
         this.score = 0
         this.dictionary = new Set() // All possible words
@@ -14,7 +17,7 @@ class Game extends Drawable{
         this.lastWordIsError = false
         this.timer = null
         this.ResetTimer()
-        fetch('./dict.txt')
+        fetch('./assets/dict.txt')
         .then(response => response.text())
         .then((data) => {
             var data = data.split("\n").map(e=>e.trim());

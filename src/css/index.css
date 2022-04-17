@@ -1,3 +1,8 @@
+* {
+  font-size: 20px;
+  font-family: "Comic Sans MS"
+}
+
 body, html {
   margin: 0;
   padding: 0;
@@ -32,8 +37,6 @@ body, html {
   height: 6%;
   margin: 0px;
   display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .Button {
@@ -41,10 +44,9 @@ body, html {
   border-radius: 32px;
   border: none;
   margin: 8px;
-  padding: 12px 20px;
+  padding: 10px 20px;
   text-align: center;
   transition-duration: .2s;
-  font-size: 16px;
 }
 
 .Button:hover {
@@ -53,6 +55,14 @@ body, html {
 
 .Button:active {
   transform: translateY(4px);
+}
+
+.ButtonContainer {
+  width: 50%;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: right;
+  display: flex;
 }
 
 .ButtonPlay {
@@ -72,3 +82,17 @@ body, html {
   background-color: #aa2626;
 }
 
+
+.IdInput {
+  color: black;
+  margin-left: 16px;
+  border-radius: 16px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #012a4a;
+  text-align: center;
+}
+
+.IdInputPrompt {
+  color: white
+}

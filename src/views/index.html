@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <div class="Navbar"></div>
+    <div class="CanvasContainer">
+        <canvas></canvas>
+    </div>
+        <div class="Bottom">
+            <div class="ButtonContainer">
+            <button id="PlayButton" class="Button ButtonPlay">Play</button>
+            <button id="RestartButton" class="Button ButtonRestart">Restart</button>
+        </div>
+        <div class="ButtonContainer">
+            <label for="GameIdInput" class="IdInputPrompt">Game ID</label>
+            <input id="GameIdInput" class="IdInput" type="text" size=8/>
+            <button id="JoinButton" class="Button ButtonPlay">Join</button>
+            <button id="temphost" class="Button ButtonPlay">host</button>
+        </div>
+    </div>
+</body>
+<script type="module" src="scripts/util/ArrayExtensions.js"></script>
+<script type="module" src="scripts/RuleGenerator.js"></script>
+<script type="module" src="scripts/Drawable.js"></script>
+<script type="module" src="scripts/Canvas.js"></script>
+<script type="module" src="scripts/Game.js"></script>
+<script type="module" src="scripts/Main.js"></script>

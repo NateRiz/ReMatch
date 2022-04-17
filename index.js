@@ -1,21 +1,14 @@
-function play(){
-    document.querySelector("#PlayButton").style.display = "none";
-    document.querySelector("#RestartButton").style.display = "initial";
+const express = require('express')
+const path = require('path')
+const app = express();
+const port = 5500;
 
-    var canvas = new Canvas()    
-    var game = new Game()
-    canvas.SubscribeDrawableObject(game)
-    
-    window.addEventListener('keydown', (event) => { 
-        game.GuessLetter(event)
-        canvas.Redraw()
-    })
-    window.addEventListener('resize', () => {canvas.OnResizeWindow()}, true);
-}
+app.use(express.static(path.join(__dirname, "src")));
 
-function main(){
-    document.querySelector("#PlayButton").onclick = () => { play() }
-    document.querySelector("#RestartButton").onclick = () => { play() }
-}
+app.get('/', (req, res) => {
+  res.sendFile('./src/views/index.html', { root: __dirname })
+});
 
-main()
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}!`)
+});

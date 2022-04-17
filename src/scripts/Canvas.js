@@ -1,5 +1,5 @@
-class Canvas {
-    constructor(game){
+export default class Canvas {
+    constructor(){
         this.canvas = document.querySelector("canvas")
         this.c = this.canvas.getContext("2d")
         this.drawableObjects = []

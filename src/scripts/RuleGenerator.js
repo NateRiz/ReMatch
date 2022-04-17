@@ -1,8 +1,8 @@
-class RuleGenerator{
+export default class RuleGenerator{
     constructor(){
         this.dictionary = new Set();
         this.wordList = [];
-        fetch('./20kdict_common_words.txt') // Only gen rules based on common words
+        fetch('./assets/20kdict_common_words.txt') // Only gen rules based on common words
         .then(response => response.text())
         .then((data) => {
             var data = data.split("\n").map(e=>e.trim());
@@ -42,12 +42,30 @@ class RuleGenerator{
         var numberOfMatches = 0
         var build = this.GetRandomWord()
         while (numberOfMatches < 50){
+
+            //Don't get to the point where there are <= 2 letters left in a word
             var numAvailableIndices = RuleBuilder.GetLetterIndices(build).length
             if (numAvailableIndices <= 2){
                 build = this.GetRandomWord()
             }
-            var rule = rules.getRandom()
-            rule(build)
+
+            // Iterate through all rules trying to apply one
+            rules.shuffle()
+            var isRuleAltered = false;
+            for(var i = 0; i < rules.length; i++){
+                var rule = rules[i]
+                isRuleAltered = rule(build)
+                if (isRuleAltered){
+                    break
+                }
+            }
+            
+            // If no rules were able to change the word, trash it and get a new one.
+            if (!isRuleAltered){
+                build = this.GetRandomWord()
+                continue
+            }
+
             var newWord = build.join('')
             var regex = this.ConvertToRegex(newWord)
             numberOfMatches = this.GetNumberOfMatches(regex)
@@ -102,12 +120,12 @@ class RuleBuilder{
     // ex: .*can => pecan (or just can)
     // testing: *testing, *esting, test*ng, test*ing, testin*, testing*
     RuleStar(build){
-        this._RuleWildCard(build, "*")
+        return this._RuleWildCard(build, "*")
     }
 
     // star.+ => stare
     RulePlus(build){
-        this._RuleWildCard(build, "+")
+        return this._RuleWildCard(build, "+")
     }
 
     _RuleWildCard(build, wildcard){
@@ -129,17 +147,18 @@ class RuleBuilder{
         var idx = availableIndices.getRandom()
         build[idx] = wildcard
         this._CleanRule(build)
+        return true
     }
 
     // ex: (h|j)orrible => horrible
     RuleOr(build){
         if(this._GetNumberOfOr(build) > 0){
-            return
+            return false
         }
         
         var availableIndices = RuleBuilder.GetLetterIndices(build)
         var idx = availableIndices.getRandom()
-        var chr = build[availableIndices[idx]]
+        var chr = build[idx]
         var letters = []
         if (this._IsVowel(chr)){
             letters = Array.from("aeiou")
@@ -154,12 +173,13 @@ class RuleBuilder{
         }
         var rule = `(${chr}|${randChar})`
         build[idx] = rule
+        return true
 
     }
 
     // ex: [a-k]ello => (hello) 
     RuleAlphabetSubset(build){
-
+        return false
     }
 
 
