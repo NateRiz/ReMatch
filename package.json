@@ -4,10 +4,10 @@
   "description": "Regex matching game",
   "main": "index.js",
   "scripts": {
-    "start"        : "npm-run-all --parallel watch:server watch:build",
-    "watch:build"  : "webpack --watch",
-    "watch:server" : "nodemon ./index.js",
-    "build"        : "webpack"
+    "start": "npm-run-all --parallel watch:server watch:build",
+    "watch:build": "webpack --watch",
+    "watch:server": "nodemon ./index.js",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/NateRiz/ReMatch#readme",
   "dependencies": {
+    "@types/peerjs": "^1.1.0",
     "express": "^4.17.3"
   },
   "devDependencies": {

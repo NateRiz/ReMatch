@@ -1,25 +1,37 @@
 <!DOCTYPE html>
+
 <head>
     <link rel="stylesheet" href="src/css/index.css">
 </head>
+
 <body>
     <div class="Navbar"></div>
     <div class="CanvasContainer">
         <canvas></canvas>
     </div>
-        <div class="Bottom">
+    <div class="BottomContainer">
+        <div id="HomepageUI" class="Bottom BottomRight Hidden">
             <div class="ButtonContainer">
-            <button id="PlayButton" class="Button ButtonPlay">Play</button>
-            <button id="RestartButton" class="Button ButtonRestart">Restart</button>
+                <button id="PlayButton" class="Button ButtonPlay">Play</button>
+            </div>
+            <div class="ButtonContainer">
+                <label for="GameIdInput" class="IdInputPrompt">Game ID</label>
+                <input id="GameIdInput" class="IdInput" type="text" size=8 />
+                <button id="JoinButton" class="Button ButtonPlay">Join</button>
+                <button id="temphost" class="Button ButtonPlay">host</button>
+            </div>
         </div>
-        <div class="ButtonContainer">
-            <label for="GameIdInput" class="IdInputPrompt">Game ID</label>
-            <input id="GameIdInput" class="IdInput" type="text" size=8/>
-            <button id="JoinButton" class="Button ButtonPlay">Join</button>
-            <button id="temphost" class="Button ButtonPlay">host</button>
+        <div id="SinglePlayerUI" class="Bottom Hidden">
+            <div class="ButtonContainer">
+                <button id="RestartButton" class="Button ButtonRed">Restart</button>
+            </div>
+        </div>
+        <div id="MultiPlayerUI" class="Bottom Hidden">
+            <div class="ButtonContainer">
+                <button id="LeaveButton" class="Button ButtonRed">Leave</button>
+            </div>
         </div>
     </div>
 </body>
 
-<script>var exports = {};</script>
-<script type="module" src="dist/bundle.js"></script>
+<script src="dist/bundle.js"></script>
