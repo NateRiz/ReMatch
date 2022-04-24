@@ -1,25 +1,28 @@
 export default class RuleGenerator{
+    dictionary: Set<string>;
+    wordList: Array<string>;
+
     constructor(){
         this.dictionary = new Set();
         this.wordList = [];
-        fetch('./assets/20kdict_common_words.txt') // Only gen rules based on common words
+        fetch('./src/assets/20kdict_common_words.txt') // Only gen rules based on common words
         .then(response => response.text())
         .then((data) => {
-            var data = data.split("\n").map(e=>e.trim());
-            data.forEach(element => {
+            var words = data.split("\n").map(e=>e.trim());
+            words.forEach(element => {
                 this.dictionary.add(element)
             });
         })
     }
 
-    _GetRule(difficulty){
+    _GetRule(difficulty: number){
         var startTime = performance.now()
         var word = this.GetRule(difficulty)
         console.log(`Time: ${performance.now() - startTime}`)
         return word
     }
 
-    GetRule(difficulty){
+    GetRule(difficulty: number){
         this.CacheWordsIfEmpty()
 
         var ruleBuilder = new RuleBuilder()
@@ -27,20 +30,21 @@ export default class RuleGenerator{
             //this.RuleAlphaBetSubset
         ]
         if (difficulty >= 2){
-            rules.push((_build) => {return ruleBuilder.RuleOr(_build)})
+            rules.push((_build: Array<string>) => {return ruleBuilder.RuleOr(_build)})
         }
 
         if (difficulty >= 1){
-            rules.push((_build) => {return ruleBuilder.RulePlus(_build)})
+            rules.push((_build: Array<string>) => {return ruleBuilder.RulePlus(_build)})
         }
 
         if (difficulty >= 0){
-            rules.push((_build) => {return ruleBuilder.RuleStar(_build)})
+            rules.push((_build: Array<string>) => {return ruleBuilder.RuleStar(_build)})
         }
 
         
         var numberOfMatches = 0
         var build = this.GetRandomWord()
+        var newWord = ''
         while (numberOfMatches < 50){
 
             //Don't get to the point where there are <= 2 letters left in a word
@@ -66,7 +70,7 @@ export default class RuleGenerator{
                 continue
             }
 
-            var newWord = build.join('')
+            newWord = build.join('')
             var regex = this.ConvertToRegex(newWord)
             numberOfMatches = this.GetNumberOfMatches(regex)
         }
@@ -85,7 +89,7 @@ export default class RuleGenerator{
         return Array.from(word)
     }
 
-    IsValidWord(word){
+    IsValidWord(word: string){
         const minWordLength = 5;
         if (word.length < minWordLength){
             return false;
@@ -94,11 +98,11 @@ export default class RuleGenerator{
         return true;
     }
 
-    GetNumberOfMatches(word){
+    GetNumberOfMatches(word: string){
         var count = 0
         var regExp = new RegExp(word)
         this.dictionary.forEach( word => {
-            count+=regExp.test(word)
+            count += +regExp.test(word)
         });
 
         return count
@@ -108,7 +112,7 @@ export default class RuleGenerator{
         this.wordList = Array.from(this.dictionary);
     }
 
-    ConvertToRegex(word){
+    ConvertToRegex(word: string){
         return word.replace("*", ".*").replace("+",".+")
     }
 }
@@ -119,16 +123,16 @@ class RuleBuilder{
 
     // ex: .*can => pecan (or just can)
     // testing: *testing, *esting, test*ng, test*ing, testin*, testing*
-    RuleStar(build){
+    RuleStar(build: Array<string>){
         return this._RuleWildCard(build, "*")
     }
 
     // star.+ => stare
-    RulePlus(build){
+    RulePlus(build: Array<string>){
         return this._RuleWildCard(build, "+")
     }
 
-    _RuleWildCard(build, wildcard){
+    _RuleWildCard(build: Array<string>, wildcard: string){
         var availableIndices = RuleBuilder.GetLetterIndices(build)
         var numWildcards = this._GetNumberOfWildCards(build)
 
@@ -151,7 +155,7 @@ class RuleBuilder{
     }
 
     // ex: (h|j)orrible => horrible
-    RuleOr(build){
+    RuleOr(build: Array<string>){
         if(this._GetNumberOfOr(build) > 0){
             return false
         }
@@ -178,12 +182,12 @@ class RuleBuilder{
     }
 
     // ex: [a-k]ello => (hello) 
-    RuleAlphabetSubset(build){
+    RuleAlphabetSubset(build: Array<string>){
         return false
     }
 
 
-    static GetLetterIndices(build){
+    static GetLetterIndices(build: Array<string>){
         var availableIndices = []
         for(var i = 0; i < build.length; i++){
             if (build[i].length == 1 && 'a' <= build[i] && build[i] <= 'z'){
@@ -194,13 +198,13 @@ class RuleBuilder{
         return availableIndices
     }
 
-    _GetNumberOfWildCards(build){
+    _GetNumberOfWildCards(build: Array<string>){
         return build.count("*") + build.count("+")
     }
 
-    _GetNumberOfOr(build){
+    _GetNumberOfOr(build: Array<string>){
         var c = 0
-        build.forEach((elem)=> {
+        build.forEach((elem: string)=> {
             if (elem.includes("|")){
                 c+=1
             }
@@ -208,7 +212,7 @@ class RuleBuilder{
         return c
     }
 
-    _CleanRule(build){
+    _CleanRule(build: Array<string>){
         var i = 0;
         while (i < build.length - 1){
             if ((build[i]=="*" && build[i+1]=="+") || (build[i]=="+" && build[i+1]=="*")){
@@ -222,11 +226,11 @@ class RuleBuilder{
         }
     }
 
-    _IsWildcard(chr) {
+    _IsWildcard(chr: string) {
         return chr == "*" || chr == "+"
     }
 
-    _IsVowel(c) {
+    _IsVowel(c: string) {
         if(c == undefined){debugger}
         return ['a', 'e', 'i', 'o', 'u'].indexOf(c.toLowerCase()) !== -1
     }

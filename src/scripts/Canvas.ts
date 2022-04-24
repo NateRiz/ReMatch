@@ -1,17 +1,23 @@
+import Drawable from "./Drawable"
+
 export default class Canvas {
+    canvas: HTMLCanvasElement
+    c: CanvasRenderingContext2D
+    drawableObjects: Array<Drawable>
+    
     constructor(){
-        this.canvas = document.querySelector("canvas")
-        this.c = this.canvas.getContext("2d")
+        this.canvas = document.querySelector("canvas")!
+        this.c = this.canvas.getContext("2d")!
         this.drawableObjects = []
         this.OnResizeWindow()        
     }
 
-    SubscribeDrawableObject(obj){
+    SubscribeDrawableObject(obj: Drawable){
         this.drawableObjects.push(obj)
     }
 
     OnResizeWindow(){
-        const parent = document.querySelector(".CanvasContainer")
+        const parent: HTMLDivElement = document.querySelector(".CanvasContainer")!
         this.canvas.width = parent.offsetWidth
         this.canvas.height = parent.offsetHeight
         this.Redraw()

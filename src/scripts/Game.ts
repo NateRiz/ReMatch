@@ -1,7 +1,20 @@
-import Drawable from './Drawable.js'
-import RuleGenerator from './RuleGenerator.js'
+import Drawable from './Drawable'
+import RuleGenerator from './RuleGenerator'
 
 export default class Game extends Drawable {
+    score: number
+    dictionary: Set<string>
+    ruleGenerator: RuleGenerator
+    rule: string
+    ruleRegex: RegExp
+    bonus: string
+    bonusRegex: RegExp
+    guess: string
+    canvas: HTMLCanvasElement
+    c: CanvasRenderingContext2D
+    lastWordIsError: boolean
+    timer: number | null
+
     constructor(){
         super()
         this.score = 0
@@ -12,16 +25,16 @@ export default class Game extends Drawable {
         this.bonus = ""
         this.bonusRegex = new RegExp(this.bonus.replaceAll("*",".*"), "i");
         this.guess = ""
-        this.canvas = document.querySelector("canvas")
-        this.c = this.canvas.getContext("2d")
+        this.canvas = document.querySelector("canvas")!
+        this.c = this.canvas.getContext("2d")!
         this.lastWordIsError = false
         this.timer = null
         this.ResetTimer()
-        fetch('./assets/dict.txt')
+        fetch('./src/assets/dict.txt')
         .then(response => response.text())
         .then((data) => {
-            var data = data.split("\n").map(e=>e.trim());
-            data.forEach(element => {
+            var words = data.split("\n").map(e=>e.trim());
+            words.forEach(element => {
                 this.dictionary.add(element)
             });
             console.log("loaded dict")
@@ -30,11 +43,11 @@ export default class Game extends Drawable {
         this.Draw()
     }
 
-    GuessLetter(event){
+    GuessLetter(event: KeyboardEvent){
         const key = event.key.toLowerCase();
 
         if (key == "backspace"){
-            this.guess = this.guess.slice(0,-1)
+            this.guess = this.guess.slice(0, -1)
             return;
         } else if (key == "enter"){
             this.SubmitGuess()
@@ -44,12 +57,12 @@ export default class Game extends Drawable {
         if (key.length !== 1) {
             return;
         }
-    
+
         const isLetter = (key >= "a" && key <= "z");
         if (!isLetter) {
             return
         }
-        
+
         this.guess += key
     }
 
