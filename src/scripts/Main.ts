@@ -1,12 +1,24 @@
 import Game from './Game';
 import Canvas from './Canvas'
 import Peer from 'peerjs';
+import ConnectionHandler from './ConnectionHandler';
+
 
 function CreateHomepage(){
     (document.querySelector("#HomepageUI") as HTMLDivElement).classList.remove("Hidden");
     (document.querySelector("#PlayButton") as HTMLButtonElement).onclick = () => { Play() }
     (document.querySelector("#RestartButton") as HTMLButtonElement).onclick = () => { Play() }
-    (document.querySelector("#JoinButton") as HTMLButtonElement).onclick = () => { Join() }
+    (document.querySelector("#JoinButton") as HTMLButtonElement).onclick = () => { 
+        var gameId = (document.querySelector("#GameIdInput") as HTMLInputElement)?.value
+        RedirectToGame(gameId)
+     }
+
+    (document.querySelector("#HostButton") as HTMLButtonElement).onclick = () => {
+        (document.querySelector("#MultiPlayerUI") as HTMLDivElement).classList.remove("Hidden");
+        const idSize: number = 5
+        const gameId = makeId(idSize)
+        RedirectToGame(gameId)
+    }
 }
 
 function Play(){
@@ -24,30 +36,17 @@ function Play(){
     window.addEventListener('resize', () => {canvas.OnResizeWindow()}, true);
 }
 
-function JoinLobby(lobbyId: string){
-    (document.querySelector("#MultiPlayerUI") as HTMLDivElement).classList.remove("Hidden");
-    return
-    const peer = new Peer({
-        debug:3,
-        host: "localhost",
-        port: 5500,
-        path: "/peerjs",
-    });
-    peer.connect(lobbyId)
-    peer.on('open', function(id) {
-        console.log('My peer ID is: ' + id);
-      });
-
-    peer.on('connection', function(conn) {
-        conn.send("hey!")
-        conn.on('data', function(data){
-          console.log(data);
-        });
-      });
+function makeId(length: number) {
+    var result = '';
+    var characters = 'QWERTYUIOPLKJHGFDSAZXCVBNM0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
 }
 
-function Join(){
-    var gameId = (document.querySelector("#GameIdInput") as HTMLInputElement)?.value
+function RedirectToGame(gameId: string){
     if(gameId != ""){
         window.location.href = `/${gameId}`
     }
@@ -56,7 +55,8 @@ function Join(){
 function Main(){
     var lobbyId = window.location.pathname.replace("/", "");
     if (lobbyId != ""){
-        JoinLobby(lobbyId)
+        (document.querySelector("#MultiPlayerUI") as HTMLDivElement).classList.remove("Hidden");
+        var connectionHandler = new ConnectionHandler(lobbyId)
     }else{
         CreateHomepage()
     }
