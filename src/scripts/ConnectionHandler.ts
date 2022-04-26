@@ -2,66 +2,92 @@ import Peer from "peerjs"
 
 export default class ConnectionHandler{
     lobbyId: string
-    peer!: Peer
-    server: Peer.DataConnection | undefined
-    clients: Peer.DataConnection[] = []
+    peerClient!: Peer // Everyone has a peerClient, even the host
+    peerHost: Peer | undefined // Only the host has a peerHost
+    server!: Peer.DataConnection // Every client should know the server
+    clients: Peer.DataConnection[] = [] // Only the server has clients
+    isHost:boolean = false;
+    ClientMessageHandler: (msg: string) => void = (_: string) => {}
+    ServerMessageHandler: (conn: Peer.DataConnection, msg: string) => void = (_c:Peer.DataConnection, _s: string) => {}
+    OnCreateHostCallback: ()=>void = ()=>{}
 
-    constructor(lobbyId: string){
+    constructor(lobbyId: string, OnCreateHostCallback = ()=>{}){
         this.lobbyId = lobbyId;
-        this.CreatePeer();
+        this.TryCreatePeerHost();
+        this.CreatePeerClient();
+        this.OnCreateHostCallback = OnCreateHostCallback;
     }
 
-    CreatePeer(){
-        this.peer = new Peer(this.lobbyId, {
-            debug:3,
+    IsHost(): boolean{
+        return this.isHost;
+    }
+
+    SendToServer(message: string){
+        this.server.send(message);
+    }
+
+    SendToAllClients(message: string){
+        this.clients.forEach((client)=>{
+            client.send(message);
+        })
+    }
+
+    RegisterClientCallback(callback: (_: string) => void){
+        this.ClientMessageHandler = callback;
+    }
+    
+    RegisterServerCallback(callback: (_c:Peer.DataConnection, _s: string) => void){
+        this.ServerMessageHandler = callback;
+    }
+
+    private TryCreatePeerHost(){
+        // Peer with id == lobbyid is the host
+        this.peerHost = new Peer(this.lobbyId, {
+            // debug:3,
             host: "localhost",
             port: 5500,
             path: "/peerjs",
         });
 
-        // Peer with id == lobbyid is the host
-        this.peer.on("open", (peerid: string) => {
-            this.CreateGameAsHost()
+        this.peerHost.on("open", (peerid: string) => {
+            console.log("I am the host")
+            this.isHost = true
+            this.peerHost!.on('connection', (conn) => {
+                this.clients.push(conn)
+                conn.on('data', (data) => {
+                  this.ServerMessageHandler(conn, data)
+                });
+            });
+            this.OnCreateHostCallback()
         })
 
-        this.peer.on("error", (err) => {
+        this.peerHost.on("error", (err) => {
             if (err.type == 'unavailable-id'){
-                this.CreateClientPeer()
+                this.peerHost = undefined
             }else{
                 console.log(err.type, err)
             }
         })
-
-        this.peer.on('connection', (conn) => {
-            this.clients.push(conn)
-            conn.on('data', function(data){
-              console.log(`${conn.peer}: ${data}`);
-            });
-          });
     }
 
-    CreateGameAsHost(){
-        console.log("I am host.")
-    }
-
-    CreateClientPeer(){
-        this.peer = new Peer("client1", {
-            debug:3,
+    private CreatePeerClient(){
+        this.peerClient = new Peer({
+            // debug:3,
             host: "localhost",
             port: 5500,
             path: "/peerjs",
         });
-        console.log(this.peer.id)
-        this.peer.on("error", (err)=>{
+
+        this.peerClient.on("error", (err)=>{
             console.log(err.type, err)
         })
-        this.peer.on("open", (peerid)=>{
+
+        this.peerClient.on("open", (peerid)=>{
             console.log("open peer with id ", peerid)
-            this.server = this.peer.connect(this.lobbyId)
+            this.server = this.peerClient.connect(this.lobbyId)
             this.server.on("open", () => {
-                this.server!.send(`I am joining as ${this.peer.id}`)
-                this.server!.on("data", function(data) {
-                    console.log("recv", data)
+                this.server!.on("data", (data) => {
+                    this.ClientMessageHandler(data)
                 })
             })
 

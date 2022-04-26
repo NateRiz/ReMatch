@@ -1,7 +1,6 @@
-import Game from './Game';
+import Game from './ClassicGame';
 import Canvas from './Canvas'
-import Peer from 'peerjs';
-import ConnectionHandler from './ConnectionHandler';
+import MultiplayerLobby from './MultiplayerLobby';
 
 
 function CreateHomepage(){
@@ -26,11 +25,11 @@ function Play(){
     (document.querySelector("#SinglePlayerUI") as HTMLButtonElement).classList.remove("Hidden");
 
     var canvas: Canvas = new Canvas()    
-    var game: Game = new Game()
-    canvas.SubscribeDrawableObject(game)
+    var classicGame: Game = new Game()
+    canvas.SubscribeDrawableObject(classicGame)
     
     window.addEventListener('keydown', (event) => { 
-        game.GuessLetter(event)
+        classicGame.GuessLetter(event)
         canvas.Redraw()
     })
     window.addEventListener('resize', () => {canvas.OnResizeWindow()}, true);
@@ -56,7 +55,8 @@ function Main(){
     var lobbyId = window.location.pathname.replace("/", "");
     if (lobbyId != ""){
         (document.querySelector("#MultiPlayerUI") as HTMLDivElement).classList.remove("Hidden");
-        var connectionHandler = new ConnectionHandler(lobbyId)
+        var multiplayerLobby = new MultiplayerLobby(lobbyId)
+        multiplayerLobby.Start()
     }else{
         CreateHomepage()
     }
