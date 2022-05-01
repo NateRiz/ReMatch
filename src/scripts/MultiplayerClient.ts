@@ -1,11 +1,15 @@
+import Canvas from "./Canvas";
 import MultiplayerGame from "./MultiplayerGame";
 
 export default class MultiplayerClient{
     multiplayerGame: MultiplayerGame;
+    canvas: Canvas
     Send: (message: string) => void = (_: string) => {}
     
     constructor(multiplayerGame: MultiplayerGame){
         this.multiplayerGame = multiplayerGame;
+        this.canvas = new Canvas()
+        this.canvas.SubscribeDrawableObject(this.multiplayerGame) 
     }
 
     OnReceiveMessage(message: string){
@@ -25,6 +29,18 @@ export default class MultiplayerClient{
             case "Connect":
                 this.multiplayerGame.OnPlayerConnect(args)
                 break
+            case "Start":
+                this.multiplayerGame.OnStartGame();
+                break;
+            case "Rule":
+                this.multiplayerGame.OnReceiveRule(args);
+                break;
+            case "TurnOrder":
+                this.multiplayerGame.OnReceiveTurnOrder(args);
+                break;
+            case "Turn":
+                this.multiplayerGame.OnReceiveTurn(args);
+                break;
             default:
                 console.log(`Invalid Command: [${command}](${args})`)
         }

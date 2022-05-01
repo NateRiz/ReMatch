@@ -32,7 +32,6 @@ function Play(){
         classicGame.GuessLetter(event)
         canvas.Redraw()
     })
-    window.addEventListener('resize', () => {canvas.OnResizeWindow()}, true);
 }
 
 function makeId(length: number) {

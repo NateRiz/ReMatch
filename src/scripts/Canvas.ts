@@ -9,7 +9,8 @@ export default class Canvas {
         this.canvas = document.querySelector("canvas")!
         this.c = this.canvas.getContext("2d")!
         this.drawableObjects = []
-        this.OnResizeWindow()        
+        this.OnResizeWindow()
+        window.addEventListener('resize', () => {this.OnResizeWindow()}, true);
     }
 
     SubscribeDrawableObject(obj: Drawable){

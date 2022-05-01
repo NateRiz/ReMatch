@@ -82,6 +82,11 @@ body, html {
   background-color: #239B31;
 }
 
+.ButtonPlay:disabled {
+  background-color: gray;
+  cursor: initial;
+}
+
 .ButtonRed {
   background-color: #B72A2A;
 }
