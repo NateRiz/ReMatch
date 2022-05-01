@@ -10,6 +10,7 @@ export default class ConnectionHandler{
     ClientMessageHandler: (msg: string) => void = (_: string) => {}
     ServerMessageHandler: (conn: Peer.DataConnection, msg: string) => void = (_c:Peer.DataConnection, _s: string) => {}
     OnCreateHostCallback: ()=>void = ()=>{}
+    ServerOnPlayerConnectCallback: (conn: Peer.DataConnection) => void = (_:Peer.DataConnection) => {}
 
     constructor(lobbyId: string, OnCreateHostCallback = ()=>{}){
         this.lobbyId = lobbyId;
@@ -27,6 +28,7 @@ export default class ConnectionHandler{
     }
 
     SendToAllClients(message: string){
+        console.log(`>> [Server]: ${message}`)
         this.clients.forEach((client)=>{
             client.send(message);
         })
@@ -38,6 +40,10 @@ export default class ConnectionHandler{
     
     RegisterServerCallback(callback: (_c:Peer.DataConnection, _s: string) => void){
         this.ServerMessageHandler = callback;
+    }
+
+    RegisterOnPlayerConnectCallback(callback: (_c:Peer.DataConnection) => void){
+        this.ServerOnPlayerConnectCallback = callback;
     }
 
     private TryCreatePeerHost(){
@@ -54,6 +60,7 @@ export default class ConnectionHandler{
             this.isHost = true
             this.peerHost!.on('connection', (conn) => {
                 this.clients.push(conn)
+                this.ServerOnPlayerConnectCallback(conn)
                 conn.on('data', (data) => {
                   this.ServerMessageHandler(conn, data)
                 });
@@ -84,11 +91,14 @@ export default class ConnectionHandler{
 
         this.peerClient.on("open", (peerid)=>{
             console.log("open peer with id ", peerid)
-            this.server = this.peerClient.connect(this.lobbyId)
+            this.server = this.peerClient.connect(this.lobbyId, {reliable:true})
+            
             this.server.on("open", () => {
                 this.server!.on("data", (data) => {
                     this.ClientMessageHandler(data)
                 })
+
+                this.server!.send(JSON.stringify({"Established":null}))
             })
 
         })
