@@ -12,9 +12,13 @@ export default class MultiplayerClient{
         this.canvas.SubscribeDrawableObject(this.multiplayerGame) 
 
         window.addEventListener('keydown', (event) => { 
-            var hiddenTextBox = document.querySelector("#HiddenGuessInput") as HTMLInputElement
-            hiddenTextBox.focus();
-            this.canvas.Redraw()
+            if (event.key === "Enter"){
+                this.SubmitGuess()
+            }else{
+                var hiddenTextBox = document.querySelector("#HiddenGuessInput") as HTMLInputElement;
+                hiddenTextBox.focus();
+                this.canvas.Redraw();
+            }
         });
 
         const hiddenInput = (document.querySelector("#HiddenGuessInput") as HTMLInputElement)
@@ -40,6 +44,14 @@ export default class MultiplayerClient{
 
     RegisterSendCallback(callback: (msg: string) => void){
         this.Send = callback
+    }
+    
+    private SubmitGuess(){
+        if (this.multiplayerGame.IsMyTurn() && this.multiplayerGame.guess !== ''){
+            this.Send(JSON.stringify({
+                "SubmitGuess": this.multiplayerGame.guess
+            }));
+        }
     }
 
     private OnType(value: string){
@@ -70,6 +82,13 @@ export default class MultiplayerClient{
                 break;
             case 'ServerGuessUpdate':
                 this.multiplayerGame.OnGuessUpdate(args)
+                break;
+            case 'IncorrectGuess':
+                console.log("Wrong guess")
+                break;
+            case 'CorrectGuess':
+                console.log("Correct Guess")
+                this.multiplayerGame.OnCorrectGuess()
                 break;
             default:
                 console.log(`Invalid Command: [${command}](${args})`)

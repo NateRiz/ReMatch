@@ -43,7 +43,18 @@ export default class MultiplayerServer{
                 "Start": null,
                 "Rule": this.multiplayerGame.rule,
                 "TurnOrder": this.clients,
-                "Turn": this.clients[0],
+                "Turn": 0,
+            }
+        ))
+    }
+
+    private StartNextTurn(){
+        this.multiplayerGame.ResetWord()
+        this.multiplayerGame.IncrementTurn();
+        this.SendAll(JSON.stringify(
+            {
+                "Rule": this.multiplayerGame.rule,
+                "Turn": this.multiplayerGame.turn,
             }
         ))
     }
@@ -56,8 +67,29 @@ export default class MultiplayerServer{
             case "ClientGuessUpdate":
                 this.OnClientGuessUpdate(client, args);
                 break;
+            case "SubmitGuess":
+                this.OnClientGuess(client, args);
+                break;
             default:
                 console.log(`Invalid Command: [${command}](${args})`);
+        }
+    }
+
+    private OnClientGuess(client: Peer.DataConnection, guess: string){
+        if (!this.multiplayerGame.IsPlayersTurn(client.peer)){
+            return;
+        }
+
+        const isGuessCorrect = this.multiplayerGame.TestGuess(guess);
+        if (isGuessCorrect){
+            this.SendAll(JSON.stringify({
+                "CorrectGuess": null
+            }))
+            this.StartNextTurn();
+        }else{
+            this.SendAll(JSON.stringify({
+                "IncorrectGuess": null
+            }))
         }
     }
 
@@ -70,9 +102,9 @@ export default class MultiplayerServer{
     }
 
     private EnableStartButton(){
-        var startMPButton = (document.querySelector("#StartMultiplayerButton") as HTMLButtonElement)
-        startMPButton.disabled = false
-        startMPButton.onclick = () => this.StartGame()
+        var startMPButton = (document.querySelector("#StartMultiplayerButton") as HTMLButtonElement);
+        startMPButton.disabled = false;
+        startMPButton.onclick = () => this.StartGame();
     }
 
 }

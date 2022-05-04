@@ -6,13 +6,14 @@ export default class MultiplayerGame extends Drawable{
     canvas: HTMLCanvasElement
     context: CanvasRenderingContext2D
     players: string[] = [] // All player ids
-    turn: string = "" // player's id for whoever's turn it is
+    turn: number = 0 // player's id for whoever's turn it is
     me: string = "" // This player's peer id
     ruleGenerator: RuleGenerator
     rule: string = ""
     guess: string = ""
     ruleRegex: RegExp
     gameState: number = GameState.LOBBY;
+    dictionary: Set<string>;
     
     constructor(){
         super()
@@ -20,6 +21,18 @@ export default class MultiplayerGame extends Drawable{
         this.canvas = document.querySelector("canvas")!
         this.context = this.canvas.getContext("2d")!
         this.ruleRegex = new RegExp(".*")
+        this.dictionary = new Set();
+        
+        fetch('./src/assets/dict.txt')
+        .then(response => response.text())
+        .then((data) => {
+            var words = data.split("\n").map(e=>e.trim());
+            words.forEach(element => {
+                this.dictionary.add(element)
+            });
+            console.log("loaded dict")
+        })
+        
         this.Draw();
     }
 
@@ -46,10 +59,8 @@ export default class MultiplayerGame extends Drawable{
         this.Draw()
     }
 
-    OnReceiveTurn(player: string){
+    OnReceiveTurn(player: number){
         this.turn = player
-        console.log("turn:", player)
-        if (this.turn == this.me){console.log("my turn")}
         this.Draw()
     }
 
@@ -58,12 +69,33 @@ export default class MultiplayerGame extends Drawable{
         this.Draw()
     }
 
+    OnCorrectGuess(){
+        var hiddenTextBox = document.querySelector("#HiddenGuessInput") as HTMLInputElement;
+        hiddenTextBox.value = '';
+        this.guess = '';
+    }
+
     IsMyTurn(){
         return this.IsPlayersTurn(this.me);
     }
 
     IsPlayersTurn(player: string){
-        return player === this.turn;
+        return player === this.players[this.turn];
+    }
+
+    TestGuess(guess: string){
+        var isRuleCorrect = this.ruleRegex.test(guess)
+        var isWordInDictionary = this.dictionary.has(guess)
+        console.log(isRuleCorrect, isWordInDictionary)
+        var lastWordIsError = !(isRuleCorrect && isWordInDictionary)
+        if (lastWordIsError){
+            // this.guess = ""
+        } else {
+            // this.ResetWord()
+            // this.score+=1
+            // this.ResetTimer()
+        }
+        return isRuleCorrect && isWordInDictionary;
     }
 
     // Server Only Functions
@@ -71,6 +103,10 @@ export default class MultiplayerGame extends Drawable{
         this.rule = this.ruleGenerator._GetRule(1)
         this.ruleRegex = new RegExp(this.rule.replaceAll("*",".*").replaceAll("+", ".+"), "i");
         this.guess = ""
+    }
+
+    IncrementTurn(){
+        this.turn = (this.turn + 1) % this.players.length;
     }
     // End Server Functions
 
