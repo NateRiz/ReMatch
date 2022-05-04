@@ -19,7 +19,7 @@ export default class MultiplayerServer{
         console.log(`<< [${client.peer}]: ${message}`);
         var json = JSON.parse(message);
         Object.keys(json).forEach((key)=>{
-            this.DispatchCommand(key, json[key])
+            this.DispatchCommand(client, key, json[key])
         })
     }
 
@@ -48,13 +48,24 @@ export default class MultiplayerServer{
         ))
     }
 
-    private DispatchCommand(command: string, args: any){
+    private DispatchCommand(client: Peer.DataConnection, command: string, args: any){
         switch(command){
             case "Established":
-                this.SendAll(JSON.stringify({"Connect": this.clients}))
-                break
+                this.SendAll(JSON.stringify({"Connect": this.clients}));
+                break;
+            case "ClientGuessUpdate":
+                this.OnClientGuessUpdate(client, args);
+                break;
             default:
-                console.log(`Invalid Command: [${command}](${args})`)
+                console.log(`Invalid Command: [${command}](${args})`);
+        }
+    }
+
+    private OnClientGuessUpdate(client: Peer.DataConnection, value: string){
+        if (this.multiplayerGame.IsPlayersTurn(client.peer)){
+            this.SendAll(JSON.stringify({
+                "ServerGuessUpdate": value
+            }));
         }
     }
 

@@ -5,13 +5,14 @@ import RuleGenerator from "./RuleGenerator"
 export default class MultiplayerGame extends Drawable{
     canvas: HTMLCanvasElement
     context: CanvasRenderingContext2D
-    players: string[] = []
+    players: string[] = [] // All player ids
+    turn: string = "" // player's id for whoever's turn it is
+    me: string = "" // This player's peer id
     ruleGenerator: RuleGenerator
     rule: string = ""
     guess: string = ""
     ruleRegex: RegExp
     gameState: number = GameState.LOBBY;
-    turn: string = ""
     
     constructor(){
         super()
@@ -19,8 +20,7 @@ export default class MultiplayerGame extends Drawable{
         this.canvas = document.querySelector("canvas")!
         this.context = this.canvas.getContext("2d")!
         this.ruleRegex = new RegExp(".*")
-        this.Draw()
-
+        this.Draw();
     }
 
     OnStartGame(){
@@ -30,6 +30,10 @@ export default class MultiplayerGame extends Drawable{
     OnPlayerConnect(allPlayers: string[]){
         this.players = allPlayers
         this.Draw()
+    }
+
+    OnCreateMyClientCallback(me: string){
+        this.me = me
     }
 
     OnReceiveRule(rule: string){
@@ -44,9 +48,23 @@ export default class MultiplayerGame extends Drawable{
 
     OnReceiveTurn(player: string){
         this.turn = player
+        console.log("turn:", player)
+        if (this.turn == this.me){console.log("my turn")}
         this.Draw()
     }
 
+    OnGuessUpdate(value: string){
+        this.guess = value
+        this.Draw()
+    }
+
+    IsMyTurn(){
+        return this.IsPlayersTurn(this.me);
+    }
+
+    IsPlayersTurn(player: string){
+        return player === this.turn;
+    }
 
     // Server Only Functions
     ResetWord(){

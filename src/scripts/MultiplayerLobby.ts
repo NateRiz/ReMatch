@@ -11,9 +11,8 @@ export default class MultiplayerLobby{
     multiplayerGame: MultiplayerGame
 
     constructor(lobbyId: string){
-        this.connectionHandler = new ConnectionHandler(lobbyId, ()=>this.OnCreateHostCallback())
         this.multiplayerGame = new MultiplayerGame();
-
+        this.connectionHandler = new ConnectionHandler(lobbyId, () => this.OnCreateHostCallback(), (me: string) => this.multiplayerGame.OnCreateMyClientCallback(me))
         this.multiplayerClient = new MultiplayerClient(this.multiplayerGame)
         this.connectionHandler.RegisterClientCallback((msg: string) => this.multiplayerClient.OnReceiveMessage(msg))
         this.multiplayerClient.RegisterSendCallback((msg: string) => this.connectionHandler.SendToServer(msg))

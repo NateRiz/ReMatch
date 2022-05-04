@@ -10,6 +10,24 @@ export default class MultiplayerClient{
         this.multiplayerGame = multiplayerGame;
         this.canvas = new Canvas()
         this.canvas.SubscribeDrawableObject(this.multiplayerGame) 
+
+        window.addEventListener('keydown', (event) => { 
+            var hiddenTextBox = document.querySelector("#HiddenGuessInput") as HTMLInputElement
+            hiddenTextBox.focus();
+            this.canvas.Redraw()
+        });
+
+        const hiddenInput = (document.querySelector("#HiddenGuessInput") as HTMLInputElement)
+        const self = this;
+        hiddenInput.setAttribute('input-prev-val', '')
+        hiddenInput.addEventListener('input', function(e){
+            if(this.checkValidity()){
+                hiddenInput.setAttribute('input-prev-val', this.value)
+                self.OnType(this.value);
+            } else {
+              this.value = hiddenInput.getAttribute('input-prev-val')!;
+            }
+        }); 
     }
 
     OnReceiveMessage(message: string){
@@ -22,6 +40,15 @@ export default class MultiplayerClient{
 
     RegisterSendCallback(callback: (msg: string) => void){
         this.Send = callback
+    }
+
+    private OnType(value: string){
+        if (this.multiplayerGame.IsMyTurn()){
+            this.multiplayerGame.OnGuessUpdate(value);
+            this.Send(JSON.stringify({
+                "ClientGuessUpdate": value
+            }))
+        }
     }
 
     private DispatchCommand(command: string, args: any){
@@ -40,6 +67,9 @@ export default class MultiplayerClient{
                 break;
             case "Turn":
                 this.multiplayerGame.OnReceiveTurn(args);
+                break;
+            case 'ServerGuessUpdate':
+                this.multiplayerGame.OnGuessUpdate(args)
                 break;
             default:
                 console.log(`Invalid Command: [${command}](${args})`)

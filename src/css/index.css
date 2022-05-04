@@ -109,6 +109,13 @@ body, html {
   color: white
 }
 
+.HiddenInput {
+  opacity:0;
+  filter:alpha(opacity=0);
+  height: 0px;
+  width: 0px;
+}
+
 .Hidden{
   display: none;
 }

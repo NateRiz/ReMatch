@@ -11,12 +11,14 @@ export default class ConnectionHandler{
     ServerMessageHandler: (conn: Peer.DataConnection, msg: string) => void = (_c:Peer.DataConnection, _s: string) => {}
     OnCreateHostCallback: ()=>void = ()=>{}
     ServerOnPlayerConnectCallback: (conn: Peer.DataConnection) => void = (_:Peer.DataConnection) => {}
+    OnCreateMyClientCallback: (me: string)=>void = (_: string)=>{}
 
-    constructor(lobbyId: string, OnCreateHostCallback = ()=>{}){
+    constructor(lobbyId: string, OnCreateHostCallback: ()=>void, OnCreateMyClientCallback: (_: string)=>void){
         this.lobbyId = lobbyId;
         this.TryCreatePeerHost();
         this.CreatePeerClient();
         this.OnCreateHostCallback = OnCreateHostCallback;
+        this.OnCreateMyClientCallback = OnCreateMyClientCallback;
     }
 
     IsHost(): boolean{
@@ -91,6 +93,7 @@ export default class ConnectionHandler{
 
         this.peerClient.on("open", (peerid)=>{
             console.log("open peer with id ", peerid)
+            this.OnCreateMyClientCallback(peerid);
             this.server = this.peerClient.connect(this.lobbyId, {reliable:true})
             
             this.server.on("open", () => {
