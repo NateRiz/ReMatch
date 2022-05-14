@@ -1,7 +1,8 @@
-const express = require('express');
-const { ExpressPeerServer } = require('peer');
-
 function main() {
+    const express = require('express');
+    const { ExpressPeerServer } = require('peer');
+    const lowercasePaths = require("express-lowercase-paths");
+    
     const app = express();
     const port = 5500;
 
@@ -11,6 +12,9 @@ function main() {
     const peerServer = ExpressPeerServer(server, {
         debug: true
     });
+
+    app.use(lowercasePaths());
+
     app.use('/peerjs', peerServer);
     app.get('/peerjs/*', peerServer);
 

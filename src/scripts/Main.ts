@@ -34,6 +34,24 @@ function Play(){
     })
 }
 
+function SetNickName(){
+    var name = GetNickName();
+    (document.querySelector("#NickName") as HTMLInputElement).value = name;
+}
+
+function SaveNickName(nickname: string){
+    window.localStorage.setItem("nickname", nickname)
+}
+
+function GetNickName(){
+    var nickname = window.localStorage.getItem("nickname");
+    if (nickname !== null){
+        return nickname;
+    }
+
+    return "Guest" + (Math.floor(Math.random()*8998) + 1000).toString();
+}
+
 function makeId(length: number) {
     var result = '';
     var characters = 'QWERTYUIOPLKJHGFDSAZXCVBNM0123456789';
@@ -50,7 +68,18 @@ function RedirectToGame(gameId: string){
     }
 }
 
+function SetupNavBar(){
+    SetNickName();
+    const nicknameInput = (document.querySelector("#NickName") as HTMLInputElement); 
+    nicknameInput.addEventListener('change', (_) => {
+        if (nicknameInput.value.length > 0){
+            SaveNickName(nicknameInput.value);
+        }
+    });
+}
+
 function Main(){
+    SetupNavBar();
     var lobbyId = window.location.pathname.replace("/", "");
     if (lobbyId != ""){
         (document.querySelector("#MultiPlayerUI") as HTMLDivElement).classList.remove("Hidden");

@@ -21,6 +21,22 @@ body, html {
     margin: 0px;
 }
 
+.NickNameContainer{
+  text-align: right;
+}
+
+.NickNameInput{
+  background-color: transparent;
+  color: white;
+  margin-right: 8px;
+  margin-top: 8px;
+  border-radius: 16px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #012a4a;
+  text-align: center;
+}
+
 .CanvasContainer {
     background-color: #012a4a;
     height: 88%;
