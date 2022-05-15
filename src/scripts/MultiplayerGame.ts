@@ -1,11 +1,12 @@
 import Drawable from "./Drawable"
 import GameState from "./GameState"
+import Player from "./Player"
 import RuleGenerator from "./RuleGenerator"
 
 export default class MultiplayerGame extends Drawable{
     canvas: HTMLCanvasElement
     context: CanvasRenderingContext2D
-    players: string[] = [] // All player ids
+    players: Player[] = [] // All player ids
     turn: number = 0 // player's id for whoever's turn it is
     me: string = "" // This player's peer id
     ruleGenerator: RuleGenerator
@@ -40,8 +41,9 @@ export default class MultiplayerGame extends Drawable{
         this.gameState = GameState.INGAME
     }
 
-    OnPlayerConnect(allPlayers: string[]){
-        this.players = allPlayers
+    OnPlayerConnect(allPlayers: object[]){
+        this.players = Array.from(allPlayers, (p) => Object.setPrototypeOf(p, Player.prototype));
+        console.log(".>", allPlayers)
         this.Draw()
     }
 
@@ -54,14 +56,14 @@ export default class MultiplayerGame extends Drawable{
         this.Draw()
     }
 
-    OnReceiveTurnOrder(allPlayers: string[]){
-        this.players = allPlayers
-        this.Draw()
+    OnReceiveTurnOrder(playerIds: string[]){
+        this.players.sort((a, b) => +(playerIds.indexOf(a.id) < playerIds.indexOf(b.id)));
+        this.Draw();
     }
 
     OnReceiveTurn(player: number){
-        this.turn = player
-        this.Draw()
+        this.turn = player;
+        this.Draw();
     }
 
     OnGuessUpdate(value: string){
@@ -80,7 +82,7 @@ export default class MultiplayerGame extends Drawable{
     }
 
     IsPlayersTurn(player: string){
-        return player === this.players[this.turn];
+        return player === this.players[this.turn].id;
     }
 
     TestGuess(guess: string){
@@ -136,7 +138,7 @@ export default class MultiplayerGame extends Drawable{
 
         this.players.forEach((p) => {
             y += fontSize
-            this.context.fillText(p, x, y)
+            this.context.fillText(p.nickname, x, y)
         })
     }
 

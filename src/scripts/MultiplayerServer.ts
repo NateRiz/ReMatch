@@ -1,9 +1,10 @@
 import Peer from "peerjs"
 import MultiplayerGame from "./MultiplayerGame"
+import Player from "./Player"
 
 export default class MultiplayerServer{
     multiplayerGame: MultiplayerGame
-    clients: string[] = []
+    clients: Player[] = []
     SendAll: (message: string) => void = (_: string) => {}
     
     constructor(multiplayerGame: MultiplayerGame){
@@ -23,9 +24,13 @@ export default class MultiplayerServer{
         })
     }
 
-    OnPlayerConnect(client: Peer.DataConnection){
+    OnPlayerConnect(client: Peer.DataConnection, nickname: string){
         console.log(`<< [${client.peer}] (Connection Request)`);
-        this.clients.push(client.peer)
+
+        var player = new Player(client.peer, nickname);
+        this.clients.push(player)
+
+        this.SendAll(JSON.stringify({"Connect": this.clients}));
 
         if (this.clients.length >= 2){
             this.EnableStartButton()
@@ -61,8 +66,8 @@ export default class MultiplayerServer{
 
     private DispatchCommand(client: Peer.DataConnection, command: string, args: any){
         switch(command){
-            case "Established":
-                this.SendAll(JSON.stringify({"Connect": this.clients}));
+            case "Nickname":
+                this.OnPlayerConnect(client, args)
                 break;
             case "ClientGuessUpdate":
                 this.OnClientGuessUpdate(client, args);

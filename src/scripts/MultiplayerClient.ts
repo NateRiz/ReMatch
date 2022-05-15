@@ -11,11 +11,16 @@ export default class MultiplayerClient{
         this.canvas = new Canvas()
         this.canvas.SubscribeDrawableObject(this.multiplayerGame) 
 
-        window.addEventListener('keydown', (event) => { 
+        window.addEventListener('keydown', (event) => {
+            const hiddenTextBox = document.querySelector("#HiddenGuessInput") as HTMLInputElement;
+            const activeElement = document.activeElement
+            if (activeElement !== hiddenTextBox && activeElement !== this.canvas.canvas && activeElement !== document.body){
+                return;
+            }
+
             if (event.key === "Enter"){
                 this.SubmitGuess()
             }else{
-                var hiddenTextBox = document.querySelector("#HiddenGuessInput") as HTMLInputElement;
                 hiddenTextBox.focus();
                 this.canvas.Redraw();
             }

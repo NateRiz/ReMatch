@@ -19,13 +19,9 @@ export default class MultiplayerLobby{
 
     }
 
-    Start(){
-    }
-
     OnCreateHostCallback(){
         this.multiplayerServer = new MultiplayerServer(this.multiplayerGame);
         this.connectionHandler.RegisterServerCallback((conn: Peer.DataConnection, message: string) => this.multiplayerServer!.OnReceiveMessage(conn, message));
-        this.connectionHandler.RegisterOnPlayerConnectCallback((conn:Peer.DataConnection) => this.multiplayerServer!.OnPlayerConnect(conn));
 
         this.multiplayerServer.RegisterSendCallback((msg: string) => this.connectionHandler.SendToAllClients(msg))
     }

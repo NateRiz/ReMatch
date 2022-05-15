@@ -1,4 +1,5 @@
 import Peer from "peerjs"
+import Cookies from "./Cookies"
 
 export default class ConnectionHandler{
     lobbyId: string
@@ -10,7 +11,6 @@ export default class ConnectionHandler{
     ClientMessageHandler: (msg: string) => void = (_: string) => {}
     ServerMessageHandler: (conn: Peer.DataConnection, msg: string) => void = (_c:Peer.DataConnection, _s: string) => {}
     OnCreateHostCallback: ()=>void = ()=>{}
-    ServerOnPlayerConnectCallback: (conn: Peer.DataConnection) => void = (_:Peer.DataConnection) => {}
     OnCreateMyClientCallback: (me: string)=>void = (_: string)=>{}
 
     constructor(lobbyId: string, OnCreateHostCallback: ()=>void, OnCreateMyClientCallback: (_: string)=>void){
@@ -44,10 +44,6 @@ export default class ConnectionHandler{
         this.ServerMessageHandler = callback;
     }
 
-    RegisterOnPlayerConnectCallback(callback: (_c:Peer.DataConnection) => void){
-        this.ServerOnPlayerConnectCallback = callback;
-    }
-
     private TryCreatePeerHost(){
         // Peer with id == lobbyid is the host
         this.peerHost = new Peer(this.lobbyId, {
@@ -62,7 +58,6 @@ export default class ConnectionHandler{
             this.isHost = true
             this.peerHost!.on('connection', (conn) => {
                 this.clients.push(conn)
-                this.ServerOnPlayerConnectCallback(conn)
                 conn.on('data', (data) => {
                   this.ServerMessageHandler(conn, data)
                 });
@@ -101,7 +96,7 @@ export default class ConnectionHandler{
                     this.ClientMessageHandler(data)
                 })
 
-                this.server!.send(JSON.stringify({"Established":null}))
+                this.server!.send(JSON.stringify({"Nickname":Cookies.GetNickName()}))
             })
 
         })
