@@ -1,4 +1,4 @@
-import RuleGenerator from './RuleGenerator'
+import RuleGenerator from "../RuleGenerator";
 
 export default class ClassicGame{
     score: number;
@@ -78,10 +78,10 @@ export default class ClassicGame{
         }
 
         var timerElement = document.body;
-        if(timerElement.classList.contains("Timer")){
-            timerElement.classList.remove("Timer")
-        }
-        timerElement.classList.add("Timer")
+        
+        timerElement.classList.remove("Timer");
+        window.setTimeout(()=>timerElement.classList.add("Timer"), 1);
+
         timerElement.style.animationDuration = Math.floor(duration / 1000).toString() +"s";
 
         this.timer = window.setTimeout(()=>{alert("GG")}, duration)

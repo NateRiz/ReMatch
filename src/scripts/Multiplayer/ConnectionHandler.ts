@@ -1,5 +1,5 @@
 import Peer from "peerjs"
-import Cookies from "./Cookies"
+import Cookies from "../Cookies"
 
 export default class ConnectionHandler{
     lobbyId: string

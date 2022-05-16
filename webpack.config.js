@@ -4,11 +4,15 @@ module.exports = {
     entry: {
       main: [
         './src/scripts/util/ArrayExtensions.ts',
-        './src/scripts/Main.ts',
+        './src/scripts/Homepage/Main.ts',
       ],
       classic: [
         './src/scripts/util/ArrayExtensions.ts',
-        './src/scripts/MainClassicGame.ts',
+        './src/scripts/Classic/MainClassicGame.ts',
+      ],
+      multi: [
+        './src/scripts/util/ArrayExtensions.ts',
+        './src/scripts/Multiplayer/MainMultiplayer.ts',
       ]
     },
     module: {

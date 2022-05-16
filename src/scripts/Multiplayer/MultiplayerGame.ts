@@ -1,6 +1,5 @@
-import GameState from "./GameState"
 import Player from "./Player"
-import RuleGenerator from "./RuleGenerator"
+import RuleGenerator from "../RuleGenerator"
 
 export default class MultiplayerGame{
     players: Player[] = [] // All player ids
@@ -10,7 +9,6 @@ export default class MultiplayerGame{
     rule: string = ""
     guess: string = ""
     ruleRegex: RegExp
-    gameState: number = GameState.LOBBY;
     dictionary: Set<string>;
     
     constructor(){

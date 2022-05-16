@@ -1,22 +1,20 @@
-import ClassicGame from './ClassicGame';
-import MultiplayerLobby from './MultiplayerLobby';
-import Cookies from './Cookies';
+import ClassicGame from '../Classic/ClassicGame';
+import MultiplayerLobby from '../Multiplayer/MultiplayerLobby';
+import Cookies from '../Cookies';
 
 
 function CreateHomepage(){
     //(document.querySelector("#HomepageUI") as HTMLDivElement).classList.remove("Hidden");
     (document.querySelector("#ClassicButton") as HTMLButtonElement).onclick = () => { PlayClassic(); }
-    (document.querySelector("#OnlineButton") as HTMLButtonElement).onclick = () => { GoToOnlineLobby(); }
-    (document.querySelector("#OnlineBackButton") as HTMLButtonElement).onclick = () => { GoToMainLobby(); }
+    (document.querySelector("#OnlineButton") as HTMLButtonElement).onclick = () => { GoToOnlineHomepage(); }
+    (document.querySelector("#OnlineBackButton") as HTMLButtonElement).onclick = () => { GoToMainHomepage(); }
 
-    return;
     (document.querySelector("#JoinButton") as HTMLButtonElement).onclick = () => { 
         var gameId = (document.querySelector("#GameIdInput") as HTMLInputElement)?.value
         RedirectToGame(gameId)
      }
 
     (document.querySelector("#HostButton") as HTMLButtonElement).onclick = () => {
-        (document.querySelector("#MultiPlayerUI") as HTMLDivElement).classList.remove("Hidden");
         const idSize: number = 5
         const gameId = makeId(idSize)
         RedirectToGame(gameId)
@@ -24,24 +22,18 @@ function CreateHomepage(){
 
 }
 
-function GoToOnlineLobby(){
+function GoToOnlineHomepage(){
     document.querySelector("#BaseLobby")?.classList.add("Hidden")
     document.querySelector("#OnlineLobby")?.classList.remove("Hidden")
 }
 
-function GoToMainLobby(){
+function GoToMainHomepage(){
     document.querySelector("#OnlineLobby")?.classList.add("Hidden")
     document.querySelector("#BaseLobby")?.classList.remove("Hidden")
 }
 
 function PlayClassic(){
     window.location.href = "/play"
-    return
-    (document.querySelector("#HomepageUI") as HTMLButtonElement).classList.add("Hidden");
-    (document.querySelector("#SinglePlayerUI") as HTMLButtonElement).classList.remove("Hidden");
-
-    var classicGame: ClassicGame = new ClassicGame()
-
 }
 
 function makeId(length: number) {
@@ -76,7 +68,6 @@ function Main(){
     if (lobbyId != ""){
         (document.querySelector("#MultiPlayerUI") as HTMLDivElement).classList.remove("Hidden");
         var multiplayerLobby = new MultiplayerLobby(lobbyId)
-    }else{
     }
 }
 
