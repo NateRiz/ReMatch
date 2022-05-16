@@ -5,7 +5,7 @@ export default class RuleGenerator{
     constructor(){
         this.dictionary = new Set();
         this.wordList = [];
-        fetch('./src/assets/20kdict_common_words.txt') // Only gen rules based on common words
+        fetch('./src/assets/10kdict_common_words.txt') // Only gen rules based on common words
         .then(response => response.text())
         .then((data) => {
             var words = data.split("\n").map(e=>e.trim());
@@ -146,6 +146,10 @@ class RuleBuilder{
             }
 
             availableIndices = filteredAvailableIndices
+        }
+
+        if (availableIndices.length === 0){
+            return false;
         }
 
         var idx = availableIndices.getRandom()

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="src/css/classic.css">
+</head>
+
+<body>
+    <div class='TopContainer'>
+        <div class="TopLeftFiller"></div>
+        <div class="TitleContainer">
+            <div class="TitleContainerInner">
+                <span class="Title">R*MATCH</span>
+            </div>
+        </div>
+        <div class="ScoreContainer">
+            <span id="Score">0</span>
+            <span id="AvailableRules">*</span>
+        </div>
+    </div>
+    <div class="GameContainer">
+        <div class="RuleContainer">
+            <span id="Rule">R*match</span>
+        </div>
+        <div class="GuessContainer">
+            <span id="Guess"></span>
+        </div>
+        <input id="HiddenInput" class="HiddenInput " pattern="[a-zA-Z]+"/>
+    </div>
+</body>
+
+<script src="dist/classic-bundle.js"></script>

@@ -1,11 +1,8 @@
-import Drawable from "./Drawable"
 import GameState from "./GameState"
 import Player from "./Player"
 import RuleGenerator from "./RuleGenerator"
 
-export default class MultiplayerGame extends Drawable{
-    canvas: HTMLCanvasElement
-    context: CanvasRenderingContext2D
+export default class MultiplayerGame{
     players: Player[] = [] // All player ids
     turn: number = 0 // player's id for whoever's turn it is
     me: string = "" // This player's peer id
@@ -19,8 +16,6 @@ export default class MultiplayerGame extends Drawable{
     constructor(){
         super()
         this.ruleGenerator = new RuleGenerator()
-        this.canvas = document.querySelector("canvas")!
-        this.context = this.canvas.getContext("2d")!
         this.ruleRegex = new RegExp(".*")
         this.dictionary = new Set();
         

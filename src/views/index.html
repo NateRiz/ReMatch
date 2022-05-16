@@ -1,46 +1,42 @@
 <!DOCTYPE html>
-
 <head>
     <link rel="stylesheet" href="src/css/index.css">
 </head>
 
 <body>
-    <div class="Navbar">
-        <div class="NickNameContainer">
-            <input id="NickName" class="NickNameInput" size=16/>
+
+    <div id="BaseLobby" class="LobbyButtonContainer">
+        <div class="TitleContainer">
+            <span class="Title">R*MATCH</span>
+        </div>
+        <div class="ButtonContainer">
+            <button id="ClassicButton" class="LobbyButton">CLASSIC</button>
+        </div>
+        <div class="ButtonContainer">
+            <button id="OnlineButton" class="LobbyButton">Online</button>
+        </div>
+        <div class="ButtonContainer">
+            <input id="NicknameInput" class="LobbyInput" value="Guest"/>
         </div>
     </div>
-    <div class="CanvasContainer">
-        <canvas></canvas>
-        <input id="HiddenGuessInput" class="HiddenInput" pattern="[a-zA-Z]+"/>
-    </div>
-    <div class="BottomContainer">
-        <div id="HomepageUI" class="Bottom BottomRight Hidden">
-            <div class="ButtonContainer">
-                <button id="PlayButton" class="Button ButtonPlay">Play</button>
-            </div>
-            <div class="ButtonContainer">
-                <label for="GameIdInput" class="IdInputPrompt">Game ID</label>
-                <input id="GameIdInput" class="IdInput" type="text" size=8 />
-                <button id="JoinButton" class="Button ButtonPlay">Join</button>
-                <button id="HostButton" class="Button ButtonPlay">Host</button>
-            </div>
+
+    <div id="OnlineLobby" class="LobbyButtonContainer Hidden">
+        <div class="TitleContainer">
+            <span class="Title">R*MATCH</span>
         </div>
-        <div id="SinglePlayerUI" class="Bottom Hidden">
-            <div class="ButtonContainer">
-                <button id="RestartButton" class="Button ButtonRed">Restart</button>
-            </div>
+        <div class="ButtonContainer">
+            <button id="ClassicButton" class="LobbyButton">Host</button>
         </div>
-        <div id="MultiPlayerUI" class="Bottom Hidden">
-            <div class="ButtonContainer Hidden">
-                <button id="StartMultiplayerButton" class="Button ButtonPlay" disabled>Start</button>
+        <div class="ButtonContainer JoinElementsContainer">
+            <div class="JoinContainer">
+                <input class="LobbyButton JoinInput" placeholder="Join"/>
             </div>
-            <div class="ButtonContainer">
-                <button id="LeaveButton" class="Button ButtonRed">Leave</button>
+            <div>
+                <button class="LobbyButton">&gt;</button>
             </div>
         </div>
     </div>
 
 </body>
 
-<script src="dist/bundle.js"></script>
+<script src="dist/main-bundle.js"></script>

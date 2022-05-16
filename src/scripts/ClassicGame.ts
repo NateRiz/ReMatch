@@ -1,34 +1,34 @@
-import Drawable from './Drawable'
 import RuleGenerator from './RuleGenerator'
 
-export default class Game extends Drawable {
-    score: number
-    dictionary: Set<string>
-    ruleGenerator: RuleGenerator
-    rule: string
-    ruleRegex: RegExp
-    bonus: string
-    bonusRegex: RegExp
-    guess: string
-    canvas: HTMLCanvasElement
-    c: CanvasRenderingContext2D
-    lastWordIsError: boolean
-    timer: number | null
+export default class ClassicGame{
+    score: number;
+    dictionary: Set<string>;
+    ruleGenerator: RuleGenerator;
+    rule: string;
+    ruleRegex: RegExp;
+    guess: string;
+    lastWordIsError: boolean;
+    timer: number | null;
+    guessSpan: HTMLSpanElement;
+    ruleSpan: HTMLSpanElement;
+    scoreSpan: HTMLSpanElement;
+    availableRulesSpan: HTMLSpanElement;
+    hiddenInput: HTMLInputElement;
 
     constructor(){
-        super()
         this.score = 0
         this.dictionary = new Set() // All possible words
         this.ruleGenerator = new RuleGenerator()
         this.rule = "R*match"
         this.ruleRegex = new RegExp(this.rule.replaceAll("*",".*"), "i");
-        this.bonus = ""
-        this.bonusRegex = new RegExp(this.bonus.replaceAll("*",".*"), "i");
         this.guess = ""
-        this.canvas = document.querySelector("canvas")!
-        this.c = this.canvas.getContext("2d")!
         this.lastWordIsError = false
         this.timer = null
+        this.guessSpan = (document.querySelector("#Guess") as HTMLSpanElement)
+        this.ruleSpan = (document.querySelector("#Rule") as HTMLSpanElement);
+        this.scoreSpan = (document.querySelector("#Score") as HTMLSpanElement);
+        this.availableRulesSpan = (document.querySelector("#AvailableRules") as HTMLSpanElement);
+        this.hiddenInput = (document.querySelector("#HiddenInput") as HTMLInputElement);
         this.ResetTimer()
         fetch('./src/assets/dict.txt')
         .then(response => response.text())
@@ -39,102 +39,35 @@ export default class Game extends Drawable {
             });
             console.log("loaded dict")
         })
-
-        this.Draw()
     }
 
-    GuessLetter(event: KeyboardEvent){
-        const key = event.key.toLowerCase();
-
-        if (key == "backspace"){
-            this.guess = this.guess.slice(0, -1)
-            return;
-        } else if (key == "enter"){
-            this.SubmitGuess()
-            return;
-        }
-
-        if (key.length !== 1) {
-            return;
-        }
-
-        const isLetter = (key >= "a" && key <= "z");
-        if (!isLetter) {
-            return
-        }
-
-        this.guess += key
+    OnType(){        
+        this.guess = this.hiddenInput.value;
+        this.guessSpan.textContent = this.guess;
     }
 
     SubmitGuess(){
         var isRuleCorrect = this.ruleRegex.test(this.guess)
-        var isBonusCorrect = this.bonusRegex.test(this.guess)
         var isWordInDictionary = this.dictionary.has(this.guess)
-        console.log(isRuleCorrect, isBonusCorrect, isWordInDictionary)
+        console.log(isRuleCorrect, isWordInDictionary)
         this.lastWordIsError = !(isRuleCorrect && isWordInDictionary)
         if (this.lastWordIsError){
             this.guess = ""
         } else {
             this.ResetWord()
             this.score+=1
+            this.scoreSpan.textContent = this.score.toString();
             this.ResetTimer()
         }
     }
 
     ResetWord(){
         this.rule = this.ruleGenerator._GetRule(Math.floor(this.score/10))
-        this.bonus = this.rule
+        this.ruleSpan.textContent = this.rule
         this.ruleRegex = new RegExp(this.rule.replaceAll("*",".*").replaceAll("+", ".+"), "i");
-        this.bonusRegex = new RegExp(this.bonus.replaceAll("*",".*").replaceAll("+", ".+"), "i");
-        this.guess = ""
-    }
-
-
-    Draw() {
-        // Draw Rule
-        var fontSize = 42
-        if (this.lastWordIsError){
-            this.c.fillStyle = "red"
-        } else {
-            this.c.fillStyle = 'white';
-        }
-        this.c.font = `bold ${fontSize}px Monospace`
-        var x = this.canvas.width / 2 - this.c.measureText(this.rule).width/2
-        var y = fontSize
-        this.c.fillText(this.rule, x, y)
-
-        // Draw Bonus Rule
-        x = this.canvas.width / 2 - this.c.measureText(this.bonus).width/2
-        //this.c.fillText(this.bonus, x, y*2)
-    
-        // Draw Guess
-        this.c.fillStyle = 'white';
-        x = this.canvas.width / 2 - this.c.measureText(this.guess).width/2
-        y = this.canvas.height / 2 - fontSize/2
-        this.c.fillText(this.guess, x, y)
-
-        // Draw Score
-        var buffer = 16
-        var text = "Score"
-        x = this.canvas.width - buffer - this.c.measureText(text).width
-        y = fontSize
-        this.c.fillText(text, x, y)
-        // Draw actual score number
-        var score = this.score.toString()
-        x = this.canvas.width - buffer - this.c.measureText(score).width
-        y = fontSize * 2
-        this.c.fillText(score, x, y)
-
-        // Draw Rules
-        text = "Rules"
-        x = this.canvas.width - buffer - this.c.measureText(text).width
-        y = fontSize * 4
-        this.c.fillText(text, x, y)
-        // Draw Actual Rules
-        text = ["*", "*+", "*+|"][Math.min(Math.floor(this.score/10), 2)]
-        x = this.canvas.width - buffer - this.c.measureText(text).width
-        y = fontSize * 5
-        this.c.fillText(text, x, y)
+        this.guess = "";
+        this.guessSpan.textContent = this.guess;
+        this.hiddenInput.value = "";
     }
 
     ResetTimer(){

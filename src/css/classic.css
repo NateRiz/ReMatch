@@ -1,0 +1,87 @@
+* {
+    font-size: 64px;
+    font-weight: bold;
+    font-family: "Consolas";
+    color: #6fffe9;
+  }
+  
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background-color: #0B132B;
+  }
+
+.TopContainer {
+    height: 14%;
+    width: 98%;
+    padding: 1% 1% 0% 1%;
+    text-align: center;
+    display: flex;
+}
+
+.TopLeftFiller{
+    width: 33.33333%
+}
+
+.TitleContainer {
+    width: 33.33333%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+}
+
+.TitleContainerInner{
+    background: #6fffe9;
+    border-radius: 25px;
+    padding: 4px 32px;
+}
+  
+
+.ScoreContainer {
+    text-align: right;
+    width: 33.33333%;
+    display: flex;
+    flex-direction: column;
+}
+
+.GameContainer {
+    height: 85%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.RuleContainer {
+    width: 15%;
+    border: 4px solid #6fffe9;
+    border-radius: 25px;
+    text-align: center;
+}
+
+.Title {
+    color: #0B132B;
+    font-size:  96px;
+}
+
+.GuessContainer {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.HiddenInput {
+    opacity:0;
+    filter:alpha(opacity=0);
+    height: 0px;
+    width: 0px;
+}
+
+.Hidden {
+    display: none;
+}

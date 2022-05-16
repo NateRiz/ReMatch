@@ -1,20 +1,16 @@
-import Canvas from "./Canvas";
 import MultiplayerGame from "./MultiplayerGame";
 
 export default class MultiplayerClient{
     multiplayerGame: MultiplayerGame;
-    canvas: Canvas
     Send: (message: string) => void = (_: string) => {}
     
     constructor(multiplayerGame: MultiplayerGame){
         this.multiplayerGame = multiplayerGame;
-        this.canvas = new Canvas()
-        this.canvas.SubscribeDrawableObject(this.multiplayerGame) 
 
         window.addEventListener('keydown', (event) => {
             const hiddenTextBox = document.querySelector("#HiddenGuessInput") as HTMLInputElement;
             const activeElement = document.activeElement
-            if (activeElement !== hiddenTextBox && activeElement !== this.canvas.canvas && activeElement !== document.body){
+            if (activeElement !== hiddenTextBox && activeElement !== document.body){
                 return;
             }
 
@@ -22,7 +18,7 @@ export default class MultiplayerClient{
                 this.SubmitGuess()
             }else{
                 hiddenTextBox.focus();
-                this.canvas.Redraw();
+                // this.canvas.Redraw();
             }
         });
 

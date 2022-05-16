@@ -1,10 +1,16 @@
 const path = require('path')
 
 module.exports = {
-    entry: [
+    entry: {
+      main: [
         './src/scripts/util/ArrayExtensions.ts',
         './src/scripts/Main.ts',
-    ],
+      ],
+      classic: [
+        './src/scripts/util/ArrayExtensions.ts',
+        './src/scripts/MainClassicGame.ts',
+      ]
+    },
     module: {
       rules: [
         {
@@ -18,7 +24,7 @@ module.exports = {
       extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
-      filename: 'bundle.js',
+      filename: "[name]-bundle.js",
       path: path.resolve(__dirname, 'dist'),
     },
     mode: 'development',

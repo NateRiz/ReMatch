@@ -4,7 +4,7 @@ export default class Cookies{
 
     public static SetNickName(){
         var name = Cookies.GetNickName();
-        (document.querySelector("#NickName") as HTMLInputElement).value = name;
+        (document.querySelector("#NicknameInput") as HTMLInputElement).value = name;
     }
     
     public static SaveNickName(nickname: string){

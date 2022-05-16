@@ -15,6 +15,10 @@ function main() {
 
     app.use(lowercasePaths());
 
+    app.get('/play', (_req, res) => {
+        res.sendFile('./src/views/classic.html', {root: __dirname});
+    });
+
     app.use('/peerjs', peerServer);
     app.get('/peerjs/*', peerServer);
 
