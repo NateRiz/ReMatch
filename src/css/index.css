@@ -82,10 +82,13 @@ body, html {
   flex-direction: row;
   align-items: center;
   margin: 16px;
+  width: 15%;
+  max-width: 400px;
+  box-sizing: border-box;
 }
 
 .LobbyInput {
-  margin: 0px 16px;
+  margin: 16px 8px;
   background: transparent;
   cursor: text;
   height: 100%;
@@ -98,7 +101,7 @@ body, html {
 }
 
 .UserIcon{
-  margin-left: 16px;
+  margin-left: 8px;
   background-color: #6fffe9;
   border-radius: 8px;
 }
