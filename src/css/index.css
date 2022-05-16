@@ -31,24 +31,24 @@ body, html {
   margin-bottom: 16px;
   border-radius: 25px;
   background: #6fffe9;
-  width: 22%;
-  max-width: 520px;
+  width: 520px;
   text-align: center;
 }
 
 .ButtonContainer{
   margin-top: 16px;
-  width: 15%;
-  max-width: 400px;
+  width: 380px;
   text-align: center;
 }
 
 .JoinContainer{
   margin-right: 16px;
+  height: 100%;
 }
 
-.JoinElementsContainer {
+.HorizontalElementsContainer {
   display: flex;
+  align-items: center;
 }
 
 
@@ -68,6 +68,17 @@ body, html {
   text-align: left;
   cursor: text;
   padding: 4px;
+  outline: none;
+  resize: none;
+  border-radius: 25px;
+  border: 8px solid #6fffe9;
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+}
+
+.JoinInput::placeholder {
+  color: #3A506B;
 }
 
 .LobbyButton:hover {
@@ -81,9 +92,7 @@ body, html {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 16px;
-  width: 15%;
-  max-width: 400px;
+  width: 380px;
   box-sizing: border-box;
 }
 

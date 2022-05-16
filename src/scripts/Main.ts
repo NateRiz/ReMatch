@@ -1,13 +1,15 @@
 import ClassicGame from './ClassicGame';
-import Canvas from './Canvas'
 import MultiplayerLobby from './MultiplayerLobby';
 import Cookies from './Cookies';
 
 
 function CreateHomepage(){
     //(document.querySelector("#HomepageUI") as HTMLDivElement).classList.remove("Hidden");
-    (document.querySelector("#ClassicButton") as HTMLButtonElement).onclick = () => { PlayClassic() }
-    (document.querySelector("#OnlineButton") as HTMLButtonElement).onclick = () => { GoToOnlineLobby() }
+    (document.querySelector("#ClassicButton") as HTMLButtonElement).onclick = () => { PlayClassic(); }
+    (document.querySelector("#OnlineButton") as HTMLButtonElement).onclick = () => { GoToOnlineLobby(); }
+    (document.querySelector("#OnlineBackButton") as HTMLButtonElement).onclick = () => { GoToMainLobby(); }
+
+    return;
     (document.querySelector("#JoinButton") as HTMLButtonElement).onclick = () => { 
         var gameId = (document.querySelector("#GameIdInput") as HTMLInputElement)?.value
         RedirectToGame(gameId)
@@ -19,11 +21,17 @@ function CreateHomepage(){
         const gameId = makeId(idSize)
         RedirectToGame(gameId)
     }
+
 }
 
 function GoToOnlineLobby(){
     document.querySelector("#BaseLobby")?.classList.add("Hidden")
     document.querySelector("#OnlineLobby")?.classList.remove("Hidden")
+}
+
+function GoToMainLobby(){
+    document.querySelector("#OnlineLobby")?.classList.add("Hidden")
+    document.querySelector("#BaseLobby")?.classList.remove("Hidden")
 }
 
 function PlayClassic(){
