@@ -5,13 +5,45 @@
     color: #6fffe9;
   }
   
-  body, html {
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
     margin: 0;
     padding: 0;
     height: 100%;
     overflow: hidden;
     background-color: #0B132B;
-  }
+    box-sizing: border-box;
+    border-image: linear-gradient(to bottom, #0B132B 0 100%, #6fffe9 100% 100%) 1;
+    border-style: none solid;
+    border-width: 8px;
+    border-radius: 4px;
+}
+
+.Timer{
+    animation-name: TimerAnimation;
+    animation-duration: 20s;
+}
+
+@keyframes TimerAnimation {
+    0%{border-image: linear-gradient(to bottom, #0B132B 0 0%, #6fffe9 10% 100%) 1;}
+    10%{border-image: linear-gradient(to bottom, #0B132B 0 10%, #6fffe9 20% 100%) 1;}
+    20%{border-image: linear-gradient(to bottom, #0B132B 0 20%, #6fffe9 30% 100%) 1;}
+    30%{border-image: linear-gradient(to bottom, #0B132B 0 30%, #6fffe9 40% 100%) 1;}
+    40%{border-image: linear-gradient(to bottom, #0B132B 0 40%, #6fffe9 50% 100%) 1;}
+    50%{border-image: linear-gradient(to bottom, #0B132B 0 50%, #6fffe9 60% 100%) 1;}
+    60%{border-image: linear-gradient(to bottom, #0B132B 0 60%, #6fffe9 70% 100%) 1;}
+    70%{border-image: linear-gradient(to bottom, #0B132B 0 70%, #6fffe9 80% 100%) 1;}
+    80%{border-image: linear-gradient(to bottom, #0B132B 0 80%, #6fffe9 90% 100%) 1;}
+    90%{border-image: linear-gradient(to bottom, #0B132B 0 90%, #6fffe9 100% 100%) 1;}
+    100%{border-image: linear-gradient(to bottom, #0B132B 0 100%, #6fffe9 100% 100%) 1;}
+}
+
 
 .TopContainer {
     height: 14%;

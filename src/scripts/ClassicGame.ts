@@ -47,8 +47,9 @@ export default class ClassicGame{
     }
 
     SubmitGuess(){
-        var isRuleCorrect = this.ruleRegex.test(this.guess)
-        var isWordInDictionary = this.dictionary.has(this.guess)
+        const guess = this.guess.toLowerCase();
+        var isRuleCorrect = this.ruleRegex.test(guess)
+        var isWordInDictionary = this.dictionary.has(guess)
         console.log(isRuleCorrect, isWordInDictionary)
         this.lastWordIsError = !(isRuleCorrect && isWordInDictionary)
         if (this.lastWordIsError){
@@ -71,11 +72,20 @@ export default class ClassicGame{
     }
 
     ResetTimer(){
+        const duration = 20000;
         if (this.timer != null){
             window.clearTimeout(this.timer)
         }
 
-        this.timer = window.setTimeout(()=>{alert("GG")}, 20000)
+        var timerElement = document.body;
+        if(timerElement.classList.contains("Timer")){
+            timerElement.classList.remove("Timer")
+        }
+        timerElement.classList.add("Timer")
+        timerElement.style.animationDuration = Math.floor(duration / 1000).toString() +"s";
+
+        this.timer = window.setTimeout(()=>{alert("GG")}, duration)
+
     }
 
 };
