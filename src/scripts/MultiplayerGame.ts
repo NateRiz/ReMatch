@@ -14,7 +14,6 @@ export default class MultiplayerGame{
     dictionary: Set<string>;
     
     constructor(){
-        super()
         this.ruleGenerator = new RuleGenerator()
         this.ruleRegex = new RegExp(".*")
         this.dictionary = new Set();
