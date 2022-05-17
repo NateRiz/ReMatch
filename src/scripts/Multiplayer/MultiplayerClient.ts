@@ -92,7 +92,7 @@ export default class MultiplayerClient{
                 this.multiplayerGame.OnCorrectGuess();
                 break;
             case 'Winner':
-                this.multiplayerGame.ShowWinner(args);
+                this.multiplayerGame.EndGame(args);
                 break;
             default:
                 console.log(`Invalid Command: [${command}](${args})`)

@@ -111,10 +111,9 @@ export default class MultiplayerGame{
         }
     }
 
-    ShowWinner(playerId: string){
+    EndGame(playerNames: string[]){
         this.hiddenInput.disabled = true;
 
-        const player = this.GetPlayerById(playerId);
         
         const gameDiv = document.querySelector("#PlayerContainer") as HTMLDivElement;
         gameDiv.classList.add("Hidden");    
@@ -122,8 +121,18 @@ export default class MultiplayerGame{
         const resultDiv = document.querySelector("#ResultContainer") as HTMLDivElement;
         resultDiv.classList.remove("Hidden");
 
-        const winnerSpan = document.querySelector("#Winner") as HTMLSpanElement;
-        winnerSpan.textContent = player.nickname;
+        var placeSpan = document.querySelector("#FirstPlace") as HTMLSpanElement;
+        placeSpan.textContent = playerNames[0];
+    
+        placeSpan = document.querySelector("#SecondPlace") as HTMLSpanElement;
+        placeSpan.textContent = playerNames[1];
+
+        if (playerNames.length >= 3){
+            document.querySelector("#ThirdPlaceContainer")?.classList.remove("Hidden");
+
+            placeSpan = document.querySelector("#ThirdPlace") as HTMLSpanElement;
+            placeSpan.textContent = playerNames[2];
+        }
     }
 
     GetPlayerById(playerId: string): Player{

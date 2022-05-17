@@ -1,6 +1,7 @@
 export default class Player{
     id: string = "";
     nickname: string = "";
+    place = 999; // Whichever place this player came in. (first, second...)
     playerCard: HTMLDivElement | undefined;
 
     constructor(id: string, nickname: string){

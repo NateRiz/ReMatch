@@ -4,7 +4,7 @@ import Player from "./Player"
 
 export default class MultiplayerServer{
     multiplayerGame: MultiplayerGame
-    clients: Player[] = []
+    allPlayers: Player[] = []
     turnTimer: number | null = null;
     SendAll: (message: string) => void = (_: string) => {}
     
@@ -30,11 +30,11 @@ export default class MultiplayerServer{
         console.log(`<< [${client.peer}] (Connection Request)`);
 
         var player = new Player(client.peer, nickname);
-        this.clients.push(player)
+        this.allPlayers.push(player)
 
-        this.SendAll(JSON.stringify({"Connect": this.clients}));
+        this.SendAll(JSON.stringify({"Connect": this.allPlayers}));
 
-        if (this.clients.length >= 2){
+        if (this.allPlayers.length >= 2){
             this.EnableStartButton()
         }
     }
@@ -54,7 +54,7 @@ export default class MultiplayerServer{
             {
                 "Start": null,
                 "Rule": this.multiplayerGame.rule,
-                "TurnOrder": this.clients,
+                "TurnOrder": this.allPlayers,
                 "Turn": 0,
             }
         ))
@@ -76,7 +76,7 @@ export default class MultiplayerServer{
     }
 
     private ResetTimer(){
-        const duration = 1000//20000;
+        const duration = 5000//20000;
         if (this.turnTimer != null){
             window.clearTimeout(this.turnTimer)
         }
@@ -84,12 +84,15 @@ export default class MultiplayerServer{
     }
 
     private NotifyUserOutOfTime(){
-        const player = this.multiplayerGame.players[this.multiplayerGame.turn];
+        const gamePlayer = this.multiplayerGame.players[this.multiplayerGame.turn];
         this.SendAll(JSON.stringify({
-            "OutOfTime": player.id
+            "OutOfTime": gamePlayer.id
         }));
         this.multiplayerGame.DecrementTurn();
-        this.multiplayerGame.RemovePlayer(player.id);
+        this.multiplayerGame.RemovePlayer(gamePlayer.id);
+
+        const serverPlayer = this.GetPlayerById(gamePlayer.id);
+        serverPlayer.place = this.multiplayerGame.players.length;
 
         if (this.multiplayerGame.players.length == 1){
             this.EndGame();
@@ -146,11 +149,25 @@ export default class MultiplayerServer{
     }
 
     private EndGame(){
+        const player = this.GetPlayerById(this.multiplayerGame.players[0].id);
+        player.place = 0;
+        this.allPlayers.sort((a:Player, b:Player) => a.place - b.place);
+
+        const topPlaces = Array.from(this.allPlayers.slice(0,3), (p)=>p.nickname);
+
         this.SendAll(JSON.stringify({
-            "Winner": this.multiplayerGame.players[0].id
+            "Winner": topPlaces
         }));
 
         window.clearTimeout(this.turnTimer!);
     }
 
+    // Get player by id: From ALL players, not remaining.
+    private GetPlayerById(playerId: string): Player{
+        const index = this.allPlayers.findIndex(p => {
+            return p.id === playerId;
+        });
+
+        return this.allPlayers[index];
+    }
 }
