@@ -62,6 +62,12 @@ body, html {
   width: 100%;
 }
 
+.LobbyButton:hover {
+  background-color: #6fffe9;
+  color: #0B132B;
+}
+
+
 .JoinInput{
   flex-grow: 100;
   box-sizing: border-box;
@@ -82,10 +88,6 @@ body, html {
   color: #3A506B;
 }
 
-.LobbyButton:hover {
-  background-color: #6fffe9;
-  color: #0B132B;
-}
 
 .LobbyInputContainer {
   border-radius: 25px;

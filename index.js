@@ -22,9 +22,15 @@ function main() {
     app.use('/peerjs', peerServer);
     app.get('/peerjs/*', peerServer);
 
-    app.get('/*', (_req, res) => {
+    app.get('/', (_req, res) => {
         res.sendFile('./src/views/index.html', { root: __dirname });
     });
+
+    app.get('/*', (_req, res) => {
+        res.sendFile('./src/views/Multiplayer.html', { root: __dirname });
+    });
+
+
 }
 
 main();

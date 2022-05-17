@@ -8,7 +8,7 @@ export default class MultiplayerClient{
         this.multiplayerGame = multiplayerGame;
 
         window.addEventListener('keydown', (event) => {
-            const hiddenTextBox = document.querySelector("#HiddenGuessInput") as HTMLInputElement;
+            const hiddenTextBox = document.querySelector("#HiddenInput") as HTMLInputElement;
             const activeElement = document.activeElement
             if (activeElement !== hiddenTextBox && activeElement !== document.body){
                 return;
@@ -18,11 +18,10 @@ export default class MultiplayerClient{
                 this.SubmitGuess()
             }else{
                 hiddenTextBox.focus();
-                // this.canvas.Redraw();
             }
         });
 
-        const hiddenInput = (document.querySelector("#HiddenGuessInput") as HTMLInputElement)
+        const hiddenInput = (document.querySelector("#HiddenInput") as HTMLInputElement)
         const self = this;
         hiddenInput.setAttribute('input-prev-val', '')
         hiddenInput.addEventListener('input', function(e){
@@ -86,6 +85,9 @@ export default class MultiplayerClient{
                 break;
             case 'IncorrectGuess':
                 console.log("Wrong guess")
+                break;
+            case 'OutOfTime':
+                this.multiplayerGame.RemovePlayer(args)
                 break;
             case 'CorrectGuess':
                 console.log("Correct Guess")

@@ -4,17 +4,27 @@ import RuleGenerator from "../RuleGenerator"
 export default class MultiplayerGame{
     players: Player[] = [] // All player ids
     turn: number = 0 // player's id for whoever's turn it is
+    round: number = 0
     me: string = "" // This player's peer id
     ruleGenerator: RuleGenerator
     rule: string = ""
     guess: string = ""
     ruleRegex: RegExp
     dictionary: Set<string>;
-    
+
+    hiddenInput: HTMLInputElement;
+    ruleSpan: HTMLSpanElement;
+    guessSpan: HTMLSpanElement;
+    roundSpan: HTMLSpanElement;
+
     constructor(){
         this.ruleGenerator = new RuleGenerator()
         this.ruleRegex = new RegExp(".*")
         this.dictionary = new Set();
+        this.hiddenInput = document.querySelector("#HiddenInput") as HTMLInputElement;
+        this.ruleSpan = document.querySelector("#Rule") as HTMLSpanElement;
+        this.guessSpan = document.querySelector("#Guess") as HTMLSpanElement;
+        this.roundSpan = document.querySelector("#Round") as HTMLSpanElement;
         
         fetch('./src/assets/dict.txt')
         .then(response => response.text())
@@ -25,18 +35,29 @@ export default class MultiplayerGame{
             });
             console.log("loaded dict")
         })
-        
-        this.Draw();
     }
 
     OnStartGame(){
-        this.gameState = GameState.INGAME
+        // Not needed for now?
     }
 
     OnPlayerConnect(allPlayers: object[]){
         this.players = Array.from(allPlayers, (p) => Object.setPrototypeOf(p, Player.prototype));
-        console.log(".>", allPlayers)
-        this.Draw()
+        var playerContainer = document.querySelector("#PlayerContainer");
+        var child = playerContainer?.lastElementChild
+        while (child){
+            playerContainer?.removeChild(child);
+            child = playerContainer?.lastElementChild;
+        }
+
+        var template = document.querySelector("#PlayerTemplate") as HTMLTemplateElement;
+        this.players.forEach((player) => {
+            var clone = template.content.cloneNode(true);
+            player.playerCard = clone.childNodes[1] as HTMLDivElement;
+            (player.playerCard.childNodes[1] as HTMLSpanElement).textContent = player.nickname;
+            playerContainer?.appendChild(clone);
+        });
+
     }
 
     OnCreateMyClientCallback(me: string){
@@ -45,28 +66,49 @@ export default class MultiplayerGame{
 
     OnReceiveRule(rule: string){
         this.rule = rule
-        this.Draw()
+        this.ruleSpan.textContent = this.rule;
     }
 
     OnReceiveTurnOrder(playerIds: string[]){
         this.players.sort((a, b) => +(playerIds.indexOf(a.id) < playerIds.indexOf(b.id)));
-        this.Draw();
     }
 
-    OnReceiveTurn(player: number){
-        this.turn = player;
-        this.Draw();
+    OnReceiveTurn(playerTurn: number){
+        this.turn = playerTurn;
+        this.players.forEach((player) => {
+            player.DeselectPlayerCard();
+        })
+
+        this.players[playerTurn].SelectPlayerCard()
+
+        if (this.turn === 0){
+            this.round += 1
+            this.roundSpan.textContent = this.round.toString()
+        }
+
+        this.ResetTimer();
     }
 
     OnGuessUpdate(value: string){
         this.guess = value
-        this.Draw()
+        this.guessSpan.textContent = this.guess
     }
 
     OnCorrectGuess(){
-        var hiddenTextBox = document.querySelector("#HiddenGuessInput") as HTMLInputElement;
-        hiddenTextBox.value = '';
+        this.hiddenInput.value = '';
         this.guess = '';
+        this.guessSpan.textContent = this.guess
+    }
+
+    RemovePlayer(playerId: string){
+        const index = this.players.findIndex(p => {
+            return p.id === playerId;
+        });
+
+        if (index !== -1){
+            this.players[index].RemovePlayer();
+            this.players.splice(index, 1);
+        }
     }
 
     IsMyTurn(){
@@ -92,82 +134,32 @@ export default class MultiplayerGame{
         return isRuleCorrect && isWordInDictionary;
     }
 
-    // Server Only Functions
+    // ### Server Only Functions ###
     ResetWord(){
-        this.rule = this.ruleGenerator._GetRule(1)
+        this.rule = this.ruleGenerator._GetRule(1);
         this.ruleRegex = new RegExp(this.rule.replaceAll("*",".*").replaceAll("+", ".+"), "i");
-        this.guess = ""
+        this.guess = "";
+        this.guessSpan.textContent = this.guess;
+    }
+
+    // Used after a player is removed from the game to re-sync turn order
+    DecrementTurn(){
+        this.turn -= 1
     }
 
     IncrementTurn(){
         this.turn = (this.turn + 1) % this.players.length;
     }
-    // End Server Functions
+    // ### End Server Only Functions ###
 
-    public Draw(){
-        switch(this.gameState){
-            case GameState.LOBBY:
-                this.DrawLobby();
-                break;
-            case GameState.INGAME:
-                this.DrawGame();
-                break;
-            default:
-                break;
-        }
+    private ResetTimer(){
+        const duration = 20000;
+
+        var timerElement = document.body;
+        
+        timerElement.classList.remove("Timer");
+        window.setTimeout(()=>timerElement.classList.add("Timer"), 50);
+
+        timerElement.style.animationDuration = Math.floor(duration / 1000).toString() +"s";
     }
-
-    private DrawLobby(){
-        this.context.fillStyle = 'white';
-        var fontSize = 42
-        this.context.font = `bold ${fontSize}px Monospace`
-        var buffer = 16
-
-        const connectedText = "Connected:"
-        var x = buffer
-        var y = fontSize
-        this.context.fillText(connectedText, x, y)
-
-        this.players.forEach((p) => {
-            y += fontSize
-            this.context.fillText(p.nickname, x, y)
-        })
-    }
-
-    private DrawGame() {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        // Draw Rule
-        var buffer = 16
-        var fontSize = 42
-        this.context.fillStyle = 'white';
-        /*
-        if (this.lastWordIsError){
-            this.c.fillStyle = "red"
-        } else {
-            this.c.fillStyle = 'white';
-        }
-        */
-        this.context.font = `bold ${fontSize}px Monospace`
-        var x = this.canvas.width / 2 - this.context.measureText(this.rule).width/2
-        var y = fontSize
-        this.context.fillText(this.rule, x, y)
-    
-        // Draw Guess
-        this.context.fillStyle = 'white';
-        x = this.canvas.width / 2 - this.context.measureText(this.guess).width/2
-        y = this.canvas.height / 2 - fontSize/2
-        this.context.fillText(this.guess, x, y)
-
-        // Draw Rules
-        var text = "Rules"
-        x = this.canvas.width - buffer - this.context.measureText(text).width
-        y = fontSize * 4
-        this.context.fillText(text, x, y)
-        // Draw Actual Rules
-        text = ["*", "*+", "*+|"][2]
-        x = this.canvas.width - buffer - this.context.measureText(text).width
-        y = fontSize * 5
-        this.context.fillText(text, x, y)
-    }
-
 }

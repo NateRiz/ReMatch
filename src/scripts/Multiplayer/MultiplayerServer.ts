@@ -5,14 +5,16 @@ import Player from "./Player"
 export default class MultiplayerServer{
     multiplayerGame: MultiplayerGame
     clients: Player[] = []
+    turnTimer: number | null = null;
     SendAll: (message: string) => void = (_: string) => {}
     
     constructor(multiplayerGame: MultiplayerGame){
         this.multiplayerGame = multiplayerGame;
-        (document.querySelector("#LeaveButton") as HTMLButtonElement).onclick = () => this.SendAll("{Testing from server:0}");
 
-        var startMPButton = (document.querySelector("#StartMultiplayerButton") as HTMLButtonElement)
-        startMPButton.parentElement!.classList.remove("Hidden")
+        var ruleSpan = (document.querySelector("#RuleContainer") as HTMLDivElement);
+        ruleSpan.classList.add("Hidden");
+        var startMPButton = (document.querySelector("#StartButtonContainer") as HTMLButtonElement);
+        startMPButton.classList.remove("Hidden");
 
     }
 
@@ -42,6 +44,11 @@ export default class MultiplayerServer{
     }
 
     private StartGame(){
+        var startMPButton = (document.querySelector("#StartButtonContainer") as HTMLButtonElement);
+        startMPButton.classList.add("Hidden");
+        var ruleSpan = (document.querySelector("#RuleContainer") as HTMLDivElement);
+        ruleSpan.classList.remove("Hidden");
+
         this.multiplayerGame.ResetWord()
         this.SendAll(JSON.stringify(
             {
@@ -51,6 +58,8 @@ export default class MultiplayerServer{
                 "Turn": 0,
             }
         ))
+
+        this.ResetTimer();
     }
 
     private StartNextTurn(){
@@ -62,6 +71,31 @@ export default class MultiplayerServer{
                 "Turn": this.multiplayerGame.turn,
             }
         ))
+
+        this.ResetTimer();
+    }
+
+    private ResetTimer(){
+        const duration = 20000;
+        if (this.turnTimer != null){
+            window.clearTimeout(this.turnTimer)
+        }
+        this.turnTimer = window.setTimeout(()=>{ this.NotifyUserOutOfTime() }, duration)
+    }
+
+    private NotifyUserOutOfTime(){
+        const player = this.multiplayerGame.players[this.multiplayerGame.turn];
+        this.SendAll(JSON.stringify({
+            "OutOfTime": player.id
+        }));
+        this.multiplayerGame.DecrementTurn();
+        this.multiplayerGame.RemovePlayer(player.id);
+
+        if (this.multiplayerGame.players.length == 1){
+            // EndGame();
+        }else{
+            this.StartNextTurn();
+        }
     }
 
     private DispatchCommand(client: Peer.DataConnection, command: string, args: any){
@@ -107,8 +141,7 @@ export default class MultiplayerServer{
     }
 
     private EnableStartButton(){
-        var startMPButton = (document.querySelector("#StartMultiplayerButton") as HTMLButtonElement);
-        startMPButton.disabled = false;
+        var startMPButton = (document.querySelector("#StartButton") as HTMLButtonElement);
         startMPButton.onclick = () => this.StartGame();
     }
 

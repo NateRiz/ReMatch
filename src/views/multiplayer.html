@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="src/css/multiplayer.css">
+</head>
+
+<body>
+    <div class='TopContainer'>
+        <div class="TopLeftFiller"></div>
+        <div class="TitleContainer">
+            <div class="TitleContainerInner">
+                <span class="Title">R*MATCH</span>
+            </div>
+        </div>
+        <div class="RoundContainer">
+            <span id="Round">0</span>
+            <span id="AvailableRules">*</span>
+        </div>
+    </div>
+    <div class="GameContainer">
+        <div id="StartButtonContainer" class="StartButtonContainer Hidden">
+            <button id="StartButton" class="GameButton">Start</button>
+        </div>
+        <div id="RuleContainer" class="RuleContainer">
+            <span id="Rule">Waiting...</span>
+        </div>
+        <div class="GuessContainer">
+            <span class="Guess" id="Guess"></span>
+        </div>
+        <template id="PlayerTemplate">
+            <div class="PlayerTemplate PlayerTemplateSelected">
+                <span class="PlayerIdle">{name}</span>
+            </div>
+        </template>
+        <div id="PlayerContainer" class="PlayerContainer"></div>
+
+        <input id="HiddenInput" class="HiddenInput " pattern="[a-zA-Z]+"/>
+    </div>
+</body>
+
+<script src="dist/multi-bundle.js"></script>

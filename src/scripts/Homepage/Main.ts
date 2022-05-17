@@ -63,12 +63,6 @@ function SetupNavBar(){
 function Main(){
     SetupNavBar();
     CreateHomepage()
-    return;
-    var lobbyId = window.location.pathname.replace("/", "");
-    if (lobbyId != ""){
-        (document.querySelector("#MultiPlayerUI") as HTMLDivElement).classList.remove("Hidden");
-        var multiplayerLobby = new MultiplayerLobby(lobbyId)
-    }
 }
 
 
