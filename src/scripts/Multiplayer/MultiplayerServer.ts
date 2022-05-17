@@ -76,7 +76,7 @@ export default class MultiplayerServer{
     }
 
     private ResetTimer(){
-        const duration = 20000;
+        const duration = 1000//20000;
         if (this.turnTimer != null){
             window.clearTimeout(this.turnTimer)
         }
@@ -92,7 +92,7 @@ export default class MultiplayerServer{
         this.multiplayerGame.RemovePlayer(player.id);
 
         if (this.multiplayerGame.players.length == 1){
-            // EndGame();
+            this.EndGame();
         }else{
             this.StartNextTurn();
         }
@@ -143,6 +143,14 @@ export default class MultiplayerServer{
     private EnableStartButton(){
         var startMPButton = (document.querySelector("#StartButton") as HTMLButtonElement);
         startMPButton.onclick = () => this.StartGame();
+    }
+
+    private EndGame(){
+        this.SendAll(JSON.stringify({
+            "Winner": this.multiplayerGame.players[0].id
+        }));
+
+        window.clearTimeout(this.turnTimer!);
     }
 
 }

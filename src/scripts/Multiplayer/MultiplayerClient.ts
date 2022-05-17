@@ -81,17 +81,18 @@ export default class MultiplayerClient{
                 this.multiplayerGame.OnReceiveTurn(args);
                 break;
             case 'ServerGuessUpdate':
-                this.multiplayerGame.OnGuessUpdate(args)
+                this.multiplayerGame.OnGuessUpdate(args);
                 break;
             case 'IncorrectGuess':
-                console.log("Wrong guess")
                 break;
             case 'OutOfTime':
-                this.multiplayerGame.RemovePlayer(args)
+                this.multiplayerGame.RemovePlayer(args);
                 break;
             case 'CorrectGuess':
-                console.log("Correct Guess")
-                this.multiplayerGame.OnCorrectGuess()
+                this.multiplayerGame.OnCorrectGuess();
+                break;
+            case 'Winner':
+                this.multiplayerGame.ShowWinner(args);
                 break;
             default:
                 console.log(`Invalid Command: [${command}](${args})`)

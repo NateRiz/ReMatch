@@ -38,7 +38,7 @@ export default class MultiplayerGame{
     }
 
     OnStartGame(){
-        // Not needed for now?
+        this.hiddenInput.disabled = false;
     }
 
     OnPlayerConnect(allPlayers: object[]){
@@ -109,6 +109,29 @@ export default class MultiplayerGame{
             this.players[index].RemovePlayer();
             this.players.splice(index, 1);
         }
+    }
+
+    ShowWinner(playerId: string){
+        this.hiddenInput.disabled = true;
+
+        const player = this.GetPlayerById(playerId);
+        
+        const gameDiv = document.querySelector("#PlayerContainer") as HTMLDivElement;
+        gameDiv.classList.add("Hidden");    
+        
+        const resultDiv = document.querySelector("#ResultContainer") as HTMLDivElement;
+        resultDiv.classList.remove("Hidden");
+
+        const winnerSpan = document.querySelector("#Winner") as HTMLSpanElement;
+        winnerSpan.textContent = player.nickname;
+    }
+
+    GetPlayerById(playerId: string): Player{
+        const index = this.players.findIndex(p => {
+            return p.id === playerId;
+        });
+
+        return this.players[index];
     }
 
     IsMyTurn(){
