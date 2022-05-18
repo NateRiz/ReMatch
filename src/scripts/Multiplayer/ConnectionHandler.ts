@@ -10,8 +10,9 @@ export default class ConnectionHandler{
     isHost:boolean = false;
     ClientMessageHandler: (msg: string) => void = (_: string) => {}
     ServerMessageHandler: (conn: Peer.DataConnection, msg: string) => void = (_c:Peer.DataConnection, _s: string) => {}
-    OnCreateHostCallback: ()=>void = ()=>{}
-    OnCreateMyClientCallback: (me: string)=>void = (_: string)=>{}
+    OnClientDisconnect: (peerId: string) => void = (_: string) => {}
+    OnCreateHostCallback: ()=>void = () => {}
+    OnCreateMyClientCallback: (me: string) => void = (_: string) => {}
 
     constructor(lobbyId: string, OnCreateHostCallback: ()=>void, OnCreateMyClientCallback: (_: string)=>void){
         this.lobbyId = lobbyId;
@@ -44,6 +45,10 @@ export default class ConnectionHandler{
         this.ServerMessageHandler = callback;
     }
 
+    RegisterServerClientDisconnect(callback: (peerId: string) => void){
+        this.OnClientDisconnect = callback;
+    }
+
     private TryCreatePeerHost(){
         // Peer with id == lobbyid is the host
         this.peerHost = new Peer(this.lobbyId, {
@@ -58,9 +63,14 @@ export default class ConnectionHandler{
             this.isHost = true
             this.peerHost!.on('connection', (conn) => {
                 this.clients.push(conn)
+                
                 conn.on('data', (data) => {
                   this.ServerMessageHandler(conn, data)
                 });
+
+                conn.on("close", () => {
+                    this.OnClientDisconnect(conn.peer);
+                })
             });
             this.OnCreateHostCallback()
         })

@@ -39,6 +39,33 @@ export default class MultiplayerServer{
         }
     }
 
+    OnClientDisconnect(peerId: string){
+        var currentPlayer = this.multiplayerGame.players[this.multiplayerGame.turn];
+        this.multiplayerGame.RemovePlayer(peerId);
+
+        this.SendAll(JSON.stringify({
+            "Disconnect": peerId
+        }));
+
+        if (currentPlayer.id === peerId){
+            this.multiplayerGame.DecrementTurn();
+            this.StartNextTurn();
+        } else {
+            var turn = this.multiplayerGame.players.indexOf(currentPlayer);
+            this.SendAll(JSON.stringify({
+                "Turn": turn,
+            }))
+        }
+
+        const index = this.allPlayers.findIndex(p => {
+            return p.id === peerId;
+        });
+
+        if(index !== -1){
+            this.allPlayers.splice(index, 1);
+        }
+    }
+
     RegisterSendCallback(callback: (msg: string) => void){
         this.SendAll = callback;
     }
@@ -76,7 +103,7 @@ export default class MultiplayerServer{
     }
 
     private ResetTimer(){
-        const duration = 5000//20000;
+        const duration = 20000;
         if (this.turnTimer != null){
             window.clearTimeout(this.turnTimer)
         }

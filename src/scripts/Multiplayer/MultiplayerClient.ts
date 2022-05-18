@@ -68,6 +68,9 @@ export default class MultiplayerClient{
             case "Connect":
                 this.multiplayerGame.OnPlayerConnect(args)
                 break
+            case "Disconnect":
+                this.multiplayerGame.OnPlayerDisconnect(args);
+                break;
             case "Start":
                 this.multiplayerGame.OnStartGame();
                 break;

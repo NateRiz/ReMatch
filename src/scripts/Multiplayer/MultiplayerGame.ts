@@ -45,7 +45,7 @@ export default class MultiplayerGame{
         this.players = Array.from(allPlayers, (p) => Object.setPrototypeOf(p, Player.prototype));
         var playerContainer = document.querySelector("#PlayerContainer");
         var child = playerContainer?.lastElementChild;
-        
+
         while (child){
             playerContainer?.removeChild(child);
             child = playerContainer?.lastElementChild;
@@ -54,7 +54,10 @@ export default class MultiplayerGame{
         this.players.forEach((player) => {
             player.CreatePlayerCard()
         });
+    }
 
+    OnPlayerDisconnect(peerId: string){
+        this.RemovePlayer(peerId);
     }
 
     OnCreateMyClientCallback(me: string){
