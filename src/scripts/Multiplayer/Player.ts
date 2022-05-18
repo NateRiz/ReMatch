@@ -4,6 +4,7 @@ export default class Player{
     abbreviatedNickname: string = "";
     place = 999; // Whichever place this player came in. (first, second...)
     playerCard: HTMLDivElement | undefined;
+    playerNameSpan: HTMLSpanElement | undefined
 
     constructor(id: string, nickname: string){
         this.id = id;
@@ -14,16 +15,16 @@ export default class Player{
         this.playerCard?.classList.remove("PlayerTemplateIdle");
         this.playerCard?.classList.add("PlayerTemplateSelected");
 
-        this.playerCard?.children[0].classList.remove("PlayerIdle");
-        this.playerCard?.children[0].classList.add("PlayerSelected");
+        this.playerNameSpan?.classList.remove("PlayerIdle");
+        this.playerNameSpan?.classList.add("PlayerSelected");
     }
 
     public DeselectPlayerCard(){
         this.playerCard?.classList.remove("PlayerTemplateSelected");
         this.playerCard?.classList.add("PlayerTemplateIdle");
         
-        this.playerCard?.children[0].classList.remove("PlayerSelected");
-        this.playerCard?.children[0].classList.add("PlayerIdle");
+        this.playerNameSpan?.classList.remove("PlayerSelected");
+        this.playerNameSpan?.classList.add("PlayerIdle");
     }
 
     public RemovePlayer(){
@@ -41,10 +42,27 @@ export default class Player{
         var playerContainer = document.querySelector("#PlayerContainer");
 
         var clone = template.content.cloneNode(true);
-        this.playerCard = clone.childNodes[1] as HTMLDivElement;
-
-        (this.playerCard.childNodes[1] as HTMLSpanElement).textContent = this.abbreviatedNickname;
         playerContainer?.appendChild(clone);
+
+        this.playerCard = playerContainer?.lastElementChild as HTMLDivElement;
+        this.playerNameSpan = this.playerCard.querySelector(".PlayerSpan") as HTMLSpanElement;
+        this.playerNameSpan.textContent = this.abbreviatedNickname;
+    }
+
+    public SetLives(lives: number) {
+        const lifeContainer = this.playerCard?.querySelector("#PlayerLivesContainer") as HTMLDivElement;
+        var child = lifeContainer?.lastElementChild;
+        while (child){
+            lifeContainer?.removeChild(child);
+            child = lifeContainer?.lastElementChild;
+        }
+
+        var template = document.querySelector("#LifeTemplate") as HTMLTemplateElement;
+
+        for(var i = 0; i < lives; i++){
+            var clone = template.content.cloneNode(true);
+            lifeContainer?.appendChild(clone);
+        }
     }
 
     toJSON(){

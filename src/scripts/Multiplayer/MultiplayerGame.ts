@@ -1,5 +1,6 @@
 import Player from "./Player"
 import RuleGenerator from "../RuleGenerator"
+import Settings from "./Settings"
 
 export default class MultiplayerGame{
     players: Player[] = [] // All player ids
@@ -37,8 +38,11 @@ export default class MultiplayerGame{
         })
     }
 
-    OnStartGame(){
+    OnStartGame(settings: Settings){
         this.hiddenInput.disabled = false;
+        this.players.forEach(player => {
+            player.SetLives(settings.lives);
+        });
     }
 
     OnPlayerConnect(allPlayers: object[]){

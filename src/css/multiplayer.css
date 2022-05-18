@@ -94,6 +94,8 @@ body {
     float: left;
     cursor: pointer;
     padding: 0px 8px;
+    height: 32px;
+    width: 32px;
 }
 
 .MainContainer {
@@ -154,6 +156,15 @@ body {
     font-size:  96px;
 }
 
+.PlayerLivesContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    justify-items: right;
+    width: 100%;
+    padding: 8px 32px 0px 0px;
+}
+
 .PlayerContainer {
     padding-top: 16px;
     display: flex;
@@ -169,18 +180,14 @@ body {
 
 .PlayerIdle {
     color: #1C2541;
-    padding: 16px;
 }
 
 .PlayerSelected {
     color:#0B132B;
-    padding: 32px;
-    transition-duration: .1s;
 }
 
 .PlayerTemplate {
     width: 400px;
-    height: 108px;
     border-radius: 25px;
     display: flex;
     flex-direction: column;
@@ -191,10 +198,13 @@ body {
 
 .PlayerTemplateSelected {
     background-color: #6fffe9;
+    padding: 12px;
+    transition: all .1s linear;
 }
 
 .PlayerTemplateIdle {
     background-color: #5BC0BE;
+    transition: all .1s linear;
 }
 
 .RestartContainer{

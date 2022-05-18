@@ -3,6 +3,7 @@ import Settings from "./Settings";
 
 export default class MultiplayerClient{
     multiplayerGame: MultiplayerGame;
+    settings: Settings | undefined;
     Send: (message: string) => void = (_: string) => {}
     
     constructor(multiplayerGame: MultiplayerGame){
@@ -74,8 +75,7 @@ export default class MultiplayerClient{
     }
 
     private OnReceiveSettings(settings: any){
-        Object.setPrototypeOf(settings, Settings.prototype).PopulateUI();
-        
+        this.settings = Settings.CreateSettingsFromJSON(settings);
     }
 
     private DispatchCommand(command: string, args: any){
@@ -90,7 +90,7 @@ export default class MultiplayerClient{
                 this.multiplayerGame.OnPlayerDisconnect(args);
                 break;
             case "Start":
-                this.multiplayerGame.OnStartGame();
+                this.multiplayerGame.OnStartGame(this.settings);
                 break;
             case "Rule":
                 this.multiplayerGame.OnReceiveRule(args);

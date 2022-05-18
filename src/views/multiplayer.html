@@ -13,14 +13,11 @@
             </div>
     
             <div class="LivesContainer">
-                <img id="OneLife" class="Life" src="./src/assets/heart_full.svg" width='32px' height='32px'/>
-                <img id="TwoLife" class="Life" src="./src/assets/heart_empty.svg" width='32px' height='32px'/>
-                <img id="ThreeLife" class="Life" src="./src/assets/heart_empty.svg" width='32px' height='32px'/>
+                <img id="OneLife" class="Life" src="./src/assets/heart_full.svg"/>
+                <img id="TwoLife" class="Life" src="./src/assets/heart_empty.svg"/>
+                <img id="ThreeLife" class="Life" src="./src/assets/heart_empty.svg"/>
             </div>
         </div>
-
-        
-        
         <div class = "MainContainer">
             <div class='TopContainer'>
                 <div class="TopLeftFiller"></div>
@@ -44,11 +41,6 @@
                 <div class="GuessContainer">
                     <span class="Guess" id="Guess"></span>
                 </div>
-                <template id="PlayerTemplate">
-                    <div class="PlayerTemplate PlayerTemplateSelected">
-                        <span class="PlayerIdle">{name}</span>
-                    </div>
-                </template>
                 <div id="PlayerContainer" class="PlayerContainer"></div>
                 <div id="ResultContainer" class="ResultContainer Hidden">
                     <span class="ResultText">Winner!</span>
@@ -88,5 +80,17 @@
         </div> 
     </div>
 </body>
+
+<template id="LifeTemplate">
+    <img src="./src/assets/heart_full_dark.svg" height=32px width=32px/>
+</template>
+
+<template id="PlayerTemplate">
+    <div class="PlayerTemplate PlayerTemplateSelected">
+        <div id="PlayerLivesContainer" class="PlayerLivesContainer">
+        </div>
+        <span class="PlayerSpan PlayerIdle">{name}</span>
+    </div>
+</template>
 
 <script src="dist/multi-bundle.js"></script>

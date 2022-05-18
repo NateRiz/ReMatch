@@ -1,10 +1,15 @@
 export default class Settings{
-    onSettingsChange: ()=>void = ()=>{};
+    onSettingsChange: ()=>void;
     lives: number = 1
+    static noop = ()=>{};
 
-    constructor(onSettingsChange: ()=>void){
+    constructor(onSettingsChange: ()=>void = Settings.noop){
         this.onSettingsChange = onSettingsChange;
+        if(this.onSettingsChange === Settings.noop){
+            return; // client
+        }
 
+        // Server
         var OneLifeButton = document.querySelector("#OneLife") as HTMLButtonElement;
         OneLifeButton.onclick = () => {
             this.SetLives(1)
@@ -19,8 +24,11 @@ export default class Settings{
         }
     }
 
-    PopulateUI(){
-        this.SetLives(this.lives);
+    public static CreateSettingsFromJSON(json: any){
+        const settings = new Settings();
+        Object.assign(settings, json);
+        settings.SetLives(settings.lives);
+        return settings;
     }
 
     toJSON(){
@@ -29,7 +37,7 @@ export default class Settings{
         };
     }
 
-    private SetLives(lives: number){
+    public SetLives(lives: number){
         this.lives = lives
 
         const twoButton = document.querySelector("#TwoLife") as HTMLImageElement;

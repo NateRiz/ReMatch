@@ -35,6 +35,7 @@ export default class MultiplayerServer{
         this.allPlayers.push(player)
 
         this.SendAll(JSON.stringify({"Connect": this.allPlayers}));
+        client.send(JSON.stringify({"Settings":this.settings}));
 
         if (this.allPlayers.length >= 2){
             this.EnableStartButton()
@@ -79,14 +80,13 @@ export default class MultiplayerServer{
         ruleSpan.classList.remove("Hidden");
 
         this.multiplayerGame.ResetWord()
-        this.SendAll(JSON.stringify(
-            {
-                "Start": null,
-                "Rule": this.multiplayerGame.rule,
-                "TurnOrder": this.allPlayers,
-                "Turn": 0,
-            }
-        ))
+        this.SendAll(JSON.stringify({
+            "Start": null,
+            "Rule": this.multiplayerGame.rule,
+            "TurnOrder": this.allPlayers,
+            "Turn": 0,
+            "Settings": JSON.stringify(this.settings)
+        }));
 
         this.ResetTimer();
     }
@@ -105,7 +105,7 @@ export default class MultiplayerServer{
     }
 
     private ResetTimer(){
-        const duration = 500//20000;
+        const duration = 120000;
         if (this.turnTimer != null){
             window.clearTimeout(this.turnTimer)
         }
