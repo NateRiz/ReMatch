@@ -66,7 +66,34 @@ body {
 
 .SettingsText{
     text-align: center;
-    font-size: 48px;
+    font-size: 36px;
+    border-width: 0px 0px 4px 0px;
+    border-style: solid;
+    border-color:#6fffe9;
+}
+
+.LivesText {
+    padding: 4px;
+    font-size: 28px;
+}
+
+.LivesTextContainer {
+    background-color: #1C2541;
+    display: flex;
+}
+
+.LivesContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    justify-items: center;
+    padding: 8px 0px;
+}
+
+.Life {
+    float: left;
+    cursor: pointer;
+    padding: 0px 8px;
 }
 
 .MainContainer {

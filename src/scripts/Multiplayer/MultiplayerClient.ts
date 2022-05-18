@@ -1,4 +1,5 @@
 import MultiplayerGame from "./MultiplayerGame";
+import Settings from "./Settings";
 
 export default class MultiplayerClient{
     multiplayerGame: MultiplayerGame;
@@ -72,10 +73,18 @@ export default class MultiplayerClient{
         }
     }
 
+    private OnReceiveSettings(settings: any){
+        Object.setPrototypeOf(settings, Settings.prototype).PopulateUI();
+        
+    }
+
     private DispatchCommand(command: string, args: any){
         switch(command){
+            case "Settings":
+                this.OnReceiveSettings(args);
+                break;
             case "Connect":
-                this.multiplayerGame.OnPlayerConnect(args)
+                this.multiplayerGame.OnPlayerConnect(args);
                 break
             case "Disconnect":
                 this.multiplayerGame.OnPlayerDisconnect(args);

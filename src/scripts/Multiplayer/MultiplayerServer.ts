@@ -1,11 +1,13 @@
 import Peer from "peerjs"
 import MultiplayerGame from "./MultiplayerGame"
 import Player from "./Player"
+import Settings from "./Settings"
 
 export default class MultiplayerServer{
     multiplayerGame: MultiplayerGame
     allPlayers: Player[] = []
     turnTimer: number | null = null;
+    settings: Settings;
     SendAll: (message: string) => void = (_: string) => {}
     
     constructor(multiplayerGame: MultiplayerGame){
@@ -15,6 +17,7 @@ export default class MultiplayerServer{
         ruleSpan.classList.add("Hidden");
         var startMPButton = (document.querySelector("#StartButtonContainer") as HTMLButtonElement);
         startMPButton.classList.remove("Hidden");
+        this.settings = new Settings(() => {this.SendAll(JSON.stringify({"Settings": this.settings}))});
     }
 
     OnReceiveMessage(client: Peer.DataConnection, message: string){
