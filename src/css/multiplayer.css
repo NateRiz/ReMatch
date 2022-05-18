@@ -124,7 +124,8 @@ body {
 }
 
 .PlayerTemplate {
-    width: 250px;
+    width: 400px;
+    height: 108px;
     border-radius: 25px;
     display: flex;
     flex-direction: column;

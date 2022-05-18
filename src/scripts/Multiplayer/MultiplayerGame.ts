@@ -44,18 +44,15 @@ export default class MultiplayerGame{
     OnPlayerConnect(allPlayers: object[]){
         this.players = Array.from(allPlayers, (p) => Object.setPrototypeOf(p, Player.prototype));
         var playerContainer = document.querySelector("#PlayerContainer");
-        var child = playerContainer?.lastElementChild
+        var child = playerContainer?.lastElementChild;
+        
         while (child){
             playerContainer?.removeChild(child);
             child = playerContainer?.lastElementChild;
         }
 
-        var template = document.querySelector("#PlayerTemplate") as HTMLTemplateElement;
         this.players.forEach((player) => {
-            var clone = template.content.cloneNode(true);
-            player.playerCard = clone.childNodes[1] as HTMLDivElement;
-            (player.playerCard.childNodes[1] as HTMLSpanElement).textContent = player.nickname;
-            playerContainer?.appendChild(clone);
+            player.CreatePlayerCard()
         });
 
     }

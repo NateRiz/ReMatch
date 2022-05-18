@@ -1,6 +1,7 @@
 export default class Player{
     id: string = "";
     nickname: string = "";
+    abbreviatedNickname: string = "";
     place = 999; // Whichever place this player came in. (first, second...)
     playerCard: HTMLDivElement | undefined;
 
@@ -27,6 +28,23 @@ export default class Player{
 
     public RemovePlayer(){
         this.playerCard?.parentNode?.removeChild(this.playerCard);
+    }
+
+    public CreatePlayerCard(){
+        this.abbreviatedNickname = this.nickname;
+        const MaxNameWidth = 11
+        if (this.nickname.length > MaxNameWidth - 2){
+            this.abbreviatedNickname = this.nickname.slice(0, MaxNameWidth-2) + "..";
+        }
+
+        var template = document.querySelector("#PlayerTemplate") as HTMLTemplateElement;
+        var playerContainer = document.querySelector("#PlayerContainer");
+
+        var clone = template.content.cloneNode(true);
+        this.playerCard = clone.childNodes[1] as HTMLDivElement;
+
+        (this.playerCard.childNodes[1] as HTMLSpanElement).textContent = this.abbreviatedNickname;
+        playerContainer?.appendChild(clone);
     }
 
     toJSON(){
