@@ -15,7 +15,6 @@ export default class MultiplayerServer{
         ruleSpan.classList.add("Hidden");
         var startMPButton = (document.querySelector("#StartButtonContainer") as HTMLButtonElement);
         startMPButton.classList.remove("Hidden");
-
     }
 
     OnReceiveMessage(client: Peer.DataConnection, message: string){
@@ -103,7 +102,7 @@ export default class MultiplayerServer{
     }
 
     private ResetTimer(){
-        const duration = 20000;
+        const duration = 500//20000;
         if (this.turnTimer != null){
             window.clearTimeout(this.turnTimer)
         }

@@ -32,6 +32,9 @@ export default class MultiplayerClient{
               this.value = hiddenInput.getAttribute('input-prev-val')!;
             }
         }); 
+
+        const retryButton = document.querySelector("#Restart") as HTMLButtonElement;
+        retryButton.onclick = () => { this.RestartGame(); }
     }
 
     OnReceiveMessage(message: string){
@@ -45,7 +48,13 @@ export default class MultiplayerClient{
     RegisterSendCallback(callback: (msg: string) => void){
         this.Send = callback
     }
-    
+
+    private RestartGame(){
+        var lobbyId = window.location.pathname.replace("/", "");
+        lobbyId = lobbyId.slice(1,) + lobbyId[0]
+        window.location.href = `/${lobbyId}`
+    }
+
     private SubmitGuess(){
         if (this.multiplayerGame.IsMyTurn() && this.multiplayerGame.guess !== ''){
             this.Send(JSON.stringify({

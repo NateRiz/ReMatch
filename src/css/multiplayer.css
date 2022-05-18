@@ -142,6 +142,31 @@ body {
     background-color: #5BC0BE;
 }
 
+.RestartContainer{
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    justify-content: center;
+}
+
+.Restart {
+    background-color: #6fffe9;
+    color: #0B132B;
+    margin: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 32px;
+}
+
+.Restart:hover {
+    background-color: #0B132B;
+    color: #6fffe9;
+    margin: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 32px;
+}
+
 .ResultContainer {
     background-color: #6fffe9;
     display: flex;

@@ -114,7 +114,6 @@ export default class MultiplayerGame{
     EndGame(playerNames: string[]){
         this.hiddenInput.disabled = true;
 
-        
         const gameDiv = document.querySelector("#PlayerContainer") as HTMLDivElement;
         gameDiv.classList.add("Hidden");    
         
