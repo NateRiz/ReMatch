@@ -44,11 +44,39 @@ body {
     100%{border-image: linear-gradient(to bottom, #0B132B 0 100%, #6fffe9 100% 100%) 1;}
 }
 
+.PageContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.SettingsContainer {
+    width: 400px;
+    height: 100%;
+    border-radius: 25px;
+    border: solid #6fffe9 4px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+}
+
+.SettingsText{
+    text-align: center;
+    font-size: 48px;
+}
+
+.MainContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
 
 .TopContainer {
     height: 180px;
-    width: 98%;
-    padding: 1% 1% 0% 1%;
     text-align: center;
     display: flex;
 }

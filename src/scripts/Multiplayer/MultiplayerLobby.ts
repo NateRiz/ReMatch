@@ -23,7 +23,7 @@ export default class MultiplayerLobby{
         this.multiplayerServer = new MultiplayerServer(this.multiplayerGame);
         this.connectionHandler.RegisterServerCallback((conn: Peer.DataConnection, message: string) => this.multiplayerServer!.OnReceiveMessage(conn, message));
 
-        this.connectionHandler.RegisterServerClientDisconnect((peerId: string) => this.multiplayerServer.OnClientDisconnect(peerId));
+        this.connectionHandler.RegisterServerClientDisconnect((peerId: string) => this.multiplayerServer!.OnClientDisconnect(peerId));
         this.multiplayerServer.RegisterSendCallback((msg: string) => this.connectionHandler.SendToAllClients(msg))
     }
 }
