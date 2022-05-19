@@ -102,9 +102,7 @@ export default class MultiplayerGame{
     }
 
     OnCorrectGuess(){
-        this.hiddenInput.value = '';
-        this.guess = '';
-        this.guessSpan.textContent = this.guess
+        this.ResetGuess();
     }
 
     OnOutOfTime(playerInfo: any){
@@ -117,6 +115,10 @@ export default class MultiplayerGame{
         if(player && player.lives <= 0){
             this.RemovePlayer(playerInfo.playerId);
         }
+    }
+
+    OnNextTurn(){
+        this.ResetGuess();
     }
 
     RemovePlayer(playerId: string){
@@ -185,8 +187,8 @@ export default class MultiplayerGame{
     }
 
     // ### Server Only Functions ###
-    ResetWord(){
-        this.rule = this.ruleGenerator._GetRule(1);
+    ResetWord(difficulty: number, minimumMatches: number){
+        this.rule = this.ruleGenerator._GetRule(difficulty, minimumMatches);
         this.ruleRegex = new RegExp(this.rule.replaceAll("*",".*").replaceAll("+", ".+"), "i");
         this.guess = "";
         this.guessSpan.textContent = this.guess;
@@ -211,5 +213,11 @@ export default class MultiplayerGame{
         window.setTimeout(()=>timerElement.classList.add("Timer"), 50);
 
         timerElement.style.animationDuration = Math.floor(duration / 1000).toString() +"s";
+    }
+
+    private ResetGuess(){
+        this.hiddenInput.value = '';
+        this.guess = '';
+        this.guessSpan.textContent = this.guess
     }
 }

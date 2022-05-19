@@ -15,14 +15,14 @@ export default class RuleGenerator{
         })
     }
 
-    _GetRule(difficulty: number){
+    _GetRule(difficulty: number, minimumMatches: number=50){
         var startTime = performance.now()
-        var word = this.GetRule(difficulty)
+        var word = this.GetRule(difficulty, minimumMatches)
         console.log(`Time: ${performance.now() - startTime}`)
         return word
     }
 
-    GetRule(difficulty: number){
+    GetRule(difficulty: number, minimumMatches: number){
         this.CacheWordsIfEmpty()
 
         var ruleBuilder = new RuleBuilder()
@@ -45,7 +45,7 @@ export default class RuleGenerator{
         var numberOfMatches = 0
         var build = this.GetRandomWord()
         var newWord = ''
-        while (numberOfMatches < 50){
+        while (numberOfMatches < minimumMatches){
 
             //Don't get to the point where there are <= 2 letters left in a word
             var numAvailableIndices = RuleBuilder.GetLetterIndices(build).length
@@ -75,6 +75,7 @@ export default class RuleGenerator{
             numberOfMatches = this.GetNumberOfMatches(regex)
         }
 
+        console.log('Matches:', numberOfMatches);
         return newWord
     }
 

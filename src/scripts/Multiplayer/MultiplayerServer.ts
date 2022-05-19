@@ -8,6 +8,7 @@ export default class MultiplayerServer{
     allClients: Player[] = [] // All clients. Players do not update with the game.
     turnTimer: number | null = null;
     settings: Settings;
+    ruleDifficulty:number = 1;
     SendAll: (message: string) => void = (_: string) => {}
     
     constructor(multiplayerGame: MultiplayerGame){
@@ -79,7 +80,7 @@ export default class MultiplayerServer{
         var ruleSpan = (document.querySelector("#RuleContainer") as HTMLDivElement);
         ruleSpan.classList.remove("Hidden");
 
-        this.multiplayerGame.ResetWord()
+        this.multiplayerGame.ResetWord(this.ruleDifficulty, this.settings.difficulty)
         var currentPlayer = this.multiplayerGame.players[this.multiplayerGame.turn];
         currentPlayer.lastRule = this.multiplayerGame.rule;
 
@@ -99,11 +100,11 @@ export default class MultiplayerServer{
         
         var currentPlayer = this.multiplayerGame.players[this.multiplayerGame.turn];
         if (wasOutOfTime){
-            if (!this.settings.rulePersists || currentPlayer.lastRule === this.multiplayerGame.rule){
-                this.multiplayerGame.ResetWord();
+            if (!this.settings.doesRulePersist || currentPlayer.lastRule === this.multiplayerGame.rule){
+                this.multiplayerGame.ResetWord(this.ruleDifficulty, this.settings.difficulty)
             }
         }else{
-            this.multiplayerGame.ResetWord();
+            this.multiplayerGame.ResetWord(this.ruleDifficulty, this.settings.difficulty)
         }
         currentPlayer.lastRule = this.multiplayerGame.rule;
         console.log(currentPlayer.nickname, currentPlayer.lastRule)
@@ -112,6 +113,7 @@ export default class MultiplayerServer{
             {
                 "Rule": this.multiplayerGame.rule,
                 "Turn": this.multiplayerGame.turn,
+                "NextTurn": null
             }
         ))
 

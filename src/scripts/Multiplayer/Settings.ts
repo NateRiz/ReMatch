@@ -71,19 +71,29 @@ export default class Settings{
 
     public SetDifficulty(difficulty: number){
         this.difficulty = difficulty;
+
+        if(this.IsSettingsPaneGone()){
+            return;
+        }
+
         this.difficultySpan.textContent = difficulty.toString();
         this.difficultyRange.value = difficulty.toString();
     }
 
     public SetDoesRulePersist(doesRulePersist: boolean){
         this.doesRulePersist = doesRulePersist;
+
+        if(this.IsSettingsPaneGone()){
+            return;
+        }
+
         this.rulePersists.checked = doesRulePersist;
     }
 
     public SetLives(lives: number){
         this.lives = lives
 
-        if(document.querySelector("#SettingsContainer") === null){
+        if(this.IsSettingsPaneGone()){
             return;
         }
 
@@ -101,5 +111,9 @@ export default class Settings{
         }
 
         this.onSettingsChange();
+    }
+
+    private IsSettingsPaneGone(){
+        return document.querySelector("#SettingsContainer") === null
     }
 }

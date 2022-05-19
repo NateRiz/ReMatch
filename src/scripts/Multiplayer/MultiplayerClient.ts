@@ -109,6 +109,9 @@ export default class MultiplayerClient{
             case 'OutOfTime':
                 this.multiplayerGame.OnOutOfTime(args);
                 break;
+            case 'NextTurn':
+                this.multiplayerGame.OnNextTurn();
+                break
             case 'CorrectGuess':
                 this.multiplayerGame.OnCorrectGuess();
                 break;
