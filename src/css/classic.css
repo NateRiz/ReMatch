@@ -21,7 +21,7 @@ body {
     box-sizing: border-box;
     border-image: linear-gradient(to bottom, #0B132B 0 100%, #6fffe9 100% 100%) 1;
     border-style: none solid;
-    border-width: 8px;
+    border-width: 24px;
     border-radius: 4px;
 }
 
