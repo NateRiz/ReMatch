@@ -40,6 +40,9 @@ export default class MultiplayerGame{
 
     OnStartGame(settings: Settings){
         this.hiddenInput.disabled = false;
+        const settingsPanel = document.querySelector("#SettingsContainer") as HTMLDivElement;
+        settingsPanel.parentElement?.removeChild(settingsPanel);
+
         this.players.forEach(player => {
             player.SetLives(settings.lives);
         });

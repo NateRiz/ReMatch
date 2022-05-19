@@ -90,7 +90,7 @@ export default class MultiplayerClient{
                 this.multiplayerGame.OnPlayerDisconnect(args);
                 break;
             case "Start":
-                this.multiplayerGame.OnStartGame(this.settings);
+                this.multiplayerGame.OnStartGame(this.settings!);
                 break;
             case "Rule":
                 this.multiplayerGame.OnReceiveRule(args);
