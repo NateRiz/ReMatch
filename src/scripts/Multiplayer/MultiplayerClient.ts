@@ -153,6 +153,9 @@ export default class MultiplayerClient{
             case 'NextTurn':
                 this.multiplayerGame.OnNextTurn();
                 break
+            case "LettersRemaining":
+                this.multiplayerGame.OnReceiveRemainingLetters(args);
+                break;
             case 'CorrectGuess':
                 this.multiplayerGame.OnCorrectGuess();
                 break;

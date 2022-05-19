@@ -12,6 +12,7 @@ export default class MultiplayerGame{
     guess: string = ""
     ruleRegex: RegExp
     dictionary: Set<string>;
+    settings: Settings | undefined;
 
     hiddenInput: HTMLInputElement;
     ruleSpan: HTMLSpanElement;
@@ -39,6 +40,7 @@ export default class MultiplayerGame{
     }
 
     OnStartGame(settings: Settings){
+        this.settings = settings
         localStorage.setItem("Settings", JSON.stringify(settings))
 
         this.hiddenInput.disabled = false;
@@ -50,6 +52,7 @@ export default class MultiplayerGame{
         });
 
         this.GetPlayerById(this.me)?.SetTeamChoiceUI(false)
+        this.settings.UpdateWildCardUI();
     }
 
     OnPlayerConnect(playerInfo: object, settings: Settings){
@@ -121,15 +124,26 @@ export default class MultiplayerGame{
             return;
         }
 
-        player?.SetLives(playerInfo.lives);
-        if(player && player.lives <= 0){
-            this.RemovePlayer(playerInfo.playerId);
-        }
+        this.UpdatePlayerLives(player, playerInfo.lives)
     }
 
     OnNextTurn(){
         this.ResetGuess();
     }
+
+    OnReceiveRemainingLetters(playerInfo: any){
+        const player = this.GetPlayerById(playerInfo.PlayerId);
+        if (!player){
+            return;
+        }
+
+        this.UpdatePlayerLives(player, playerInfo.Lives)
+
+        if (player.id === this.me){
+            player.UpdateRemainingCharacters(playerInfo.Letters)
+        }
+    }
+
 
     RemovePlayer(playerId: string){
         const index = this.players.findIndex(p => {
@@ -233,6 +247,13 @@ export default class MultiplayerGame{
         window.setTimeout(()=>timerElement.classList.add("Timer"), 50);
 
         timerElement.style.animationDuration = Math.floor(duration / 1000).toString() +"s";
+    }
+
+    private UpdatePlayerLives(player: Player, lives: number){
+        player?.SetLives(lives);
+        if(player && player.lives <= 0){
+            this.RemovePlayer(player.id);
+        }
     }
 
     private ResetGuess(){

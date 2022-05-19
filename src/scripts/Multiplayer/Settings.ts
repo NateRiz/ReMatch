@@ -4,11 +4,13 @@ export default class Settings{
     doesRulePersist: boolean = false;
     difficulty: number = 50;
     teams: boolean = false;
+    wildcardMode: boolean = false;
 
     difficultyInput: HTMLInputElement;
     difficultySpan: HTMLSpanElement;
     rulePersistsInput: HTMLInputElement;
     teamsInput: HTMLInputElement;
+    wildcardModeInput: HTMLInputElement;
 
     static noop = ()=>{};
 
@@ -18,6 +20,7 @@ export default class Settings{
         this.rulePersistsInput = document.querySelector("#RulePersists") as HTMLInputElement;
         this.difficultySpan = document.querySelector("#DifficultyNumber") as HTMLSpanElement;
         this.teamsInput = document.querySelector("#Teams") as HTMLInputElement;
+        this.wildcardModeInput = document.querySelector("#WildcardMode") as HTMLInputElement;
 
         if(this.onSettingsChange === Settings.noop){
             return; // client
@@ -57,6 +60,12 @@ export default class Settings{
             this.teams = this.teamsInput.checked;
             onSettingsChange();
         }
+
+        this.wildcardModeInput.disabled = false;
+        this.wildcardModeInput.onclick = () => {
+            this.wildcardMode = this.wildcardModeInput.checked;
+            onSettingsChange();
+        }
     }
 
     public static CreateSettingsFromJSON(json: any){
@@ -71,6 +80,7 @@ export default class Settings{
         settings.SetDifficulty(settings.difficulty);
         settings.SetDoesRulePersist(settings.doesRulePersist)
         settings.SetTeams(settings.teams);
+        settings.SetWildcardMode(settings.wildcardMode);
     }
 
     toJSON(){
@@ -79,7 +89,17 @@ export default class Settings{
             difficulty: this.difficulty,
             doesRulePersist: this.doesRulePersist,
             teams: this.teams,
+            wildcardMode: this.wildcardMode,
         };
+    }
+
+    public SetWildcardMode(wildcardMode: boolean){
+        this.wildcardMode = wildcardMode;
+
+        if(this.IsSettingsPaneGone()){
+            return;
+        }
+        this.wildcardModeInput.checked = wildcardMode;
     }
 
     public SetDifficulty(difficulty: number){
@@ -134,6 +154,15 @@ export default class Settings{
         }
 
         this.onSettingsChange();
+    }
+
+    public UpdateWildCardUI(){
+        var letterContainerDiv = document.querySelector("#LetterContainer") as HTMLDivElement;
+        if (this.wildcardMode){
+            letterContainerDiv.classList.remove("Hidden")
+        }else{
+            letterContainerDiv.classList.add("Hidden")
+        }
     }
 
     public TryLoadFromStorage(){

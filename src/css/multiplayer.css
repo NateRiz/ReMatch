@@ -447,6 +447,32 @@ body {
     margin-bottom: 64px;
 }
 
+.LetterContainer{
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    justify-content: center;
+}
+
+.Letter{
+    color: #0B132B;
+    width: 48px;
+    height: 48px;
+    margin: 0px 4px;
+    text-align: center;
+    font-size: 48px;
+    border-radius: 8px;
+}
+
+.UnusedLetter{
+    background-color: #6fffe9;
+}
+
+.UsedLetter {
+    background-color: #1d2541;
+    transition: all .1s;
+}
+
 .HiddenInput {
     opacity:0;
     filter:alpha(opacity=0);

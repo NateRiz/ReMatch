@@ -118,7 +118,6 @@ export default class MultiplayerServer{
             this.multiplayerGame.ResetWord(this.ruleDifficulty, this.settings.difficulty)
         }
         currentPlayer.lastRule = this.multiplayerGame.rule;
-        console.log(currentPlayer.nickname, currentPlayer.lastRule)
 
         this.SendAll(JSON.stringify(
             {
@@ -132,7 +131,7 @@ export default class MultiplayerServer{
     }
 
     private ResetTimer(){
-        const duration = 5000;
+        const duration = 20000;
         if (this.turnTimer != null){
             window.clearTimeout(this.turnTimer)
         }
@@ -200,11 +199,26 @@ export default class MultiplayerServer{
             return;
         }
 
+        const gamePlayer = this.multiplayerGame.GetPlayerById(client.peer);
+
+        guess = guess.toLowerCase();
         const isGuessCorrect = this.multiplayerGame.TestGuess(guess);
         if (isGuessCorrect){
+            const player = this.GetPlayerById(client.peer);
+            var hasUsedAllLetters = player.RemoveLetters(guess);
+            if (hasUsedAllLetters){
+                gamePlayer!.IncrementLives();
+            }
+
             this.SendAll(JSON.stringify({
-                "CorrectGuess": null
+                "CorrectGuess": null,
+                "LettersRemaining":{
+                    "PlayerId": client.peer,
+                    "Letters": Array.from(player.remainingCharacters).join(''),
+                    "Lives": gamePlayer!.lives,
+                }
             }))
+
             this.StartNextTurn();
         }else{
             this.SendAll(JSON.stringify({

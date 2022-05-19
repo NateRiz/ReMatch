@@ -22,7 +22,7 @@
                 <div class="SettingsHeaderContainer">
                     <span class="SettingsHeader">Difficulty</span>
                 </div>
-                <span class="SettingExplanation">Minimum number of words that must match a rule. (higher = easier)</span>
+                <span class="SettingExplanation">Minimum number of words that must match a rule (higher = easier)</span>
                 <div class="DifficultyContainer">
                     <div class="DifficultyRangeContainer">
                         <input id="DifficultyRange" class="DifficultyRange" type="range" min="10" max="99" value="50" disabled/>
@@ -37,7 +37,7 @@
                 <div class="SettingsHeaderContainer">
                     <span class="SettingsHeader">Rule Persists</span>
                 </div>
-                <span class="SettingExplanation">Whether a rule persists until someone gets a match.</span>
+                <span class="SettingExplanation">Whether a rule persists until someone gets a match</span>
                 <div class="SettingInputContainer">
                     <input id="RulePersists" class="SettingInput" type="checkbox" disabled/>
                 </div>
@@ -47,9 +47,19 @@
                 <div class="SettingsHeaderContainer">
                     <span class="SettingsHeader">Teams</span>
                 </div>
-                <span class="SettingExplanation">Last team standing.</span>
+                <span class="SettingExplanation">Last team standing</span>
                 <div class="SettingInputContainer">
                     <input id="Teams" class="SettingInput" type="checkbox" disabled/>
+                </div>
+            </div>
+
+            <div class="SingleSetting">
+                <div class="SettingsHeaderContainer">
+                    <span class="SettingsHeader">Wildcard Mode</span>
+                </div>
+                <span class="SettingExplanation">A twist on the classic game</span>
+                <div class="SettingInputContainer">
+                    <input id="WildcardMode" class="SettingInput" type="checkbox" disabled/>
                 </div>
             </div>
 
@@ -110,9 +120,36 @@
                         <button id="Restart" class="Restart">Rematch!</button>
                     </div>
                 </div>
-
                 <input id="HiddenInput" class="HiddenInput " pattern="[a-zA-Z]+" disabled/>
             </div> 
+            <div id="LetterContainer" class="LetterContainer Hidden">
+                <span class="Letter UnusedLetter">A</span>
+                <span class="Letter UnusedLetter">B</span>
+                <span class="Letter UnusedLetter">C</span>
+                <span class="Letter UnusedLetter">D</span>
+                <span class="Letter UnusedLetter">E</span>
+                <span class="Letter UnusedLetter">F</span>
+                <span class="Letter UnusedLetter">G</span>
+                <span class="Letter UnusedLetter">H</span>
+                <span class="Letter UnusedLetter">I</span>
+                <span class="Letter UnusedLetter">J</span>
+                <span class="Letter UnusedLetter">K</span>
+                <span class="Letter UnusedLetter">L</span>
+                <span class="Letter UnusedLetter">M</span>
+                <span class="Letter UnusedLetter">N</span>
+                <span class="Letter UnusedLetter">O</span>
+                <span class="Letter UnusedLetter">P</span>
+                <span class="Letter UnusedLetter">Q</span>
+                <span class="Letter UnusedLetter">R</span>
+                <span class="Letter UnusedLetter">S</span>
+                <span class="Letter UnusedLetter">T</span>
+                <span class="Letter UnusedLetter">U</span>
+                <span class="Letter UnusedLetter">V</span>
+                <span class="Letter UnusedLetter">W</span>
+                <span class="Letter UnusedLetter">X</span>
+                <span class="Letter UnusedLetter">Y</span>
+                <span class="Letter UnusedLetter">Z</span>
+            </div>
         </div> 
     </div>
 </body>

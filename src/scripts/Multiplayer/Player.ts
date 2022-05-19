@@ -12,6 +12,7 @@ export default class Player{
     playerCard: HTMLDivElement | undefined;
     playerNameSpan: HTMLSpanElement | undefined;
     TeamChoiceContainer: HTMLDivElement | undefined;
+    remainingCharacters = new Set('qwertyuiopasdfghjklzxcvbnnm')
 
     constructor(id: string, nickname: string, team: number){
         this.id = id;
@@ -85,6 +86,10 @@ export default class Player{
         this.SetLives(this.lives - 1);
     }
 
+    public IncrementLives(){
+        this.SetLives(this.lives + 1);
+    }
+
     public CheckAndUpdateTeamUI(){
         if (this.settings?.teams){
             this.HighlightTeamChoice();
@@ -110,6 +115,31 @@ export default class Player{
     public SetTeam(team: number){
         this.team = team;
         this.HighlightTeamChoice();
+    }
+
+    public RemoveLetters(guess: string){
+        //Remove used letters from guess. Return true if the user used all letters.
+        Array.from(guess).forEach((c)=>this.remainingCharacters.delete(c));
+        if (this.remainingCharacters.size === 0){
+            this.remainingCharacters = new Set('qwertyuiopasdfghjklzxcvbnnm');
+            return true;
+        }
+        return false;
+    }
+
+    UpdateRemainingCharacters(letters: string){
+        this.remainingCharacters = new Set(letters);
+        document.querySelectorAll(".Letter").forEach((letterSpan)=>{
+            letterSpan.classList.remove("UsedLetter")
+            letterSpan.classList.add("UnusedLetter")
+
+            var letter = letterSpan.textContent?.toLowerCase() || '';
+            if(!this.remainingCharacters.has(letter)){
+                letterSpan.classList.remove("UnusedLetter");
+                letterSpan.classList.add("UsedLetter");
+            }
+        });
+
     }
 
     toJSON(){
