@@ -22,9 +22,12 @@ export default class MultiplayerServer{
             this.SendAll(JSON.stringify({
                 "Settings": JSON.stringify(this.settings)
             }))
+            this.UpdateStartButtonState();
         });
         this.settings.TryLoadFromStorage()
 
+        var startMPButton = (document.querySelector("#StartButton") as HTMLButtonElement);
+        startMPButton.onclick = () => this.StartGame();
     }
 
     OnReceiveMessage(client: Peer.DataConnection, message: string){
@@ -46,9 +49,7 @@ export default class MultiplayerServer{
         this.SendAll(JSON.stringify({"Connect": player}));
         client.send(JSON.stringify({"PlayerList": this.allClients}));
 
-        if (this.allClients.length >= 2){
-            this.EnableStartButton()
-        }
+        this.UpdateStartButtonState()
     }
 
     OnClientDisconnect(peerId: string){
@@ -76,6 +77,8 @@ export default class MultiplayerServer{
         if(index !== -1){
             this.allClients.splice(index, 1);
         }
+
+        this.UpdateStartButtonState();
     }
 
     RegisterSendCallback(callback: (msg: string) => void){
@@ -189,6 +192,7 @@ export default class MultiplayerServer{
                 'team': team,
             }
         }));
+        this.UpdateStartButtonState();
     }
 
     private OnClientGuess(client: Peer.DataConnection, guess: string){
@@ -217,8 +221,23 @@ export default class MultiplayerServer{
         }
     }
 
-    private EnableStartButton(){
+    private UpdateStartButtonState(){
+        if (this.allClients.length < 2){
+            this.ToggleStartButton(false);
+            return;
+        }
+
+        if (this.settings.teams){
+            this.ToggleStartButton(false);
+        }else{
+            this.ToggleStartButton(true);
+        }
+
+    }
+
+    private ToggleStartButton(isEnabled: boolean){
         var startMPButton = (document.querySelector("#StartButton") as HTMLButtonElement);
+        startMPButton.disabled = !isEnabled
         startMPButton.onclick = () => this.StartGame();
     }
 

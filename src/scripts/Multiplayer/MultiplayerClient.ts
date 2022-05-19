@@ -4,6 +4,7 @@ import Settings from "./Settings";
 export default class MultiplayerClient{
     multiplayerGame: MultiplayerGame;
     settings: Settings | undefined;
+    isGameStarted: boolean = false;
     Send: (message: string) => void = (_: string) => {}
     
     constructor(multiplayerGame: MultiplayerGame){
@@ -52,8 +53,6 @@ export default class MultiplayerClient{
     }
 
     private RestartGame(){
-        localStorage.setItem("Settings", JSON.stringify(this.settings))
-
         var lobbyId = window.location.pathname.replace("/", "");
         lobbyId = lobbyId.slice(1,) + lobbyId[0]
         window.location.href = `/${lobbyId}`
@@ -76,6 +75,11 @@ export default class MultiplayerClient{
         }
     }
 
+    private OnStartGame(){
+        this.isGameStarted = true;
+        this.multiplayerGame.OnStartGame(this.settings!);
+    }
+
     private OnReceiveSettings(settings: any){
         this.settings = Settings.CreateSettingsFromJSON(JSON.parse(settings));
 
@@ -84,8 +88,10 @@ export default class MultiplayerClient{
             player.CheckAndUpdateTeamUI()
         })
 
-        const myPlayer = this.multiplayerGame.GetPlayerById(this.multiplayerGame.me)
-        myPlayer?.ToggleTeamChoiceUI()
+        if (!this.isGameStarted){
+            const myPlayer = this.multiplayerGame.GetPlayerById(this.multiplayerGame.me)
+            myPlayer?.ToggleTeamChoiceUI()
+        }
     }
 
     private OnReceivePlayerList(players: object[]){
@@ -125,7 +131,7 @@ export default class MultiplayerClient{
                 this.multiplayerGame.OnPlayerDisconnect(args);
                 break;
             case "Start":
-                this.multiplayerGame.OnStartGame(this.settings!);
+                this.OnStartGame()
                 break;
             case "Rule":
                 this.multiplayerGame.OnReceiveRule(args);

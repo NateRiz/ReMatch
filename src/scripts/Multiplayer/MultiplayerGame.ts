@@ -39,6 +39,8 @@ export default class MultiplayerGame{
     }
 
     OnStartGame(settings: Settings){
+        localStorage.setItem("Settings", JSON.stringify(settings))
+
         this.hiddenInput.disabled = false;
         const settingsPanel = document.querySelector("#SettingsContainer") as HTMLDivElement;
         settingsPanel.parentElement?.removeChild(settingsPanel);
@@ -46,6 +48,8 @@ export default class MultiplayerGame{
         this.players.forEach(player => {
             player.SetLives(settings.lives);
         });
+
+        this.GetPlayerById(this.me)?.SetTeamChoiceUI(false)
     }
 
     OnPlayerConnect(playerInfo: object, settings: Settings){

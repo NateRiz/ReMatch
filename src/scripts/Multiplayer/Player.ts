@@ -92,7 +92,11 @@ export default class Player{
     }
 
     public ToggleTeamChoiceUI(){
-        if (this.settings!.teams){
+        this.SetTeamChoiceUI(this.settings!.teams);
+    }
+
+    public SetTeamChoiceUI(isEnabled: boolean){
+        if (isEnabled){
             this.TeamChoiceContainer?.classList.remove("Hidden")
         }else{
             this.TeamChoiceContainer?.classList.add("Hidden")
@@ -101,6 +105,7 @@ export default class Player{
             })
         }
     }
+
 
     public SetTeam(team: number){
         this.team = team;
