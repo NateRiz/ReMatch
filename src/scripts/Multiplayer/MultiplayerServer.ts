@@ -80,6 +80,9 @@ export default class MultiplayerServer{
         ruleSpan.classList.remove("Hidden");
 
         this.multiplayerGame.ResetWord()
+        var currentPlayer = this.multiplayerGame.players[this.multiplayerGame.turn];
+        currentPlayer.lastRule = this.multiplayerGame.rule;
+
         this.SendAll(JSON.stringify({
             "Start": null,
             "Rule": this.multiplayerGame.rule,
@@ -91,9 +94,20 @@ export default class MultiplayerServer{
         this.ResetTimer();
     }
 
-    private StartNextTurn(){
-        this.multiplayerGame.ResetWord()
+    private StartNextTurn(wasOutOfTime: boolean=false){
         this.multiplayerGame.IncrementTurn();
+        
+        var currentPlayer = this.multiplayerGame.players[this.multiplayerGame.turn];
+        if (wasOutOfTime){
+            if (!this.settings.rulePersists || currentPlayer.lastRule === this.multiplayerGame.rule){
+                this.multiplayerGame.ResetWord();
+            }
+        }else{
+            this.multiplayerGame.ResetWord();
+        }
+        currentPlayer.lastRule = this.multiplayerGame.rule;
+        console.log(currentPlayer.nickname, currentPlayer.lastRule)
+
         this.SendAll(JSON.stringify(
             {
                 "Rule": this.multiplayerGame.rule,
@@ -135,7 +149,7 @@ export default class MultiplayerServer{
         if (this.multiplayerGame.players.length == 1){
             this.EndGame();
         }else{
-            this.StartNextTurn();
+            this.StartNextTurn(true);
         }
     }
 

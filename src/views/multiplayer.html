@@ -7,34 +7,40 @@
     <div class="PageContainer">
         <div id="SettingsContainer" class="SettingsContainer">
             <span class="SettingsText">Settings</span>
-
-            <div class='SettingsHeaderContainer'>
-                <span class="SettingsHeader">Lives</span>
-            </div>
-            <div class="LivesContainer">
-                <img id="OneLife" class="Life" src="./src/assets/heart_full.svg"/>
-                <img id="TwoLife" class="Life" src="./src/assets/heart_empty.svg"/>
-                <img id="ThreeLife" class="Life" src="./src/assets/heart_empty.svg"/>
-            </div>
-
-            <div class="SettingsHeaderContainer">
-                <span class="SettingsHeader">Difficulty</span>
-            </div>
-            <span class="SettingExplanation">Minimum number of words that must match a rule. (higher = easier)</span>
-            <div class="DifficultyContainer">
-                <div class="DifficultyRangeContainer">
-                    <input id="DifficultyRange" class="DifficultyRange" type="range" min="10" max="99" value="50" disabled/>
+            <div class="SingleSetting">
+                <div class='SettingsHeaderContainer'>
+                    <span class="SettingsHeader">Lives</span>
                 </div>
-                <div class="DifficultyNumberContainer">
-                    <span id="DifficultyNumber" class="DifficultyNumber">50</span>
+                <div class="LivesContainer">
+                    <img id="OneLife" class="Life" src="./src/assets/heart_full.svg"/>
+                    <img id="TwoLife" class="Life" src="./src/assets/heart_empty.svg"/>
+                    <img id="ThreeLife" class="Life" src="./src/assets/heart_empty.svg"/>
                 </div>
             </div>
-            <div class="SettingsHeaderContainer">
-                <span class="SettingsHeader">Rule Persists</span>
+
+            <div class="SingleSetting">
+                <div class="SettingsHeaderContainer">
+                    <span class="SettingsHeader">Difficulty</span>
+                </div>
+                <span class="SettingExplanation">Minimum number of words that must match a rule. (higher = easier)</span>
+                <div class="DifficultyContainer">
+                    <div class="DifficultyRangeContainer">
+                        <input id="DifficultyRange" class="DifficultyRange" type="range" min="10" max="99" value="50" disabled/>
+                    </div>
+                    <div class="DifficultyNumberContainer">
+                        <span id="DifficultyNumber" class="DifficultyNumber">50</span>
+                    </div>
+                </div>
             </div>
-            <span class="SettingExplanation">Whether a rule persists until someone gets a match.</span>
-            <div class="RulePersistsContainer">
-                <input id="RulePersists" class="RulePersists" type="checkbox" disabled/>
+
+            <div class="SingleSetting">
+                <div class="SettingsHeaderContainer">
+                    <span class="SettingsHeader">Rule Persists</span>
+                </div>
+                <span class="SettingExplanation">Whether a rule persists until someone gets a match.</span>
+                <div class="RulePersistsContainer">
+                    <input id="RulePersists" class="RulePersists" type="checkbox" disabled/>
+                </div>
             </div>
 
         </div>

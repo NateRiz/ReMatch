@@ -3,6 +3,7 @@ export default class Player{
     nickname: string = "";
     abbreviatedNickname: string = "";
     lives: number = 0;
+    lastRule: string = "";
     place = 999; // Whichever place this player came in. (first, second...)
     playerCard: HTMLDivElement | undefined;
     playerNameSpan: HTMLSpanElement | undefined

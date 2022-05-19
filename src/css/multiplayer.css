@@ -72,6 +72,12 @@ body {
     border-color:#6fffe9;
 }
 
+.SingleSetting{
+    padding-bottom: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
 .SettingsHeader {
     padding: 4px;
     font-size: 28px;
