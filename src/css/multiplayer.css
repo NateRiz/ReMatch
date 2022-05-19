@@ -107,6 +107,7 @@ body {
     width: 32px;
     margin: 0px 4px;
     cursor: pointer;
+    border-radius: 8px;
 }
 
 .TeamChoiceSelected {
