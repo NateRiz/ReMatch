@@ -3,18 +3,21 @@ export default class Settings{
     lives: number = 1;
     doesRulePersist: boolean = false;
     difficulty: number = 50;
+    teams: boolean = false;
 
-    difficultyRange: HTMLInputElement;
+    difficultyInput: HTMLInputElement;
     difficultySpan: HTMLSpanElement;
-    rulePersists: HTMLInputElement;
+    rulePersistsInput: HTMLInputElement;
+    teamsInput: HTMLInputElement;
 
     static noop = ()=>{};
 
     constructor(onSettingsChange: ()=>void = Settings.noop){
         this.onSettingsChange = onSettingsChange;
-        this.difficultyRange = document.querySelector("#DifficultyRange") as HTMLInputElement;
-        this.rulePersists = document.querySelector("#RulePersists") as HTMLInputElement;
+        this.difficultyInput = document.querySelector("#DifficultyRange") as HTMLInputElement;
+        this.rulePersistsInput = document.querySelector("#RulePersists") as HTMLInputElement;
         this.difficultySpan = document.querySelector("#DifficultyNumber") as HTMLSpanElement;
+        this.teamsInput = document.querySelector("#Teams") as HTMLInputElement;
 
         if(this.onSettingsChange === Settings.noop){
             return; // client
@@ -34,18 +37,24 @@ export default class Settings{
             this.SetLives(3)
         }
 
-        this.difficultyRange.disabled = false;
-        this.difficultyRange.oninput = () => {
-            this.difficultySpan.textContent = this.difficultyRange.value;
+        this.difficultyInput.disabled = false;
+        this.difficultyInput.oninput = () => {
+            this.difficultySpan.textContent = this.difficultyInput.value;
         }
-        this.difficultyRange.onchange = () => {
-            this.difficulty = parseInt(this.difficultyRange.value);
+        this.difficultyInput.onchange = () => {
+            this.difficulty = parseInt(this.difficultyInput.value);
             onSettingsChange();
         }
 
-        this.rulePersists.disabled = false;
-        this.rulePersists.onchange = () => {
-            this.doesRulePersist = this.rulePersists.checked;
+        this.rulePersistsInput.disabled = false;
+        this.rulePersistsInput.onchange = () => {
+            this.doesRulePersist = this.rulePersistsInput.checked;
+            onSettingsChange();
+        }
+
+        this.teamsInput.disabled = false;
+        this.teamsInput.onchange = () => {
+            this.teams = this.teamsInput.checked;
             onSettingsChange();
         }
     }
@@ -57,6 +66,7 @@ export default class Settings{
         settings.SetLives(settings.lives);
         settings.SetDifficulty(settings.difficulty);
         settings.SetDoesRulePersist(settings.doesRulePersist)
+        settings.SetTeams(settings.teams);
 
         return settings;
     }
@@ -66,6 +76,7 @@ export default class Settings{
             lives: this.lives,
             difficulty: this.difficulty,
             doesRulePersist: this.doesRulePersist,
+            teams: this.teams,
         };
     }
 
@@ -77,7 +88,7 @@ export default class Settings{
         }
 
         this.difficultySpan.textContent = difficulty.toString();
-        this.difficultyRange.value = difficulty.toString();
+        this.difficultyInput.value = difficulty.toString();
     }
 
     public SetDoesRulePersist(doesRulePersist: boolean){
@@ -87,7 +98,17 @@ export default class Settings{
             return;
         }
 
-        this.rulePersists.checked = doesRulePersist;
+        this.rulePersistsInput.checked = doesRulePersist;
+    }
+
+    public SetTeams(teams: boolean){
+        this.teams = teams;
+
+        if(this.IsSettingsPaneGone()){
+            return;
+        }
+
+        this.teamsInput.checked = teams;
     }
 
     public SetLives(lives: number){

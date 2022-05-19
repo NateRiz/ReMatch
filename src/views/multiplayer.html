@@ -38,8 +38,18 @@
                     <span class="SettingsHeader">Rule Persists</span>
                 </div>
                 <span class="SettingExplanation">Whether a rule persists until someone gets a match.</span>
-                <div class="RulePersistsContainer">
-                    <input id="RulePersists" class="RulePersists" type="checkbox" disabled/>
+                <div class="SettingInputContainer">
+                    <input id="RulePersists" class="SettingInput" type="checkbox" disabled/>
+                </div>
+            </div>
+
+            <div class="SingleSetting">
+                <div class="SettingsHeaderContainer">
+                    <span class="SettingsHeader">Teams</span>
+                </div>
+                <span class="SettingExplanation">Last team standing.</span>
+                <div class="SettingInputContainer">
+                    <input id="Teams" class="SettingInput" type="checkbox" disabled/>
                 </div>
             </div>
 
@@ -113,6 +123,16 @@
 
 <template id="PlayerTemplate">
     <div class="PlayerTemplate PlayerTemplateSelected">
+        <div class="TeamChoiceContainer Hidden">
+            <span id="TeamChoice0" class="TeamChoice TeamChoice0 TeamChoiceSelected"></span>
+            <span id="TeamChoice1" class="TeamChoice TeamChoice1"></span>
+            <span id="TeamChoice2" class="TeamChoice TeamChoice2"></span>
+            <span id="TeamChoice3" class="TeamChoice TeamChoice3"></span>
+            <span id="TeamChoice4" class="TeamChoice TeamChoice4"></span>
+            <span id="TeamChoice5" class="TeamChoice TeamChoice5"></span>
+            <span id="TeamChoice6" class="TeamChoice TeamChoice6"></span>
+            <span id="TeamChoice7" class="TeamChoice TeamChoice7"></span>
+        </div>
         <div id="PlayerLivesContainer" class="PlayerLivesContainer">
         </div>
         <span class="PlayerSpan PlayerIdle">{name}</span>

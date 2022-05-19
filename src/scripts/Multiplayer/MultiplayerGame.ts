@@ -48,8 +48,16 @@ export default class MultiplayerGame{
         });
     }
 
-    OnPlayerConnect(allPlayers: object[]){
-        this.players = Array.from(allPlayers, (p) => Object.setPrototypeOf(p, Player.prototype));
+    OnPlayerConnect(playerInfo: object, settings: Settings){
+        var player: Player = Object.setPrototypeOf(playerInfo, Player.prototype)
+        player.settings = settings;
+        this.players.push(player);
+        player.CreatePlayerCard();
+    }
+    
+    OnReceivePlayerList(players: object[], settings: Settings){
+        this.players = []
+
         var playerContainer = document.querySelector("#PlayerContainer");
         var child = playerContainer?.lastElementChild;
 
@@ -58,9 +66,7 @@ export default class MultiplayerGame{
             child = playerContainer?.lastElementChild;
         }
 
-        this.players.forEach((player) => {
-            player.CreatePlayerCard()
-        });
+        players.forEach(player => this.OnPlayerConnect(player, settings));
     }
 
     OnPlayerDisconnect(peerId: string){

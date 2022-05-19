@@ -75,7 +75,34 @@ export default class MultiplayerClient{
     }
 
     private OnReceiveSettings(settings: any){
-        this.settings = Settings.CreateSettingsFromJSON(settings);
+        this.settings = Settings.CreateSettingsFromJSON(JSON.parse(settings));
+
+        this.multiplayerGame.players.forEach((player)=> {
+            player.settings = this.settings;
+            player.CheckAndUpdateTeamUI()
+        })
+
+        const myPlayer = this.multiplayerGame.GetPlayerById(this.multiplayerGame.me)
+        myPlayer?.ToggleTeamChoiceUI()
+    }
+
+    private OnReceivePlayerList(players: object[]){
+        this.multiplayerGame.OnReceivePlayerList(players, this.settings!);
+
+        document.querySelectorAll(".TeamChoice").forEach((elem)=> {
+            (elem as HTMLSpanElement).onclick = () => {
+                const team = parseInt(elem.id.replace("TeamChoice",""))
+                this.Send(JSON.stringify({"TeamChoice": team}))
+            }
+        })
+
+        const myPlayer = this.multiplayerGame.GetPlayerById(this.multiplayerGame.me)
+        myPlayer?.ToggleTeamChoiceUI()
+    }
+
+    private OnTeamChoice(playerInfo: any){
+        const player = this.multiplayerGame.GetPlayerById(playerInfo.playerId);
+        player?.SetTeam(playerInfo.team);
     }
 
     private DispatchCommand(command: string, args: any){
@@ -83,8 +110,14 @@ export default class MultiplayerClient{
             case "Settings":
                 this.OnReceiveSettings(args);
                 break;
+            case "TeamChoice":
+                this.OnTeamChoice(args);
+                break;
+            case "PlayerList":
+                this.OnReceivePlayerList(args)
+                break;
             case "Connect":
-                this.multiplayerGame.OnPlayerConnect(args);
+                this.multiplayerGame.OnPlayerConnect(args, this.settings!);
                 break
             case "Disconnect":
                 this.multiplayerGame.OnPlayerDisconnect(args);

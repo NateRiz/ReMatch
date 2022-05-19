@@ -90,8 +90,38 @@ body {
 
 .SettingExplanation {
     font-size: 14px;
-    padding: 0px 4px;
+    padding: 4px;
+    text-align: center;
 }
+
+.TeamChoiceContainer{
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.TeamChoice{
+    height: 32px;
+    width: 32px;
+    margin: 0px 4px;
+    cursor: pointer;
+}
+
+.TeamChoiceSelected {
+    border: 4px solid #0B132B;
+    transform: translateY(-4px);
+}
+
+.TeamChoice0{Background-color: #F39B6D;}
+.TeamChoice1{Background-color: #2978A0;}
+.TeamChoice2{Background-color: #BCAB79;}
+.TeamChoice3{Background-color: #7785AC;}
+.TeamChoice4{Background-color: #C1666B;}
+.TeamChoice5{Background-color: #4E6151;}
+.TeamChoice6{Background-color: #FFE381 ;}
+.TeamChoice7{Background-color: #9C528B;}
 
 .DifficultyRange{
     -webkit-appearance: none;
@@ -146,14 +176,14 @@ body {
     padding: 0px 24px;
 }
 
-.RulePersistsContainer{
+.SettingInputContainer{
     width: 100%;
     display: flex;
     justify-items: center;
     justify-content: center;
 }
 
-.RulePersists{
+.SettingInput{
     width: 18px;
     height: 18px;
     accent-color: #6fffe9;
@@ -275,6 +305,7 @@ body {
     justify-content: center;
     align-items: center;
     margin: 0px 32px;
+    border: 8px solid transparent
 }
 
 .PlayerTemplateSelected {

@@ -1,16 +1,22 @@
+import Settings from "./Settings";
+
 export default class Player{
+    settings: Settings | undefined;
     id: string = "";
     nickname: string = "";
     abbreviatedNickname: string = "";
     lives: number = 0;
     lastRule: string = "";
+    team: number = -1;
     place = 999; // Whichever place this player came in. (first, second...)
     playerCard: HTMLDivElement | undefined;
-    playerNameSpan: HTMLSpanElement | undefined
+    playerNameSpan: HTMLSpanElement | undefined;
+    TeamChoiceContainer: HTMLDivElement | undefined;
 
-    constructor(id: string, nickname: string){
+    constructor(id: string, nickname: string, team: number){
         this.id = id;
         this.nickname = nickname;
+        this.team = team;
     }
 
     public SelectPlayerCard(){
@@ -49,6 +55,12 @@ export default class Player{
         this.playerCard = playerContainer?.lastElementChild as HTMLDivElement;
         this.playerNameSpan = this.playerCard.querySelector(".PlayerSpan") as HTMLSpanElement;
         this.playerNameSpan.textContent = this.abbreviatedNickname;
+
+        this.TeamChoiceContainer = this.playerCard.querySelector(".TeamChoiceContainer") as HTMLDivElement;
+    
+        if (this.settings?.teams){
+            this.SetTeam(this.team);
+        }
     }
 
     public SetLives(lives: number) {
@@ -73,10 +85,42 @@ export default class Player{
         this.SetLives(this.lives - 1);
     }
 
+    public CheckAndUpdateTeamUI(){
+        if (this.settings?.teams){
+            this.HighlightTeamChoice();
+        }
+    }
+
+    public ToggleTeamChoiceUI(){
+        if (this.settings!.teams){
+            this.TeamChoiceContainer?.classList.remove("Hidden")
+        }else{
+            this.TeamChoiceContainer?.classList.add("Hidden")
+            document.querySelectorAll(".PlayerTemplate").forEach((playerCard) => {
+                (playerCard as HTMLDivElement).style.borderColor = "transparent";
+            })
+        }
+    }
+
+    public SetTeam(team: number){
+        this.team = team;
+        this.HighlightTeamChoice();
+    }
+
     toJSON(){
         return {
             id: this.id,
             nickname: this.nickname,
+            team: this.team,
         };
+    }
+
+    private HighlightTeamChoice(){
+        Array.from(this.TeamChoiceContainer?.children!).forEach((child)=>{
+            child.classList.remove('TeamChoiceSelected')
+        })
+        this.TeamChoiceContainer?.children[this.team].classList.add("TeamChoiceSelected");
+
+        this.playerCard!.style.borderColor = window.getComputedStyle(this.TeamChoiceContainer!.children[this.team] as HTMLSpanElement).backgroundColor;
     }
 }

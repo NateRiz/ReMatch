@@ -18,7 +18,11 @@ export default class MultiplayerServer{
         ruleSpan.classList.add("Hidden");
         var startMPButton = (document.querySelector("#StartButtonContainer") as HTMLButtonElement);
         startMPButton.classList.remove("Hidden");
-        this.settings = new Settings(() => {this.SendAll(JSON.stringify({"Settings": this.settings}))});
+        this.settings = new Settings(() => {
+            this.SendAll(JSON.stringify({
+                "Settings": JSON.stringify(this.settings)
+            }))
+        });
     }
 
     OnReceiveMessage(client: Peer.DataConnection, message: string){
@@ -32,11 +36,13 @@ export default class MultiplayerServer{
     OnPlayerConnect(client: Peer.DataConnection, nickname: string){
         console.log(`<< [${client.peer}] (Connection Request)`);
 
-        var player = new Player(client.peer, nickname);
+        var randomTeam = Math.floor(Math.random()*8)
+        var player = new Player(client.peer, nickname, randomTeam);
         this.allClients.push(player)
 
-        this.SendAll(JSON.stringify({"Connect": this.allClients}));
-        client.send(JSON.stringify({"Settings": this.settings}));
+        client.send(JSON.stringify({"Settings": JSON.stringify(this.settings)}));
+        this.SendAll(JSON.stringify({"Connect": player}));
+        client.send(JSON.stringify({"PlayerList": this.allClients}));
 
         if (this.allClients.length >= 2){
             this.EnableStartButton()
@@ -166,9 +172,21 @@ export default class MultiplayerServer{
             case "SubmitGuess":
                 this.OnClientGuess(client, args);
                 break;
+            case "TeamChoice":
+                this.OnTeamChoice(client, args);
             default:
                 console.log(`Invalid Command: [${command}](${args})`);
         }
+    }
+
+    private OnTeamChoice(client: Peer.DataConnection, team: number){
+        this.GetPlayerById(client.peer).team = team;
+        this.SendAll(JSON.stringify({
+            "TeamChoice": {
+                "playerId": client.peer,
+                'team': team,
+            }
+        }));
     }
 
     private OnClientGuess(client: Peer.DataConnection, guess: string){
