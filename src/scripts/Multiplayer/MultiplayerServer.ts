@@ -23,6 +23,8 @@ export default class MultiplayerServer{
                 "Settings": JSON.stringify(this.settings)
             }))
         });
+        this.settings.TryLoadFromStorage()
+
     }
 
     OnReceiveMessage(client: Peer.DataConnection, message: string){

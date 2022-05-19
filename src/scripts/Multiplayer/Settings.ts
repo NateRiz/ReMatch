@@ -61,14 +61,16 @@ export default class Settings{
 
     public static CreateSettingsFromJSON(json: any){
         const settings = new Settings();
-        Object.assign(settings, json);
+        Settings.UpdateSettingsFromJSON(json, settings);
+        return settings;
+    }
 
+    public static UpdateSettingsFromJSON(json: any, settings: Settings){
+        Object.assign(settings, json);
         settings.SetLives(settings.lives);
         settings.SetDifficulty(settings.difficulty);
         settings.SetDoesRulePersist(settings.doesRulePersist)
         settings.SetTeams(settings.teams);
-
-        return settings;
     }
 
     toJSON(){
@@ -132,6 +134,16 @@ export default class Settings{
         }
 
         this.onSettingsChange();
+    }
+
+    public TryLoadFromStorage(){
+        const settings = localStorage.getItem("Settings")
+        if (!settings){
+            return;
+        }
+
+        const json = JSON.parse(settings);
+        Settings.UpdateSettingsFromJSON(json, this);
     }
 
     private IsSettingsPaneGone(){

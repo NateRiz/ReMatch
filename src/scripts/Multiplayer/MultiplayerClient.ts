@@ -52,6 +52,8 @@ export default class MultiplayerClient{
     }
 
     private RestartGame(){
+        localStorage.setItem("Settings", JSON.stringify(this.settings))
+
         var lobbyId = window.location.pathname.replace("/", "");
         lobbyId = lobbyId.slice(1,) + lobbyId[0]
         window.location.href = `/${lobbyId}`
