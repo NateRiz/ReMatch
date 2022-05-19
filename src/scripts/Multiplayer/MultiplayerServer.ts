@@ -5,7 +5,7 @@ import Settings from "./Settings"
 
 export default class MultiplayerServer{
     multiplayerGame: MultiplayerGame
-    allPlayers: Player[] = []
+    allClients: Player[] = [] // All clients. Players do not update with the game.
     turnTimer: number | null = null;
     settings: Settings;
     SendAll: (message: string) => void = (_: string) => {}
@@ -32,12 +32,12 @@ export default class MultiplayerServer{
         console.log(`<< [${client.peer}] (Connection Request)`);
 
         var player = new Player(client.peer, nickname);
-        this.allPlayers.push(player)
+        this.allClients.push(player)
 
-        this.SendAll(JSON.stringify({"Connect": this.allPlayers}));
-        client.send(JSON.stringify({"Settings":this.settings}));
+        this.SendAll(JSON.stringify({"Connect": this.allClients}));
+        client.send(JSON.stringify({"Settings": this.settings}));
 
-        if (this.allPlayers.length >= 2){
+        if (this.allClients.length >= 2){
             this.EnableStartButton()
         }
     }
@@ -60,12 +60,12 @@ export default class MultiplayerServer{
             }))
         }
 
-        const index = this.allPlayers.findIndex(p => {
+        const index = this.allClients.findIndex(p => {
             return p.id === peerId;
         });
 
         if(index !== -1){
-            this.allPlayers.splice(index, 1);
+            this.allClients.splice(index, 1);
         }
     }
 
@@ -83,7 +83,7 @@ export default class MultiplayerServer{
         this.SendAll(JSON.stringify({
             "Start": null,
             "Rule": this.multiplayerGame.rule,
-            "TurnOrder": this.allPlayers,
+            "TurnOrder": this.allClients,
             "Turn": 0,
             "Settings": JSON.stringify(this.settings)
         }));
@@ -105,7 +105,7 @@ export default class MultiplayerServer{
     }
 
     private ResetTimer(){
-        const duration = 120000;
+        const duration = 5000;
         if (this.turnTimer != null){
             window.clearTimeout(this.turnTimer)
         }
@@ -114,14 +114,23 @@ export default class MultiplayerServer{
 
     private NotifyUserOutOfTime(){
         const gamePlayer = this.multiplayerGame.players[this.multiplayerGame.turn];
-        this.SendAll(JSON.stringify({
-            "OutOfTime": gamePlayer.id
-        }));
-        this.multiplayerGame.DecrementTurn();
-        this.multiplayerGame.RemovePlayer(gamePlayer.id);
 
-        const serverPlayer = this.GetPlayerById(gamePlayer.id);
-        serverPlayer.place = this.multiplayerGame.players.length;
+        gamePlayer.DecrementLives()
+
+        this.SendAll(JSON.stringify({
+            "OutOfTime": {
+                "playerId":gamePlayer.id,
+                "lives":gamePlayer.lives
+            }
+        }));
+
+        if (gamePlayer.lives <= 0){
+            this.multiplayerGame.DecrementTurn();
+            this.multiplayerGame.RemovePlayer(gamePlayer.id);
+
+            const serverPlayer = this.GetPlayerById(gamePlayer.id);
+            serverPlayer.place = this.multiplayerGame.players.length;
+        }
 
         if (this.multiplayerGame.players.length == 1){
             this.EndGame();
@@ -180,9 +189,9 @@ export default class MultiplayerServer{
     private EndGame(){
         const player = this.GetPlayerById(this.multiplayerGame.players[0].id);
         player.place = 0;
-        this.allPlayers.sort((a:Player, b:Player) => a.place - b.place);
+        this.allClients.sort((a:Player, b:Player) => a.place - b.place);
 
-        const topPlaces = Array.from(this.allPlayers.slice(0,3), (p)=>p.nickname);
+        const topPlaces = Array.from(this.allClients.slice(0,3), (p)=>p.nickname);
 
         this.SendAll(JSON.stringify({
             "Winner": topPlaces
@@ -193,10 +202,10 @@ export default class MultiplayerServer{
 
     // Get player by id: From ALL players, not remaining.
     private GetPlayerById(playerId: string): Player{
-        const index = this.allPlayers.findIndex(p => {
+        const index = this.allClients.findIndex(p => {
             return p.id === playerId;
         });
 
-        return this.allPlayers[index];
+        return this.allClients[index];
     }
 }

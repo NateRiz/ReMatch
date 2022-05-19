@@ -107,6 +107,18 @@ export default class MultiplayerGame{
         this.guessSpan.textContent = this.guess
     }
 
+    OnOutOfTime(playerInfo: any){
+        const player = this.GetPlayerById(playerInfo.playerId);
+        if (!player){
+            return;
+        }
+
+        player?.SetLives(playerInfo.lives);
+        if(player && player.lives <= 0){
+            this.RemovePlayer(playerInfo.playerId);
+        }
+    }
+
     RemovePlayer(playerId: string){
         const index = this.players.findIndex(p => {
             return p.id === playerId;
@@ -141,7 +153,7 @@ export default class MultiplayerGame{
         }
     }
 
-    GetPlayerById(playerId: string): Player{
+    GetPlayerById(playerId: string): Player | undefined{
         const index = this.players.findIndex(p => {
             return p.id === playerId;
         });

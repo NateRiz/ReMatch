@@ -43,18 +43,18 @@ export default class Settings{
         if(document.querySelector("#SettingsContainer") === null){
             return;
         }
-        
+
         const twoButton = document.querySelector("#TwoLife") as HTMLImageElement;
         const threeButton = document.querySelector("#ThreeLife") as HTMLImageElement;
 
-        twoButton?.src = '/src/assets/heart_empty.svg'
-        threeButton?.src = '/src/assets/heart_empty.svg'
+        twoButton.src = '/src/assets/heart_empty.svg'
+        threeButton.src = '/src/assets/heart_empty.svg'
 
         if (lives >= 2){
-            twoButton?.src = '/src/assets/heart_full.svg'
+            twoButton.src = '/src/assets/heart_full.svg'
         }
         if (lives === 3){
-            threeButton?.src = '/src/assets/heart_full.svg'
+            threeButton.src = '/src/assets/heart_full.svg'
         }
 
         this.onSettingsChange();

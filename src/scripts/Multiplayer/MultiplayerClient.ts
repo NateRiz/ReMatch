@@ -107,7 +107,7 @@ export default class MultiplayerClient{
             case 'IncorrectGuess':
                 break;
             case 'OutOfTime':
-                this.multiplayerGame.RemovePlayer(args);
+                this.multiplayerGame.OnOutOfTime(args);
                 break;
             case 'CorrectGuess':
                 this.multiplayerGame.OnCorrectGuess();

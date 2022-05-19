@@ -2,6 +2,7 @@ export default class Player{
     id: string = "";
     nickname: string = "";
     abbreviatedNickname: string = "";
+    lives: number = 0;
     place = 999; // Whichever place this player came in. (first, second...)
     playerCard: HTMLDivElement | undefined;
     playerNameSpan: HTMLSpanElement | undefined
@@ -50,6 +51,8 @@ export default class Player{
     }
 
     public SetLives(lives: number) {
+        this.lives = lives
+
         const lifeContainer = this.playerCard?.querySelector("#PlayerLivesContainer") as HTMLDivElement;
         var child = lifeContainer?.lastElementChild;
         while (child){
@@ -63,6 +66,10 @@ export default class Player{
             var clone = template.content.cloneNode(true);
             lifeContainer?.appendChild(clone);
         }
+    }
+
+    public DecrementLives(){
+        this.SetLives(this.lives - 1);
     }
 
     toJSON(){
