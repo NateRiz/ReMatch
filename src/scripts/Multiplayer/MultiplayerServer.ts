@@ -159,7 +159,7 @@ export default class MultiplayerServer{
             serverPlayer.place = this.multiplayerGame.players.length;
         }
 
-        if (this.multiplayerGame.players.length == 1){
+        if (this.shouldEndGame()){
             this.EndGame();
         }else{
             this.StartNextTurn(true);
@@ -228,11 +228,11 @@ export default class MultiplayerServer{
         }
 
         if (this.settings.teams){
-            this.ToggleStartButton(false);
+            const uniqueTeams = (new Set(Array.from(this.allClients, p=>p.team))).size;
+            this.ToggleStartButton(uniqueTeams >= 2);
         }else{
             this.ToggleStartButton(true);
         }
-
     }
 
     private ToggleStartButton(isEnabled: boolean){
@@ -241,18 +241,54 @@ export default class MultiplayerServer{
         startMPButton.onclick = () => this.StartGame();
     }
 
+    private shouldEndGame(){
+        var remainingTeams = -1
+        if (this.settings.teams){
+            remainingTeams = (new Set(Array.from(this.multiplayerGame.players, p=>p.team))).size;
+        } else {
+            remainingTeams = this.multiplayerGame.players.length;
+        }
+
+        return remainingTeams === 1
+    }
+
     private EndGame(){
         const player = this.GetPlayerById(this.multiplayerGame.players[0].id);
         player.place = 0;
         this.allClients.sort((a:Player, b:Player) => a.place - b.place);
 
-        const topPlaces = Array.from(this.allClients.slice(0,3), (p)=>p.nickname);
 
         this.SendAll(JSON.stringify({
-            "Winner": topPlaces
+            "Winner": this.GetWinners()
         }));
 
         window.clearTimeout(this.turnTimer!);
+    }
+
+    private GetWinners():string[] {
+        if (!this.settings.teams){
+            return Array.from(this.allClients.slice(0, 3), (p)=>p.nickname)
+        }
+
+        var players = Array.from(this.allClients).sort((a:Player, b:Player) => a.place - b.place);
+        var topTeams:number[] = [];
+        for(var i = 0; i < players.length; i++){
+            var team = players[i].team;
+            if (!topTeams.includes(team)){
+                topTeams.push(team);
+                if (topTeams.length === 3){
+                    break;
+                }
+            }
+        }
+
+        var winners: string[] = []
+        topTeams.forEach((team) => {
+            var teamPlayers = players.filter((player)=>player.team === team).map((player)=>player.nickname);
+            winners.push(teamPlayers.join(' '));
+        });
+
+        return winners;
     }
 
     // Get player by id: From ALL players, not remaining.
