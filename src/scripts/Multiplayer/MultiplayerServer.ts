@@ -9,6 +9,7 @@ export default class MultiplayerServer{
     turnTimer: number | null = null;
     settings: Settings;
     currentWordNumber:number = 1;
+    baseTurnDuration:number = 20000
     SendAll: (message: string) => void = (_: string) => {}
     
     constructor(multiplayerGame: MultiplayerGame){
@@ -100,10 +101,11 @@ export default class MultiplayerServer{
             "Rule": this.multiplayerGame.rule,
             "TurnOrder": this.allClients,
             "Turn": 0,
-            "Settings": JSON.stringify(this.settings)
+            "Settings": JSON.stringify(this.settings),
+            "TurnEndTime": Date.now() + this.baseTurnDuration,
         }));
 
-        this.ResetTimer();
+        this.ResetTimer(this.baseTurnDuration);
     }
 
     private StartNextTurn(wasOutOfTime: boolean=false){
@@ -112,6 +114,7 @@ export default class MultiplayerServer{
         
         const ruleDifficulty = Math.floor(this.currentWordNumber / (this.allClients.length * 3))
         var currentPlayer = this.multiplayerGame.players[this.multiplayerGame.turn];
+        currentPlayer.statusEffects.length = 0; //  Clear
         if (wasOutOfTime){
             if (!this.settings.doesRulePersist || currentPlayer.lastRule === this.multiplayerGame.rule){
                 this.multiplayerGame.ResetWord(ruleDifficulty, this.settings.difficulty)
@@ -121,23 +124,24 @@ export default class MultiplayerServer{
         }
         currentPlayer.lastRule = this.multiplayerGame.rule;
 
+        const turnDuration = 120000
         this.SendAll(JSON.stringify(
             {
                 "Rule": this.multiplayerGame.rule,
                 "Turn": this.multiplayerGame.turn,
-                "NextTurn": null
+                "NextTurn": null,
+                "TurnEndTime": Date.now() + turnDuration
             }
         ))
 
-        this.ResetTimer();
+        this.ResetTimer(turnDuration);
     }
 
-    private ResetTimer(){
-        const duration = 120000;
+    private ResetTimer(turnDuration: number){
         if (this.turnTimer != null){
             window.clearTimeout(this.turnTimer)
         }
-        this.turnTimer = window.setTimeout(()=>{ this.NotifyUserOutOfTime() }, duration)
+        this.turnTimer = window.setTimeout(()=>{ this.NotifyUserOutOfTime() }, turnDuration)
     }
 
     private NotifyUserOutOfTime(){
@@ -180,9 +184,37 @@ export default class MultiplayerServer{
                 break;
             case "TeamChoice":
                 this.OnTeamChoice(client, args);
+                break;
+            case "Purchase":
+                this.OnPurchase(client, args);
+                break;
             default:
                 console.log(`Invalid Command: [${command}](${args})`);
         }
+    }
+
+    private OnPurchase(client: Peer.DataConnection, buttonInfo: any){
+        const gamePlayer = this.multiplayerGame.GetPlayerById(client.peer);
+        const recipient = this.multiplayerGame.GetPlayerById(buttonInfo.PlayerId);
+        
+        const cost = this.multiplayerGame.playerButtons[buttonInfo.ButtonType].cost;
+        if (!recipient || !gamePlayer || gamePlayer.points < cost){
+            return;
+        }
+
+        gamePlayer.RemovePoints(cost);
+        recipient.statusEffects.push(buttonInfo.ButtonType);
+
+        this.SendAll(JSON.stringify({
+            "Points": {
+                Points: gamePlayer!.points,
+                PlayerId: client.peer,
+            },
+            "Status":{
+                PlayerId: recipient.id,
+                StatusEffects: recipient.statusEffects,
+            }
+        }))
     }
 
     private OnTeamChoice(client: Peer.DataConnection, team: number){

@@ -14,7 +14,7 @@ export default class MultiplayerGame{
     ruleRegex: RegExp
     dictionary: Set<string>;
     settings: Settings | undefined;
-    playerButtons = {}
+    playerButtons: {[key: string]: PlayerButton} = {};
 
     hiddenInput: HTMLInputElement;
     ruleSpan: HTMLSpanElement;
@@ -30,8 +30,8 @@ export default class MultiplayerGame{
         this.guessSpan = document.querySelector("#Guess") as HTMLSpanElement;
         this.roundSpan = document.querySelector("#Round") as HTMLSpanElement;
         this.playerButtons = {
-            "ExtraTime": new PlayerButton("Teammate", 1),
-            "LessTime": new PlayerButton("Opponent", 3),
+            "ExtraTime": new PlayerButton("Teammate", 1, "slowdown.svg", "#59cd90", "transform: scaleX(-1);"),
+            "LessTime": new PlayerButton("Opponent", 3, "slowdown.svg", "#c1666b"),
         };
         
         fetch('./src/assets/dict.txt')
@@ -116,6 +116,11 @@ export default class MultiplayerGame{
         }
     }
 
+    OnReceiveStatus(statusInfo: any){
+        const player = this.GetPlayerById(statusInfo.PlayerId);
+        player!.SetStatusEffects(statusInfo.StatusEffects, this.playerButtons);
+    }
+
     OnReceiveTurnOrder(playerIds: string[]){
         this.players.sort((a, b) => +(playerIds.indexOf(a.id) < playerIds.indexOf(b.id)));
     }
@@ -133,8 +138,6 @@ export default class MultiplayerGame{
             // This is not right. need to keep track of amt of words each player has done.
             this.roundSpan.textContent = this.round.toString()
         }
-
-        this.ResetTimer();
     }
 
     OnGuessUpdate(value: string){
@@ -157,6 +160,10 @@ export default class MultiplayerGame{
 
     OnNextTurn(){
         this.ResetGuess();
+    }
+
+    OnReceiveTurnEndTime(endTime: number){
+        this.ResetTimer(endTime);
     }
 
     OnReceiveRemainingLetters(playerInfo: any){
@@ -305,9 +312,8 @@ export default class MultiplayerGame{
         return this.players.filter((p)=>p.team !== team)
     }
 
-    private ResetTimer(){
-        const duration = 20000;
-
+    private ResetTimer(endTime: number){
+        const duration = endTime - Date.now();
         var timerElement = document.body;
         
         timerElement.classList.remove("Timer");

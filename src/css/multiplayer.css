@@ -306,6 +306,29 @@ body {
     background-color: #1d2541;
 }
 
+.PlayerStatusContainer{
+    width: 32px;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 8px 8px 0px;
+    text-align: center;
+}
+
+.PlayerStatuses {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 400px;
+    padding: 8px;
+}
+
+.PlayerStatus {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background-color: white;
+}
+
 .ButtonExplanation{
     font-size: 18px;
     white-space: nowrap;

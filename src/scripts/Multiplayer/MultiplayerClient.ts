@@ -78,6 +78,13 @@ export default class MultiplayerClient{
     private OnStartGame(){
         this.isGameStarted = true;
         this.multiplayerGame.OnStartGame(this.settings!);
+
+        this.multiplayerGame.players.forEach((p) => {
+            p.playerCard?.parentElement?.querySelectorAll(".PlayerButton").forEach((btn) => {
+                const btnImg = (btn as HTMLImageElement);
+                btnImg.onclick = () => this.TryBuyPlayerButton(btnImg, p.id);
+            })
+        })
     }
 
     private OnReceiveSettings(settings: any){
@@ -108,6 +115,20 @@ export default class MultiplayerClient{
         myPlayer?.ToggleTeamChoiceUI()
     }
 
+    private TryBuyPlayerButton(btn: HTMLImageElement, playerId: string){
+        const buttonType = btn.getAttribute("data-button")
+        if (!buttonType){
+            return;
+        }
+
+        this.Send(JSON.stringify({
+            "Purchase": {
+                "PlayerId": playerId,
+                "ButtonType": buttonType,
+            }
+        }));
+    }
+
     private OnTeamChoice(playerInfo: any){
         const player = this.multiplayerGame.GetPlayerById(playerInfo.playerId);
         player?.SetTeam(playerInfo.team);
@@ -120,6 +141,9 @@ export default class MultiplayerClient{
                 break;
             case "Points":
                 this.multiplayerGame.OnReceivePoints(args);
+                break;
+            case "Status":
+                this.multiplayerGame.OnReceiveStatus(args);
                 break;
             case "TeamChoice":
                 this.OnTeamChoice(args);
@@ -138,6 +162,9 @@ export default class MultiplayerClient{
                 break;
             case "Rule":
                 this.multiplayerGame.OnReceiveRule(args);
+                break;
+            case "TurnEndTime":
+                this.multiplayerGame.OnReceiveTurnEndTime(args);
                 break;
             case "TurnOrder":
                 this.multiplayerGame.OnReceiveTurnOrder(args);

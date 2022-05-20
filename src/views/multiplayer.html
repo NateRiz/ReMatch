@@ -144,11 +144,11 @@
                 <span class="Letter UnusedLetter">S</span>
                 <span class="Letter UnusedLetter">T</span>
                 <span class="Letter UnusedLetter">U</span>
-                <span class="Letter UnusedLetter">V</span>
+                <span class="Letter UnusedLetter Hidden">V</span>
                 <span class="Letter UnusedLetter">W</span>
-                <span class="Letter UnusedLetter">X</span>
-                <span class="Letter UnusedLetter">Y</span>
-                <span class="Letter UnusedLetter">Z</span>
+                <span class="Letter UnusedLetter Hidden">X</span>
+                <span class="Letter UnusedLetter Hidden">Y</span>
+                <span class="Letter UnusedLetter Hidden">Z</span>
             </div>
         </div> 
     </div>
@@ -156,6 +156,11 @@
 
 <template id="LifeTemplate">
     <img src="./src/assets/heart_full_dark.svg" height=32px width=32px/>
+</template>
+<template id="PlayerStatusTemplate">
+    <div class="PlayerStatusContainer">
+        <img class="PlayerStatus">
+    </div>
 </template>
 
 <template id="PlayerTemplate">
@@ -189,6 +194,8 @@
                 </div>
             </div>
             <span class="PlayerSpan PlayerIdle">{name}</span>
+        </div>
+        <div class="PlayerStatuses">
         </div>
     </div>
 </template>

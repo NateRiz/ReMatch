@@ -10,11 +10,12 @@ export default class Player{
     lastRule: string = "";
     team: number = -1;
     place:number = 999; // Whichever place this player came in. (first, second...)
-    points:number = 0
+    points:number = 60
     playerCard: HTMLDivElement | undefined;
     playerNameSpan: HTMLSpanElement | undefined;
     TeamChoiceContainer: HTMLDivElement | undefined;
-    remainingCharacters = new Set('qwertyuiopasdfghjklzxcvbnnm')
+    remainingCharacters = new Set('abcdefghijklmnopqrstuw');
+    statusEffects: string[] = [];
 
     constructor(id: string, nickname: string, team: number){
         this.id = id;
@@ -67,11 +68,37 @@ export default class Player{
         }
     }
 
+    public SetStatusEffects(statusEffects: string[], playerButtons: {[key: string]: PlayerButton}){
+        this.statusEffects = statusEffects;
+        const playerStatuses = this.playerCard?.parentElement?.querySelector(".PlayerStatuses") as HTMLDivElement;
+
+        var child = playerStatuses?.lastElementChild;
+        while (child){
+            playerStatuses?.removeChild(child);
+            child = playerStatuses?.lastElementChild;
+        }
+
+        var template = document.querySelector("#PlayerStatusTemplate") as HTMLTemplateElement;
+        this.statusEffects.forEach((status)=>{
+            var clone = template.content.cloneNode(true) as HTMLDivElement;
+            const img = clone.querySelector(".PlayerStatus") as HTMLImageElement;
+            const playerButton = playerButtons[status];
+            img.src = `/src/assets/${playerButton.imageName}`;
+            img.style.backgroundColor = playerButton.backgroundColor;
+            img.style.cssText += playerButton.style;
+            playerStatuses?.appendChild(clone);
+        })
+    }
+
     public SetPoints(points: number){
         this.points = points;
 
         const pointSpan = this.playerCard?.querySelector(".Points") as HTMLSpanElement;
         pointSpan.textContent = points.toString();
+    }
+
+    public RemovePoints(cost: number){
+        this.SetPoints(this.points - cost)
     }
 
     public SetLives(lives: number) {
@@ -127,7 +154,7 @@ export default class Player{
         this.HighlightTeamChoice();
     }
 
-    public UpdatePlayerButtonUI(myPoints: Number, playerButtons: any){
+    public UpdatePlayerButtonUI(myPoints: number, playerButtons: {[key: string]: PlayerButton}){
         document.querySelectorAll(".PlayerButton").forEach((btn)=>{
             btn.classList.remove("PlayerButtonEnabled");
             if (myPoints >= playerButtons[btn.getAttribute("data-button")!].cost){
@@ -136,11 +163,11 @@ export default class Player{
         })
     }
 
-    public ShowTeamButtonUI(playerButtons: any){
+    public ShowTeamButtonUI(playerButtons: {[key: string]: PlayerButton}){
         this.ShowButtonUI(playerButtons, "Teammate")
     }
 
-    public ShowOpponentButtonUI(playerButtons: any){
+    public ShowOpponentButtonUI(playerButtons: {[key: string]: PlayerButton}){
         this.ShowButtonUI(playerButtons, "Opponent")
     }
 
@@ -148,7 +175,7 @@ export default class Player{
         //Remove used letters from guess. Return true if the user used all letters.
         Array.from(guess).forEach((c)=>this.remainingCharacters.delete(c));
         if (this.remainingCharacters.size === 0){
-            this.remainingCharacters = new Set('qwertyuiopasdfghjklzxcvbnnm');
+            this.remainingCharacters = new Set('abcdefghijklmnopqrstuw');
             return true;
         }
         return false;
