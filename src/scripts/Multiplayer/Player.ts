@@ -54,7 +54,8 @@ export default class Player{
         var clone = template.content.cloneNode(true);
         playerContainer?.appendChild(clone);
 
-        this.playerCard = playerContainer?.lastElementChild as HTMLDivElement;
+        var card = playerContainer?.querySelectorAll(".PlayerTemplate")
+        this.playerCard = card![card!.length - 1] as HTMLDivElement;
         this.playerNameSpan = this.playerCard.querySelector(".PlayerSpan") as HTMLSpanElement;
         this.playerNameSpan.textContent = this.abbreviatedNickname;
 
@@ -123,6 +124,15 @@ export default class Player{
     public SetTeam(team: number){
         this.team = team;
         this.HighlightTeamChoice();
+    }
+
+    public UpdatePlayerButtonUI(myPoints: Number, buttonCosts: any){
+        document.querySelectorAll(".PlayerButton").forEach((btn)=>{
+            btn.classList.remove("PlayerButtonEnabled");
+            if (myPoints >= buttonCosts[btn.getAttribute("data-button")!]){
+                btn.classList.add("PlayerButtonEnabled")
+            }
+        })
     }
 
     public RemoveLetters(guess: string){

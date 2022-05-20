@@ -111,6 +111,7 @@ body {
     justify-items: center;
     justify-content: center;
     width: 100%;
+    margin-top: 4px;
 }
 
 .TeamChoice{
@@ -279,10 +280,49 @@ body {
     font-size:  96px;
 }
 
+.PlayerAndButtonContainer{
+    display: flex;
+    flex-direction: column;
+    margin: 0px 32px;
+}
+
+.PlayerButtonContainer{
+    width: 32px;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 8px 8px 0px;
+    text-align: center;
+}
+
+.PlayerButtons{
+    display: flex;
+    flex-direction: row;
+}
+
+.PlayerButton {
+    height: 32px;
+    width: 32px;
+    border-radius: 8px;
+    background-color: #1d2541;
+}
+
+.ButtonExplanation{
+    font-size: 18px;
+    white-space: nowrap;
+    position: absolute;
+    transform: translateY(-150%) translateX(-50%) translateX(16px);
+}
+
+.PlayerButtonEnabled {
+    background-color: #6fffe9;
+    transition: all .1s linear;
+    cursor: pointer;
+}
+
 .PlayerCardHeader{
     display: flex;
     flex-direction: row;
-    width: 100%;
+    width: 96%;
 }
 
 .PlayerLivesContainer{
@@ -320,13 +360,12 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0px 32px;
     border: 8px solid transparent
 }
 
 .PlayerTemplateSelected {
     background-color: #6fffe9;
-    padding: 0px 12px;
+    padding: 0px 12px 24px 12px;
     transition: all .1s linear;
 }
 

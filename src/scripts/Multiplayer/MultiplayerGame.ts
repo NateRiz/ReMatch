@@ -13,6 +13,7 @@ export default class MultiplayerGame{
     ruleRegex: RegExp
     dictionary: Set<string>;
     settings: Settings | undefined;
+    buttonCosts = {}
 
     hiddenInput: HTMLInputElement;
     ruleSpan: HTMLSpanElement;
@@ -27,6 +28,10 @@ export default class MultiplayerGame{
         this.ruleSpan = document.querySelector("#Rule") as HTMLSpanElement;
         this.guessSpan = document.querySelector("#Guess") as HTMLSpanElement;
         this.roundSpan = document.querySelector("#Round") as HTMLSpanElement;
+        this.buttonCosts = {
+            "ExtraTime": 1,
+            "LessTime": 3,
+        }
         
         fetch('./src/assets/dict.txt')
         .then(response => response.text())
@@ -53,6 +58,10 @@ export default class MultiplayerGame{
 
         this.GetPlayerById(this.me)?.SetTeamChoiceUI(false)
         this.settings.UpdateWildCardUI();
+
+        if (this.settings.wildcardMode){
+            this.SetUpWildCardMode();
+        }
     }
 
     OnPlayerConnect(playerInfo: object, settings: Settings){
@@ -98,6 +107,12 @@ export default class MultiplayerGame{
         }
 
         player.SetPoints(pointInfo.Points);
+        
+        if (player.id === this.me){
+            this.players.forEach((p)=>{
+                p.UpdatePlayerButtonUI(player.points, this.buttonCosts);
+            })
+        }
     }
 
     OnReceiveTurnOrder(playerIds: string[]){
@@ -249,6 +264,21 @@ export default class MultiplayerGame{
         this.turn = (this.turn + 1) % this.players.length;
     }
     // ### End Server Only Functions ###
+
+    private SetUpWildCardMode(){
+        document.querySelectorAll(".PointsContainer").forEach((pointDiv)=>{
+            pointDiv.classList.remove("Hidden")
+        })
+
+        document.querySelectorAll(".PlayerButton").forEach((btn) => {
+            (btn as HTMLImageElement).onmouseover = () => {
+                btn.parentElement?.querySelector(".ButtonExplanation")?.classList.remove("Hidden")
+            }
+            (btn as HTMLImageElement).onmouseout = () => {
+                btn.parentElement?.querySelector(".ButtonExplanation")?.classList.add("Hidden")
+            }
+        })
+    }
 
     private ResetTimer(){
         const duration = 20000;

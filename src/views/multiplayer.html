@@ -72,7 +72,7 @@
                         <span class="Title">R*MATCH</span>
                     </div>
                 </div>
-                <div class="RoundContainer">
+                <div class="RoundContainer Hidden">
                     <span id="Round">0</span>
                     <span id="AvailableRules">*</span>
                 </div>
@@ -159,26 +159,37 @@
 </template>
 
 <template id="PlayerTemplate">
-    <div class="PlayerTemplate PlayerTemplateSelected">
-        <div class="TeamChoiceContainer Hidden">
-            <span id="TeamChoice0" class="TeamChoice TeamChoice0 TeamChoiceSelected"></span>
-            <span id="TeamChoice1" class="TeamChoice TeamChoice1"></span>
-            <span id="TeamChoice2" class="TeamChoice TeamChoice2"></span>
-            <span id="TeamChoice3" class="TeamChoice TeamChoice3"></span>
-            <span id="TeamChoice4" class="TeamChoice TeamChoice4"></span>
-            <span id="TeamChoice5" class="TeamChoice TeamChoice5"></span>
-            <span id="TeamChoice6" class="TeamChoice TeamChoice6"></span>
-            <span id="TeamChoice7" class="TeamChoice TeamChoice7"></span>
-        </div>
-        <div class="PlayerCardHeader">
-            <div class="PointsContainer">
-                <span class="Points">0</span>
+    <div class="PlayerAndButtonContainer">
+        <div class="PlayerButtons">
+            <div class="PlayerButtonContainer">
+                <span class="ButtonExplanation Hidden ButtonExtraTime">[1] Extra Time</span>
+                <img data-button="ExtraTime" class="PlayerButton" src="/src/assets/slowdown.svg" />
             </div>
-            <div id="PlayerLivesContainer" class="PlayerLivesContainer">
+            <div class="PlayerButtonContainer">
+                <span class="ButtonExplanation Hidden">[3] Less Time</span>
+                <img data-button="LessTime" class="PlayerButton" style="transform: scaleX(-1);" src="/src/assets/slowdown.svg" />
             </div>
         </div>
-
-        <span class="PlayerSpan PlayerIdle">{name}</span>
+        <div class="PlayerTemplate PlayerTemplateSelected">
+            <div class="TeamChoiceContainer Hidden">
+                <span id="TeamChoice0" class="TeamChoice TeamChoice0 TeamChoiceSelected"></span>
+                <span id="TeamChoice1" class="TeamChoice TeamChoice1"></span>
+                <span id="TeamChoice2" class="TeamChoice TeamChoice2"></span>
+                <span id="TeamChoice3" class="TeamChoice TeamChoice3"></span>
+                <span id="TeamChoice4" class="TeamChoice TeamChoice4"></span>
+                <span id="TeamChoice5" class="TeamChoice TeamChoice5"></span>
+                <span id="TeamChoice6" class="TeamChoice TeamChoice6"></span>
+                <span id="TeamChoice7" class="TeamChoice TeamChoice7"></span>
+            </div>
+            <div class="PlayerCardHeader">
+                <div class="PointsContainer Hidden">
+                    <span class="Points">0</span>
+                </div>
+                <div id="PlayerLivesContainer" class="PlayerLivesContainer">
+                </div>
+            </div>
+            <span class="PlayerSpan PlayerIdle">{name}</span>
+        </div>
     </div>
 </template>
 
