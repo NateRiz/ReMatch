@@ -133,7 +133,7 @@ export default class MultiplayerServer{
     }
 
     private ResetTimer(){
-        const duration = 20000;
+        const duration = 120000;
         if (this.turnTimer != null){
             window.clearTimeout(this.turnTimer)
         }
@@ -212,12 +212,17 @@ export default class MultiplayerServer{
                 gamePlayer!.IncrementLives();
             }
 
+            gamePlayer!.points+=1;
             this.SendAll(JSON.stringify({
                 "CorrectGuess": null,
                 "LettersRemaining":{
                     "PlayerId": client.peer,
                     "Letters": Array.from(player.remainingCharacters).join(''),
                     "Lives": gamePlayer!.lives,
+                },
+                "Points":{
+                    Points: gamePlayer!.points,
+                    PlayerId: client.peer,
                 }
             }))
 

@@ -56,7 +56,9 @@ export default class MultiplayerGame{
     }
 
     OnPlayerConnect(playerInfo: object, settings: Settings){
-        var player: Player = Object.setPrototypeOf(playerInfo, Player.prototype)
+        var player = new Player("","",-1);
+        Object.assign(player, playerInfo);
+
         player.settings = settings;
         this.players.push(player);
         player.CreatePlayerCard();
@@ -89,6 +91,15 @@ export default class MultiplayerGame{
         this.ruleSpan.textContent = this.rule;
     }
 
+    OnReceivePoints(pointInfo: any){
+        const player = this.GetPlayerById(pointInfo.PlayerId)
+        if (!player){
+            return;
+        }
+
+        player.SetPoints(pointInfo.Points);
+    }
+
     OnReceiveTurnOrder(playerIds: string[]){
         this.players.sort((a, b) => +(playerIds.indexOf(a.id) < playerIds.indexOf(b.id)));
     }
@@ -102,7 +113,8 @@ export default class MultiplayerGame{
         this.players[playerTurn].SelectPlayerCard()
 
         if (this.turn === 0){
-            this.round += 1
+            // this.round += 1
+            // This is not right. need to keep track of amt of words each player has done.
             this.roundSpan.textContent = this.round.toString()
         }
 

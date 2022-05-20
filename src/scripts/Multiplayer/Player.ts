@@ -8,7 +8,8 @@ export default class Player{
     lives: number = 0;
     lastRule: string = "";
     team: number = -1;
-    place = 999; // Whichever place this player came in. (first, second...)
+    place:number = 999; // Whichever place this player came in. (first, second...)
+    points:number = 0
     playerCard: HTMLDivElement | undefined;
     playerNameSpan: HTMLSpanElement | undefined;
     TeamChoiceContainer: HTMLDivElement | undefined;
@@ -62,6 +63,13 @@ export default class Player{
         if (this.settings?.teams){
             this.SetTeam(this.team);
         }
+    }
+
+    public SetPoints(points: number){
+        this.points = points;
+
+        const pointSpan = this.playerCard?.querySelector(".Points") as HTMLSpanElement;
+        pointSpan.textContent = points.toString();
     }
 
     public SetLives(lives: number) {

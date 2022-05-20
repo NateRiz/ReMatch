@@ -44,6 +44,17 @@ body {
     100%{border-image: linear-gradient(to bottom, #0B132B 0 100%, #6fffe9 100% 100%) 1;}
 }
 
+.PointsContainer{
+    display: flex;
+    width: 100%;
+    justify-content: left;
+}
+
+.Points{
+    color: #0B132B;
+    font-size: 32px;
+}
+
 .PageContainer {
     display: flex;
     flex-direction: row;
@@ -268,13 +279,17 @@ body {
     font-size:  96px;
 }
 
+.PlayerCardHeader{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
 .PlayerLivesContainer{
     display: flex;
     flex-direction: row;
     justify-content: right;
     justify-items: right;
-    width: 100%;
-    padding: 8px 32px 0px 0px;
 }
 
 .PlayerContainer {
@@ -311,7 +326,7 @@ body {
 
 .PlayerTemplateSelected {
     background-color: #6fffe9;
-    padding: 12px;
+    padding: 0px 12px;
     transition: all .1s linear;
 }
 

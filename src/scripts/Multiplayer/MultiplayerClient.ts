@@ -118,6 +118,9 @@ export default class MultiplayerClient{
             case "Settings":
                 this.OnReceiveSettings(args);
                 break;
+            case "Points":
+                this.multiplayerGame.OnReceivePoints(args);
+                break;
             case "TeamChoice":
                 this.OnTeamChoice(args);
                 break;
