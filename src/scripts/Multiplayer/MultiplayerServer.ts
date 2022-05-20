@@ -8,7 +8,7 @@ export default class MultiplayerServer{
     allClients: Player[] = [] // All clients. Players do not update with the game.
     turnTimer: number | null = null;
     settings: Settings;
-    ruleDifficulty:number = 1;
+    currentWordNumber:number = 1;
     SendAll: (message: string) => void = (_: string) => {}
     
     constructor(multiplayerGame: MultiplayerGame){
@@ -91,7 +91,7 @@ export default class MultiplayerServer{
         var ruleSpan = (document.querySelector("#RuleContainer") as HTMLDivElement);
         ruleSpan.classList.remove("Hidden");
 
-        this.multiplayerGame.ResetWord(this.ruleDifficulty, this.settings.difficulty)
+        this.multiplayerGame.ResetWord(0, this.settings.difficulty)
         var currentPlayer = this.multiplayerGame.players[this.multiplayerGame.turn];
         currentPlayer.lastRule = this.multiplayerGame.rule;
 
@@ -108,14 +108,16 @@ export default class MultiplayerServer{
 
     private StartNextTurn(wasOutOfTime: boolean=false){
         this.multiplayerGame.IncrementTurn();
+        this.currentWordNumber+=1;
         
+        const ruleDifficulty = Math.floor(this.currentWordNumber / (this.allClients.length * 3))
         var currentPlayer = this.multiplayerGame.players[this.multiplayerGame.turn];
         if (wasOutOfTime){
             if (!this.settings.doesRulePersist || currentPlayer.lastRule === this.multiplayerGame.rule){
-                this.multiplayerGame.ResetWord(this.ruleDifficulty, this.settings.difficulty)
+                this.multiplayerGame.ResetWord(ruleDifficulty, this.settings.difficulty)
             }
         }else{
-            this.multiplayerGame.ResetWord(this.ruleDifficulty, this.settings.difficulty)
+            this.multiplayerGame.ResetWord(ruleDifficulty, this.settings.difficulty)
         }
         currentPlayer.lastRule = this.multiplayerGame.rule;
 
