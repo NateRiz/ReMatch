@@ -1,6 +1,7 @@
 import Player from "./Player"
 import RuleGenerator from "../RuleGenerator"
 import Settings from "./Settings"
+import PlayerButton from "./PlayerButton"
 
 export default class MultiplayerGame{
     players: Player[] = [] // All player ids
@@ -13,7 +14,7 @@ export default class MultiplayerGame{
     ruleRegex: RegExp
     dictionary: Set<string>;
     settings: Settings | undefined;
-    buttonCosts = {}
+    playerButtons = {}
 
     hiddenInput: HTMLInputElement;
     ruleSpan: HTMLSpanElement;
@@ -28,10 +29,10 @@ export default class MultiplayerGame{
         this.ruleSpan = document.querySelector("#Rule") as HTMLSpanElement;
         this.guessSpan = document.querySelector("#Guess") as HTMLSpanElement;
         this.roundSpan = document.querySelector("#Round") as HTMLSpanElement;
-        this.buttonCosts = {
-            "ExtraTime": 1,
-            "LessTime": 3,
-        }
+        this.playerButtons = {
+            "ExtraTime": new PlayerButton("Teammate", 1),
+            "LessTime": new PlayerButton("Opponent", 3),
+        };
         
         fetch('./src/assets/dict.txt')
         .then(response => response.text())
@@ -110,7 +111,7 @@ export default class MultiplayerGame{
         
         if (player.id === this.me){
             this.players.forEach((p)=>{
-                p.UpdatePlayerButtonUI(player.points, this.buttonCosts);
+                p.UpdatePlayerButtonUI(player.points, this.playerButtons);
             })
         }
     }
@@ -270,6 +271,10 @@ export default class MultiplayerGame{
             pointDiv.classList.remove("Hidden")
         })
 
+        document.querySelectorAll(".PlayerButtons").forEach((btnDiv)=>{
+            btnDiv.classList.remove("Hidden");
+        })
+
         document.querySelectorAll(".PlayerButton").forEach((btn) => {
             (btn as HTMLImageElement).onmouseover = () => {
                 btn.parentElement?.querySelector(".ButtonExplanation")?.classList.remove("Hidden")
@@ -278,6 +283,26 @@ export default class MultiplayerGame{
                 btn.parentElement?.querySelector(".ButtonExplanation")?.classList.add("Hidden")
             }
         })
+
+        const teammates = this.GetPlayersOnSameTeam(this.GetPlayerById(this.me)!);
+        teammates.forEach((t)=>{
+            t.ShowTeamButtonUI(this.playerButtons);
+        })
+
+        const opponents = this.GetPlayersOnOppositeTeam(this.GetPlayerById(this.me)!);
+        opponents.forEach((opp)=>{
+            opp.ShowOpponentButtonUI(this.playerButtons);
+        })
+    }
+
+    private GetPlayersOnSameTeam(player: Player): Player[] {
+        const team = player.team;
+        return this.players.filter((p)=>p.team === team)
+    }
+
+    private GetPlayersOnOppositeTeam(player: Player): Player[] {
+        const team = player.team;
+        return this.players.filter((p)=>p.team !== team)
     }
 
     private ResetTimer(){

@@ -1,3 +1,4 @@
+import PlayerButton from "./PlayerButton";
 import Settings from "./Settings";
 
 export default class Player{
@@ -126,13 +127,21 @@ export default class Player{
         this.HighlightTeamChoice();
     }
 
-    public UpdatePlayerButtonUI(myPoints: Number, buttonCosts: any){
+    public UpdatePlayerButtonUI(myPoints: Number, playerButtons: any){
         document.querySelectorAll(".PlayerButton").forEach((btn)=>{
             btn.classList.remove("PlayerButtonEnabled");
-            if (myPoints >= buttonCosts[btn.getAttribute("data-button")!]){
+            if (myPoints >= playerButtons[btn.getAttribute("data-button")!].cost){
                 btn.classList.add("PlayerButtonEnabled")
             }
         })
+    }
+
+    public ShowTeamButtonUI(playerButtons: any){
+        this.ShowButtonUI(playerButtons, "Teammate")
+    }
+
+    public ShowOpponentButtonUI(playerButtons: any){
+        this.ShowButtonUI(playerButtons, "Opponent")
     }
 
     public RemoveLetters(guess: string){
@@ -166,6 +175,15 @@ export default class Player{
             nickname: this.nickname,
             team: this.team,
         };
+    }
+
+    private ShowButtonUI(playerButtons: any, recipient: string){
+        this.playerCard?.parentElement!.querySelectorAll(".PlayerButton").forEach((btn)=>{
+            const btnType = btn.getAttribute("data-button")!;
+            if (playerButtons[btnType].recipient === recipient){
+                btn.parentElement!.classList.remove("Hidden");
+            }
+        })
     }
 
     private HighlightTeamChoice(){
