@@ -234,8 +234,13 @@ body {
     display: flex;
 }
 
-.TopLeftFiller{
-    width: 33.33333%
+.TimerTextContainer{
+    width: 33.33333%;
+    text-align: left;
+}
+
+.TimerText{
+    padding-left: 16px;
 }
 
 .TitleContainer {

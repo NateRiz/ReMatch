@@ -15,11 +15,13 @@ export default class MultiplayerGame{
     dictionary: Set<string>;
     settings: Settings | undefined;
     playerButtons: {[key: string]: PlayerButton} = {};
+    timerInterval: NodeJS.Timer | undefined;
 
     hiddenInput: HTMLInputElement;
     ruleSpan: HTMLSpanElement;
     guessSpan: HTMLSpanElement;
     roundSpan: HTMLSpanElement;
+    timerSpan: HTMLSpanElement;
 
     constructor(){
         this.ruleGenerator = new RuleGenerator()
@@ -29,6 +31,7 @@ export default class MultiplayerGame{
         this.ruleSpan = document.querySelector("#Rule") as HTMLSpanElement;
         this.guessSpan = document.querySelector("#Guess") as HTMLSpanElement;
         this.roundSpan = document.querySelector("#Round") as HTMLSpanElement;
+        this.timerSpan = document.querySelector("#TimerText") as HTMLSpanElement;
         this.playerButtons = {
             "ExtraTime": new PlayerButton("Teammate", 1, "slowdown.svg", "#59cd90", "transform: scaleX(-1);"),
             "LessTime": new PlayerButton("Opponent", 3, "slowdown.svg", "#c1666b"),
@@ -52,6 +55,8 @@ export default class MultiplayerGame{
         this.hiddenInput.disabled = false;
         const settingsPanel = document.querySelector("#SettingsContainer") as HTMLDivElement;
         settingsPanel.parentElement?.removeChild(settingsPanel);
+
+        this.timerSpan.classList.remove("Hidden");
 
         this.players.forEach(player => {
             player.SetLives(settings.lives);
@@ -324,8 +329,15 @@ export default class MultiplayerGame{
 
     private ResetTimer(endTime: number){
         const duration = endTime - Date.now();
+
+        if(this.timerInterval){
+            clearInterval(this.timerInterval);
+        }
+        this.timerInterval = setInterval(()=>{
+            this.timerSpan.textContent = Math.max(0, Math.ceil((endTime - Date.now()) / 1000)).toString();
+        }, 1000)
+
         var timerElement = document.body;
-        
         timerElement.classList.remove("Timer");
         window.setTimeout(()=>timerElement.classList.add("Timer"), 50);
 
