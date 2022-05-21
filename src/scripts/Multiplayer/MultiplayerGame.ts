@@ -258,7 +258,7 @@ export default class MultiplayerGame{
     // ### Server Only Functions ###
     ResetWord(difficulty: number, minimumMatches: number){
         this.rule = this.ruleGenerator._GetRule(difficulty, minimumMatches);
-        this.ruleRegex = new RegExp(this.rule.replaceAll("*",".*").replaceAll("+", ".+"), "i");
+        this.ruleRegex = new RegExp('^'+this.rule.replaceAll("*",".*").replaceAll("+", ".+")+'$', "i");
         this.guess = "";
         this.guessSpan.textContent = this.guess;
     }

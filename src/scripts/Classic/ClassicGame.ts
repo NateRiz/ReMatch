@@ -65,7 +65,7 @@ export default class ClassicGame{
     ResetWord(){
         this.rule = this.ruleGenerator._GetRule(Math.floor(this.score/10))
         this.ruleSpan.textContent = this.rule
-        this.ruleRegex = new RegExp(this.rule.replaceAll("*",".*").replaceAll("+", ".+"), "i");
+        this.ruleRegex = new RegExp('^'+this.rule.replaceAll("*",".*").replaceAll("+", ".+")+'$', "i");
         this.guess = "";
         this.guessSpan.textContent = this.guess;
         this.hiddenInput.value = "";

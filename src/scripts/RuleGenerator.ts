@@ -24,11 +24,16 @@ export default class RuleGenerator{
 
     GetRule(difficulty: number, minimumMatches: number){
         this.CacheWordsIfEmpty()
+        difficulty=3;
 
         var ruleBuilder = new RuleBuilder()
         var rules = [
             //this.RuleAlphaBetSubset
         ]
+        if (difficulty >= 3){
+            rules.push((_build: Array<string>) => {return ruleBuilder.RuleAlphabetSubset(_build)})
+        }
+
         if (difficulty >= 2){
             rules.push((_build: Array<string>) => {return ruleBuilder.RuleOr(_build)})
         }
@@ -180,7 +185,7 @@ class RuleBuilder{
         if (Math.floor(Math.random() * 2) == 0){
             [chr, randChar] = [randChar, chr]
         }
-        var rule = `(${chr}|${randChar})`
+        var rule = `[${chr}|${randChar}]`
         build[idx] = rule
         return true
 
@@ -188,7 +193,22 @@ class RuleBuilder{
 
     // ex: [a-k]ello => (hello) 
     RuleAlphabetSubset(build: Array<string>){
-        return false
+        if(this._GetNumberOfSubset(build) > 0){
+            return false
+        }
+
+        var availableIndices = RuleBuilder.GetLetterIndices(build);
+        var idx = availableIndices.getRandom();
+        var chr = build[idx];
+
+        const ascii_a = 98;
+        const ascii_z = 122;
+        const rangeSize = Math.floor(Math.random() * 3) + 3;
+        const start = Math.max(ascii_a, chr.charCodeAt(0) - Math.floor(Math.random() * rangeSize));
+        const end = Math.min(ascii_z, start+rangeSize)
+        var rule = `[${String.fromCharCode(start)}-${String.fromCharCode(end)}]`;
+        build[idx] = rule;
+        return true
     }
 
 
@@ -211,6 +231,16 @@ class RuleBuilder{
         var c = 0
         build.forEach((elem: string)=> {
             if (elem.includes("|")){
+                c+=1
+            }
+        })
+        return c
+    }
+
+    _GetNumberOfSubset(build: Array<string>){
+        var c = 0
+        build.forEach((elem: string)=> {
+            if (elem.includes("-")){
                 c+=1
             }
         })
