@@ -40,7 +40,8 @@ export default class Player{
     }
 
     public RemovePlayer(){
-        this.playerCard?.parentNode?.removeChild(this.playerCard);
+        const playerContainer = this.playerCard?.parentNode;
+        playerContainer?.parentElement?.removeChild(playerContainer);
     }
 
     public CreatePlayerCard(){

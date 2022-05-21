@@ -149,6 +149,13 @@ export default class MultiplayerGame{
         this.ResetGuess();
     }
 
+    OnIncorrectGuess(){
+        document.querySelector("#Guess")?.classList.add("IncorrectGuess");
+        document.querySelector("#Guess")?.classList.remove("IncorrectGuessShake");
+        window.setTimeout(()=>document.querySelector("#Guess")?.classList.add("IncorrectGuessShake"), 50);
+        
+    }
+
     OnOutOfTime(playerInfo: any){
         const player = this.GetPlayerById(playerInfo.playerId);
         if (!player){
@@ -159,6 +166,9 @@ export default class MultiplayerGame{
     }
 
     OnNextTurn(){
+        document.querySelector("#Guess")?.classList.remove("IncorrectGuess");
+        document.querySelector("#Guess")?.classList.remove("IncorrectGuessShake");
+
         this.ResetGuess();
     }
 

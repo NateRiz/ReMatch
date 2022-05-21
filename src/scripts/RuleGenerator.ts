@@ -24,7 +24,6 @@ export default class RuleGenerator{
 
     GetRule(difficulty: number, minimumMatches: number){
         this.CacheWordsIfEmpty()
-        difficulty=3;
 
         var ruleBuilder = new RuleBuilder()
         var rules = [
