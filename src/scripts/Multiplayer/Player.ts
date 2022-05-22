@@ -14,7 +14,7 @@ export default class Player{
     playerCard: HTMLDivElement | undefined;
     playerNameSpan: HTMLSpanElement | undefined;
     TeamChoiceContainer: HTMLDivElement | undefined;
-    remainingCharacters = new Set('abcdefghijklmnopqrstuw');
+    remainingCharacters = new Set('abcdefghiklmnoprstuw');
     statusEffects: string[] = [];
 
     constructor(id: string, nickname: string, team: number){
@@ -176,7 +176,7 @@ export default class Player{
         //Remove used letters from guess. Return true if the user used all letters.
         Array.from(guess).forEach((c)=>this.remainingCharacters.delete(c));
         if (this.remainingCharacters.size === 0){
-            this.remainingCharacters = new Set('abcdefghijklmnopqrstuw');
+            this.remainingCharacters = new Set('abcdefghiklmnoprstuw');
             return true;
         }
         return false;
@@ -202,6 +202,7 @@ export default class Player{
             id: this.id,
             nickname: this.nickname,
             team: this.team,
+            lives: this.lives,
         };
     }
 

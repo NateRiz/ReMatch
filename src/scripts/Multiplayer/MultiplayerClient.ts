@@ -112,7 +112,9 @@ export default class MultiplayerClient{
         })
 
         const myPlayer = this.multiplayerGame.GetPlayerById(this.multiplayerGame.me)
-        myPlayer?.ToggleTeamChoiceUI()
+        if (!this.isGameStarted){
+            myPlayer?.ToggleTeamChoiceUI();
+        }
     }
 
     private TryBuyPlayerButton(btn: HTMLImageElement, playerId: string){
@@ -165,9 +167,6 @@ export default class MultiplayerClient{
                 break;
             case "TurnEndTime":
                 this.multiplayerGame.OnReceiveTurnEndTime(args);
-                break;
-            case "TurnOrder":
-                this.multiplayerGame.OnReceiveTurnOrder(args);
                 break;
             case "Turn":
                 this.multiplayerGame.OnReceiveTurn(args);

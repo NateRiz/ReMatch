@@ -59,7 +59,8 @@ export default class MultiplayerGame{
         this.timerSpan.classList.remove("Hidden");
 
         this.players.forEach(player => {
-            player.SetLives(settings.lives);
+            // Adds the UI for hearts
+            player.SetLives(player.lives);
         });
 
         this.GetPlayerById(this.me)?.SetTeamChoiceUI(false)
@@ -79,7 +80,7 @@ export default class MultiplayerGame{
         player.CreatePlayerCard();
     }
     
-    OnReceivePlayerList(players: object[], settings: Settings){
+    OnReceivePlayerList(players: any[], settings: Settings){
         this.players = []
 
         var playerContainer = document.querySelector("#PlayerContainer");
@@ -124,10 +125,6 @@ export default class MultiplayerGame{
     OnReceiveStatus(statusInfo: any){
         const player = this.GetPlayerById(statusInfo.PlayerId);
         player!.SetStatusEffects(statusInfo.StatusEffects, this.playerButtons);
-    }
-
-    OnReceiveTurnOrder(playerIds: string[]){
-        this.players.sort((a, b) => +(playerIds.indexOf(a.id) < playerIds.indexOf(b.id)));
     }
 
     OnReceiveTurn(playerTurn: number){

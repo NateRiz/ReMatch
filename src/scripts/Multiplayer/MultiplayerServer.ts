@@ -93,17 +93,24 @@ export default class MultiplayerServer{
         ruleSpan.classList.remove("Hidden");
 
         this.multiplayerGame.ResetWord(0, this.settings.difficulty)
+        this.multiplayerGame.players.shuffle();
+        this.multiplayerGame.players.forEach(player => {
+            player.SetLives(this.settings.lives);
+        });
+
         var currentPlayer = this.multiplayerGame.players[this.multiplayerGame.turn];
         currentPlayer.lastRule = this.multiplayerGame.rule;
 
+        this.allClients.sort((a, b) => this.multiplayerGame.players.indexOf(a) - this.multiplayerGame.players.indexOf(b))
         this.SendAll(JSON.stringify({
-            "Start": null,
             "Rule": this.multiplayerGame.rule,
-            "TurnOrder": this.allClients,
+            "PlayerList": this.multiplayerGame.players,
             "Turn": 0,
             "Settings": JSON.stringify(this.settings),
             "TurnEndTime": Date.now() + this.baseTurnDuration,
         }));
+        
+        this.SendAll((JSON.stringify({"Start":null})))
 
         this.ResetTimer(this.baseTurnDuration);
     }

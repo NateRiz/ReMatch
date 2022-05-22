@@ -15,6 +15,10 @@ export default class RuleGenerator{
         })
     }
 
+    GetAvailableRulesFromDifficulty(difficulty: number){
+        return ['*', '+', '[a|z]', '[a-z]'].slice(0, difficulty + 1)
+    }
+
     _GetRule(difficulty: number, minimumMatches: number=50){
         var startTime = performance.now()
         var word = this.GetRule(difficulty, minimumMatches)
