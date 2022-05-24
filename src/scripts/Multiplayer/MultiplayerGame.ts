@@ -287,11 +287,11 @@ export default class MultiplayerGame{
 
     private SetUpWildCardMode(){
         document.querySelectorAll(".PointsContainer").forEach((pointDiv)=>{
-            pointDiv.classList.remove("Hidden")
+            // pointDiv.classList.remove("Hidden")
         })
 
         document.querySelectorAll(".PlayerButtons").forEach((btnDiv)=>{
-            btnDiv.classList.remove("Hidden");
+            // btnDiv.classList.remove("Hidden");
         })
 
         document.querySelectorAll(".PlayerButton").forEach((btn) => {
