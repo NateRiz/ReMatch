@@ -84,7 +84,7 @@ export default class Player{
             var clone = template.content.cloneNode(true) as HTMLDivElement;
             const img = clone.querySelector(".PlayerStatus") as HTMLImageElement;
             const playerButton = playerButtons[status];
-            img.src = `/src/assets/${playerButton.imageName}`;
+            img.src = `./assets/${playerButton.imageName}`;
             img.style.backgroundColor = playerButton.backgroundColor;
             img.style.cssText += playerButton.style;
             playerStatuses?.appendChild(clone);

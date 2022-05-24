@@ -131,7 +131,7 @@ export default class MultiplayerServer{
         }
         currentPlayer.lastRule = this.multiplayerGame.rule;
 
-        const turnDuration = 120000
+        const turnDuration = 20000
         this.SendAll(JSON.stringify(
             {
                 "Rule": this.multiplayerGame.rule,

@@ -30,7 +30,7 @@ export default class ClassicGame{
         this.availableRulesSpan = (document.querySelector("#AvailableRules") as HTMLSpanElement);
         this.hiddenInput = (document.querySelector("#HiddenInput") as HTMLInputElement);
         this.ResetTimer()
-        fetch('./src/assets/dict.txt')
+        fetch('./assets/dict.txt')
         .then(response => response.text())
         .then((data) => {
             var words = data.split("\n").map(e=>e.trim());

@@ -37,7 +37,7 @@ export default class MultiplayerGame{
             "LessTime": new PlayerButton("Opponent", 3, "slowdown.svg", "#c1666b"),
         };
         
-        fetch('./src/assets/dict.txt')
+        fetch('./assets/dict.txt')
         .then(response => response.text())
         .then((data) => {
             var words = data.split("\n").map(e=>e.trim());
