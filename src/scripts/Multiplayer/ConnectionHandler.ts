@@ -1,5 +1,6 @@
 import Peer from "peerjs"
 import Cookies from "../Cookies"
+import GlobalConfig from "../GlobalConfig"
 
 export default class ConnectionHandler{
     lobbyId: string
@@ -54,7 +55,7 @@ export default class ConnectionHandler{
         this.peerHost = new Peer(this.lobbyId, {
             // debug:3,
             host: "localhost",
-            port: 5500,
+            port: GlobalConfig.PORT,
             path: "/peerjs",
         });
 
@@ -88,7 +89,7 @@ export default class ConnectionHandler{
         this.peerClient = new Peer({
             // debug:3,
             host: "localhost",
-            port: 5500,
+            port: GlobalConfig.PORT,
             path: "/peerjs",
         });
 
