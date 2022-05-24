@@ -27,7 +27,7 @@ function main() {
     });
 
     app.get('/*', (_req, res) => {
-        res.sendFile('./src/views/Multiplayer.html', { root: __dirname });
+        res.sendFile('./src/views/multiplayer.html', { root: __dirname });
     });
 
 
