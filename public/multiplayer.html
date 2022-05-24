@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-    <link rel="stylesheet" href="src/css/multiplayer.css">
+    <link rel="stylesheet" href="./css/multiplayer.css">
 </head>
 
 <body>
@@ -12,9 +12,9 @@
                     <span class="SettingsHeader">Lives</span>
                 </div>
                 <div class="LivesContainer">
-                    <img id="OneLife" class="Life" src="./src/assets/heart_full.svg"/>
-                    <img id="TwoLife" class="Life" src="./src/assets/heart_empty.svg"/>
-                    <img id="ThreeLife" class="Life" src="./src/assets/heart_empty.svg"/>
+                    <img id="OneLife" class="Life" src="./assets/heart_full.svg"/>
+                    <img id="TwoLife" class="Life" src="./assets/heart_empty.svg"/>
+                    <img id="ThreeLife" class="Life" src="./assets/heart_empty.svg"/>
                 </div>
             </div>
 
@@ -157,7 +157,7 @@
 </body>
 
 <template id="LifeTemplate">
-    <img src="./src/assets/heart_full_dark.svg" height=32px width=32px/>
+    <img src="./assets/heart_full_dark.svg" height=32px width=32px/>
 </template>
 <template id="PlayerStatusTemplate">
     <div class="PlayerStatusContainer">
@@ -170,11 +170,11 @@
         <div class="PlayerButtons Hidden">
             <div class="PlayerButtonContainer Hidden">
                 <span class="ButtonExplanation Hidden">[1] Extra Time</span>
-                <img data-button="ExtraTime" class="PlayerButton" src="/src/assets/slowdown.svg" />
+                <img data-button="ExtraTime" class="PlayerButton" src="./assets/slowdown.svg" />
             </div>
             <div class="PlayerButtonContainer Hidden">
                 <span class="ButtonExplanation Hidden">[3] Less Time</span>
-                <img data-button="LessTime" class="PlayerButton" style="transform: scaleX(-1);" src="/src/assets/slowdown.svg" />
+                <img data-button="LessTime" class="PlayerButton" style="transform: scaleX(-1);" src="./assets/slowdown.svg" />
             </div>
         </div>
         <div class="PlayerTemplate PlayerTemplateSelected">
@@ -202,4 +202,4 @@
     </div>
 </template>
 
-<script src="dist/multi-bundle.js"></script>
+<script src="./dist/multi-bundle.js"></script>

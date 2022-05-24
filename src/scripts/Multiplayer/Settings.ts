@@ -143,14 +143,14 @@ export default class Settings{
         const twoButton = document.querySelector("#TwoLife") as HTMLImageElement;
         const threeButton = document.querySelector("#ThreeLife") as HTMLImageElement;
 
-        twoButton.src = '/src/assets/heart_empty.svg'
-        threeButton.src = '/src/assets/heart_empty.svg'
+        twoButton.src = './assets/heart_empty.svg'
+        threeButton.src = './assets/heart_empty.svg'
 
         if (lives >= 2){
-            twoButton.src = '/src/assets/heart_full.svg'
+            twoButton.src = './assets/heart_full.svg'
         }
         if (lives === 3){
-            threeButton.src = '/src/assets/heart_full.svg'
+            threeButton.src = './assets/heart_full.svg'
         }
 
         this.onSettingsChange();
