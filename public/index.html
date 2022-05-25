@@ -4,48 +4,67 @@
 </head>
 
 <body>
-
-    <div id="BaseLobby" class="LobbyButtonContainer">
-        <div class="TitleContainer">
-            <span class="Title">R*MATCH</span>
-        </div>
-        <div class="ButtonContainer">
-            <button id="ClassicButton" class="LobbyButton">CLASSIC</button>
-        </div>
-        <div class="ButtonContainer">
-            <button id="OnlineButton" class="LobbyButton">ONLINE</button>
-        </div>
-        <div class="ButtonContainer LobbyInputContainer">
-            <img class="UserIcon" src="./assets/user.svg" alt="Nickname" width="48" height="48">
-            <input id="NicknameInput" class="LobbyInput" value="Guest"/>
-        </div>
-    </div>
-
-    <div id="OnlineLobby" class="LobbyButtonContainer Hidden">
-        <div class="TitleContainer">
-            <span class="Title">R*MATCH</span>
-        </div>
-        <div class="ButtonContainer HorizontalElementsContainer">
-            <div>
-                <button id="OnlineBackButton" class="LobbyButton">&lt;</button>
+    <div class="Container">
+        <div id="BaseLobby" class="LobbyButtonContainer">
+            <div class="TitleContainer">
+                <span class="Title">R*MATCH</span>
             </div>
             <div class="ButtonContainer">
-                <span>ONLINE</span>
+                <button id="ClassicButton" class="LobbyButton">CLASSIC</button>
+            </div>
+            <div class="ButtonContainer">
+                <button id="OnlineButton" class="LobbyButton">ONLINE</button>
+            </div>
+            <div class="ButtonContainer LobbyInputContainer">
+                <img class="UserIcon" src="./assets/user.svg" alt="Nickname" width="48" height="48">
+                <input id="NicknameInput" class="LobbyInput" value="Guest"/>
             </div>
         </div>
-        <div class="ButtonContainer">
-            <button id="HostButton" class="LobbyButton">Host</button>
-        </div>
-        <div class="ButtonContainer HorizontalElementsContainer">
-            <div class="JoinContainer">
-                <input id="GameIdInput" class="JoinInput" placeholder="Join"/>
+
+        <div id="OnlineLobby" class="LobbyButtonContainer Hidden">
+            <div class="TitleContainer">
+                <span class="Title">R*MATCH</span>
             </div>
-            <div>
-                <button id="JoinButton" class="LobbyButton">&gt;</button>
+            <div class="ButtonContainer HorizontalElementsContainer">
+                <div>
+                    <button id="OnlineBackButton" class="LobbyButton">&lt;</button>
+                </div>
+                <div class="ButtonContainer">
+                    <span>ONLINE</span>
+                </div>
+            </div>
+            <div class="ButtonContainer">
+                <button id="HostButton" class="LobbyButton">Host</button>
+            </div>
+            <div class="ButtonContainer HorizontalElementsContainer">
+                <div class="JoinContainer">
+                    <input id="GameIdInput" class="JoinInput" placeholder="Join"/>
+                </div>
+                <div>
+                    <button id="JoinButton" class="LobbyButton">&gt;</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="RulesContainer">
+            <div class="RuleExplanationContainer">
+                <span class="RuleType">*</span>
+                <span class="RuleExplanation">Matches 0+ letters</span>
+            </div>
+            <div class="RuleExplanationContainer">
+                <span class="RuleType">+</span>
+                <span class="RuleExplanation">Matches 1+ letters</span>
+            </div>
+            <div class="RuleExplanationContainer">
+                <span class="RuleType">[a|z]</span>
+                <span class="RuleExplanation">Matches a or z</span>
+            </div>
+            <div class="RuleExplanationContainer">
+                <span class="RuleType">[a-e]</span>
+                <span class="RuleExplanation">Matches a through e</span>
             </div>
         </div>
     </div>
-
 </body>
 
 <script src="./dist/main-bundle.js"></script>

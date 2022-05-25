@@ -13,6 +13,44 @@ body, html {
   background-color: #0B132B;
 }
 
+.Container{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  justify-items: center;
+  justify-content: center;
+}
+
+.RulesContainer{
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  justify-content: center;
+  padding-top: 32px;
+  width: 100%;
+  align-items: center;
+  padding-bottom: 16px;
+}
+
+.RuleExplanationContainer{
+  display: flex;
+  flex-direction: row;
+  width: 380px;
+}
+
+.RuleType{
+  font-size: 24px;
+  white-space: nowrap;  
+  width: 64px;
+}
+
+.RuleExplanation {
+  font-size: 24px;
+  width: 100%;
+  text-align: right;
+}
+
 .LobbyButtonContainer {
   display: flex;
   flex-direction: column;
