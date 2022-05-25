@@ -9,7 +9,7 @@ export default class MultiplayerServer{
     turnTimer: number | null = null;
     settings: Settings;
     currentWordNumber:number = 1;
-    baseTurnDuration:number = 20000
+    baseTurnDuration:number = 15000
     SendAll: (message: string) => void = (_: string) => {}
     
     constructor(multiplayerGame: MultiplayerGame){
@@ -131,7 +131,7 @@ export default class MultiplayerServer{
         }
         currentPlayer.lastRule = this.multiplayerGame.rule;
 
-        const turnDuration = 20000
+        const turnDuration = this.baseTurnDuration;
         this.SendAll(JSON.stringify(
             {
                 "Rule": this.multiplayerGame.rule,
