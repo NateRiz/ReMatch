@@ -9,11 +9,13 @@ export default class ClassicGame{
     guess: string;
     lastWordIsError: boolean;
     timer: number | null;
+    timerInterval: NodeJS.Timer | undefined;
     guessSpan: HTMLSpanElement;
     ruleSpan: HTMLSpanElement;
     scoreSpan: HTMLSpanElement;
     availableRulesSpan: HTMLSpanElement;
     hiddenInput: HTMLInputElement;
+    timerSpan: HTMLSpanElement;
 
     constructor(){
         this.score = 0
@@ -29,6 +31,7 @@ export default class ClassicGame{
         this.scoreSpan = (document.querySelector("#Score") as HTMLSpanElement);
         this.availableRulesSpan = (document.querySelector("#AvailableRules") as HTMLSpanElement);
         this.hiddenInput = (document.querySelector("#HiddenInput") as HTMLInputElement);
+        this.timerSpan = document.querySelector("#TimerText") as HTMLSpanElement;
         this.ResetTimer()
         fetch('./assets/dict.txt')
         .then(response => response.text())
@@ -38,7 +41,10 @@ export default class ClassicGame{
                 this.dictionary.add(element)
             });
             console.log("loaded dict")
-        })
+        });
+
+        (document.querySelector("#Restart")as HTMLButtonElement).onclick = () => location.reload();
+
     }
 
     OnType(){        
@@ -71,11 +77,41 @@ export default class ClassicGame{
         this.hiddenInput.value = "";
     }
 
+    EndGame(){
+        this.hiddenInput.disabled = true;
+
+        const guessContainer = document.querySelector("#GuessContainer") as HTMLDivElement;
+        guessContainer.classList.add("Hidden");
+
+        const resultContainer = document.querySelector("#ResultContainer") as HTMLDivElement;
+        resultContainer.classList.remove("Hidden")
+
+        const finalScore = document.querySelector("#FinalScore") as HTMLSpanElement;
+        finalScore.textContent = this.score.toString();
+
+        const highScore = localStorage.getItem("Highscore") || "0";
+        const highScoreSpan = document.querySelector("#Highscore") as HTMLSpanElement;
+        highScoreSpan.textContent = `High Score ${Math.max(parseInt(highScore), this.score)}`;
+
+        if(this.score > parseInt(highScore)){
+            const newHighScore = document.querySelector("#NewHighScore") as HTMLDivElement;
+            newHighScore.classList.remove("Hidden");
+            localStorage.setItem("Highscore", this.score.toString());
+        }
+    }
+
     ResetTimer(){
         const duration = 20000;
         if (this.timer != null){
             window.clearTimeout(this.timer)
         }
+
+        if(this.timerInterval){
+            clearInterval(this.timerInterval);
+        }
+        this.timerInterval = setInterval(()=>{
+            this.timerSpan.textContent = (Math.max(0,parseInt(this.timerSpan.textContent || '0')-1)).toString()
+        }, 1000)
 
         var timerElement = document.body;
         
@@ -84,7 +120,7 @@ export default class ClassicGame{
 
         timerElement.style.animationDuration = Math.floor(duration / 1000).toString() +"s";
 
-        this.timer = window.setTimeout(()=>{alert("GG")}, duration)
+        this.timer = window.setTimeout(()=>{this.EndGame()}, duration)
 
     }
 

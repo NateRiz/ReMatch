@@ -25,6 +25,15 @@ body {
     border-radius: 4px;
 }
 
+.TimerTextContainer{
+    width: 33.33333%;
+    text-align: left;
+}
+
+.TimerText{
+    padding-left: 16px;
+}
+
 .Timer{
     animation-name: TimerAnimation;
     animation-duration: 20s;
@@ -102,6 +111,71 @@ body {
     justify-content: center;
 }
 
+.ResultContainer {
+    background-color: #6fffe9;
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    justify-items: center;
+    justify-content: center;
+    border-radius: 25px;
+}
+
+.ResultText {
+    color:#0B132B;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.ResultingPlaceContainer{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    justify-content: center;
+}
+
+.ResultingPlace {
+    padding: 4px;
+    border-radius: 8px;
+    color: #0b132b !important;;
+    font-size: 24px;
+}
+
+.WinnerContainer {
+    padding: 8px 16px;
+}
+
+.SinglePlaceContainer{
+    display: flex;
+    flex-direction: row;
+    border-radius: 16px;
+    margin-bottom: 8px;
+    padding: 0px 8px;
+    justify-items: center;
+    justify-content: center;
+}
+
+.ResultText {
+    color: #0b132b !important;;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.RestartContainer{
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    justify-content: center;
+}
+
+.Restart {
+    background-color: #6fffe9;
+    color: #0B132B;
+    margin: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 32px;
+}
 
 .Title {
     color: #0B132B;
