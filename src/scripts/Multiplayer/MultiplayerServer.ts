@@ -9,7 +9,7 @@ export default class MultiplayerServer{
     turnTimer: number | null = null;
     settings: Settings;
     currentWordNumber:number = 1;
-    baseTurnDuration:number = 15000
+    baseTurnDuration:number = 10000
     SendAll: (message: string) => void = (_: string) => {}
     
     constructor(multiplayerGame: MultiplayerGame){
