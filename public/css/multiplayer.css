@@ -158,7 +158,18 @@ body {
     background: #6fffe9;
     cursor: pointer;
     border-radius: 12px;
-  }
+}
+
+.DifficultyRange::-moz-range-thumb {
+    -moz-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #6fffe9;
+    cursor: pointer;
+    border-radius: 12px;
+    border-width: 0px;
+}
 
 .DifficultyRange:hover{
     opacity: 1;
