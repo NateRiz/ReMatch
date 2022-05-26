@@ -10,6 +10,7 @@ export default class ClassicGame{
     lastWordIsError: boolean;
     isMobile: boolean = false;
     timer: number | null;
+    endTime: number = -1;
     timerInterval: NodeJS.Timer | undefined;
     guessSpan: HTMLSpanElement;
     ruleSpan: HTMLSpanElement;
@@ -118,15 +119,17 @@ export default class ClassicGame{
 
     ResetTimer(){
         const duration = 20000;
+        this.endTime = Date.now() + duration;
         if (this.timer != null){
             window.clearTimeout(this.timer)
         }
 
         if(this.timerInterval){
             clearInterval(this.timerInterval);
+            this.timerSpan.textContent = (Math.ceil(duration/1000)).toString()
         }
         this.timerInterval = setInterval(()=>{
-            this.timerSpan.textContent = (Math.max(0,parseInt(this.timerSpan.textContent || '0')-1)).toString()
+            this.timerSpan.textContent = Math.max(0, Math.ceil((this.endTime - Date.now()) / 1000)).toString();
         }, 1000)
 
         var timerElement = document.body;
