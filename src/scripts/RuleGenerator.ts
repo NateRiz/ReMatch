@@ -106,7 +106,7 @@ export default class RuleGenerator{
 
     GetNumberOfMatches(word: string){
         var count = 0
-        var regExp = new RegExp(word)
+        var regExp = new RegExp(`^${word}&`)
         this.dictionary.forEach( word => {
             count += +regExp.test(word)
         });

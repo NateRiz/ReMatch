@@ -26,7 +26,7 @@ export default class ClassicGame{
         this.dictionary = new Set() // All possible words
         this.ruleGenerator = new RuleGenerator()
         this.rule = ""
-        this.ruleRegex = new RegExp(this.rule.replaceAll("*",".*"), "i");
+        this.ruleRegex = new RegExp('^'+this.rule.replaceAll("*",".*").replaceAll("+", ".+")+'$', "i");
         this.guess = ""
         this.lastWordIsError = false
         this.timer = null
