@@ -32,7 +32,6 @@ export default class MultiplayerServer{
     }
 
     OnReceiveMessage(client: Peer.DataConnection, message: string){
-        console.log(`<< [${client.peer}]: ${message}`);
         var json = JSON.parse(message);
         Object.keys(json).forEach((key)=>{
             this.DispatchCommand(client, key, json[key])
@@ -40,7 +39,6 @@ export default class MultiplayerServer{
     }
 
     OnPlayerConnect(client: Peer.DataConnection, nickname: string){
-        console.log(`<< [${client.peer}] (Connection Request)`);
 
         var randomTeam = Math.floor(Math.random()*8)
         var player = new Player(client.peer, nickname, randomTeam);

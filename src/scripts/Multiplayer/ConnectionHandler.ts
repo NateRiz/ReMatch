@@ -32,7 +32,6 @@ export default class ConnectionHandler{
     }
 
     SendToAllClients(message: string){
-        console.log(`>> [Server]: ${message}`)
         this.clients.forEach((client)=>{
             client.send(message);
         })
@@ -61,7 +60,6 @@ export default class ConnectionHandler{
         });
 
         this.peerHost.on("open", (peerid: string) => {
-            console.log("I am the host")
             this.isHost = true
             this.peerHost!.on('connection', (conn) => {
                 this.clients.push(conn)
@@ -100,7 +98,6 @@ export default class ConnectionHandler{
         })
 
         this.peerClient.on("open", (peerid)=>{
-            console.log("open peer with id ", peerid)
             this.OnCreateMyClientCallback(peerid);
             this.server = this.peerClient.connect(this.lobbyId, {reliable:true})
             

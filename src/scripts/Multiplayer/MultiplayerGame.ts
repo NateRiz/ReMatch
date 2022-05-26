@@ -44,7 +44,6 @@ export default class MultiplayerGame{
             words.forEach(element => {
                 this.dictionary.add(element)
             });
-            console.log("loaded dict")
         })
     }
 
@@ -255,7 +254,6 @@ export default class MultiplayerGame{
     TestGuess(guess: string){
         var isRuleCorrect = this.ruleRegex.test(guess)
         var isWordInDictionary = this.dictionary.has(guess)
-        console.log(isRuleCorrect, isWordInDictionary)
         var lastWordIsError = !(isRuleCorrect && isWordInDictionary)
         if (lastWordIsError){
             // this.guess = ""

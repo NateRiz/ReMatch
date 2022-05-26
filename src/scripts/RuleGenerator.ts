@@ -22,7 +22,6 @@ export default class RuleGenerator{
     _GetRule(difficulty: number, minimumMatches: number=50){
         var startTime = performance.now()
         var word = this.GetRule(difficulty, minimumMatches)
-        console.log(`Time: ${performance.now() - startTime}`)
         return word
     }
 
@@ -83,7 +82,6 @@ export default class RuleGenerator{
             numberOfMatches = this.GetNumberOfMatches(regex)
         }
 
-        console.log('Matches:', numberOfMatches);
         return newWord
     }
 
@@ -92,7 +90,6 @@ export default class RuleGenerator{
         var word = "";
         while (!this.IsValidWord(word)){
             word = this.wordList.getRandom();
-            console.log(word);
         }
 
         return Array.from(word)

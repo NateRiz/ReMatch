@@ -45,7 +45,6 @@ export default class ClassicGame{
             words.forEach(element => {
                 this.dictionary.add(element)
             });
-            console.log("loaded dict")
         });
 
         (document.querySelector("#Restart")as HTMLButtonElement).onclick = () => location.reload();
@@ -65,7 +64,6 @@ export default class ClassicGame{
         const guess = this.guess.toLowerCase();
         var isRuleCorrect = this.ruleRegex.test(guess)
         var isWordInDictionary = this.dictionary.has(guess)
-        console.log(isRuleCorrect, isWordInDictionary)
         this.lastWordIsError = !(isRuleCorrect && isWordInDictionary)
         if (this.lastWordIsError){
             // this.guess = "" ???

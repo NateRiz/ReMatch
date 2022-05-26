@@ -41,7 +41,6 @@ export default class MultiplayerClient{
     }
 
     OnReceiveMessage(message: string){
-        console.log(`<< ${message}`)
         var json = JSON.parse(message);
         Object.keys(json).forEach((key)=>{
             this.DispatchCommand(key, json[key])
