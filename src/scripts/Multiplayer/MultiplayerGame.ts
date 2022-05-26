@@ -142,6 +142,10 @@ export default class MultiplayerGame{
     }
 
     OnGuessUpdate(value: string){
+        if(this.players[this.turn].id === this.me){
+            return;
+        }
+
         this.guess = value
         this.guessSpan.textContent = this.guess
     }

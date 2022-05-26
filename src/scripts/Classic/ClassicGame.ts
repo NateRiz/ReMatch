@@ -25,7 +25,7 @@ export default class ClassicGame{
         this.score = 0
         this.dictionary = new Set() // All possible words
         this.ruleGenerator = new RuleGenerator()
-        this.rule = "R*match"
+        this.rule = ""
         this.ruleRegex = new RegExp(this.rule.replaceAll("*",".*"), "i");
         this.guess = ""
         this.lastWordIsError = false
@@ -46,6 +46,7 @@ export default class ClassicGame{
             words.forEach(element => {
                 this.dictionary.add(element)
             });
+            this.ResetWord();
         });
 
         (document.querySelector("#Restart")as HTMLButtonElement).onclick = () => location.reload();

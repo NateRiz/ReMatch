@@ -67,6 +67,9 @@ export default class MultiplayerClient{
 
     private OnType(value: string){
         if (this.multiplayerGame.IsMyTurn()){
+            this.multiplayerGame.guess = value
+            this.multiplayerGame.guessSpan.textContent = this.multiplayerGame.guess
+
             this.multiplayerGame.OnGuessUpdate(value);
             this.Send(JSON.stringify({
                 "ClientGuessUpdate": value
@@ -195,6 +198,4 @@ export default class MultiplayerClient{
                 console.log(`Invalid Command: [${command}](${args})`)
         }
     }
-
-
 }
