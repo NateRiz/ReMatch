@@ -92,6 +92,12 @@ export default class ClassicGame{
 
         this.mobileGuess.classList.add("Hidden")
 
+        const correctAnswers = document.querySelector("#CorrectAnswers") as HTMLSpanElement;
+        correctAnswers.classList.remove("Hidden");
+        const answers = this.ruleGenerator.GetCorrectAnswers(this.ruleRegex).slice(0,10);
+        correctAnswers.textContent = answers.join(" ")
+        correctAnswers.classList.add("ScrollableText")
+
         const guessContainer = document.querySelector("#GuessContainer") as HTMLDivElement;
         guessContainer.classList.add("Hidden");
 

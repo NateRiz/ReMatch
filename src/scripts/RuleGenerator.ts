@@ -124,6 +124,17 @@ export default class RuleGenerator{
     ConvertToRegex(word: string){
         return word.replace("*", ".*").replace("+",".+")
     }
+
+    GetCorrectAnswers(rexExp: RegExp){
+        var results:string[] = [];
+        this.dictionary.forEach( word => {
+            if (rexExp.test(word)){
+                results.push(word)
+            }
+        });
+
+        return results;
+    }
 }
 
 class RuleBuilder{
@@ -213,7 +224,6 @@ class RuleBuilder{
         build[idx] = rule;
         return true
     }
-
 
     static GetLetterIndices(build: Array<string>){
         var availableIndices = []
