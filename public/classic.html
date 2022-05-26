@@ -12,46 +12,49 @@
 </head>
 
 <body>
-    <div class='TopContainer'>
-        <div class="TimerTextContainer">
-            <span id="TimerText" class="TimerText">20</span>
-        </div>
-        <div class="TitleContainer">
-            <div class="TitleContainerInner">
-                <span class="Title">R*MATCH</span>
+    <div class="Container">
+        <div class='TopContainer'>
+            <div class="TimerTextContainer">
+                <span id="TimerText" class="TimerText">20</span>
             </div>
-        </div>
-        <div class="ScoreContainer">
-            <span id="Score">0</span>
-            <span id="AvailableRules">*</span>
-        </div>
-    </div>
-    <div class="GameContainer">
-        <div class="RuleContainer">
-            <span id="Rule" class="RuleText">R*match</span>
-        </div>
-        <div id="GuessContainer" class="GuessContainer">
-            <span id="Guess"></span>
-        </div>
-        <div id="ResultContainer" class="ResultContainer Hidden">
-            <span id="FinalScore" class="ResultText">0</span>
-            <div class="WinnerContainer">
-                <div class="SinglePlaceContainer">
-                    <div class="ResultingPlaceContainer ResultText">
-                        <span id="Highscore" class="ResultingPlace">High Score:</span>
-                    </div>
-                </div>
-                <div class="SinglePlaceContainer">
-                    <div id="NewHighScore" class="ResultingPlaceContainer ResultText Hidden">
-                        <span class="ResultingPlace">New High Score!</span>
-                    </div>
+            <div class="TitleContainer">
+                <div class="TitleContainerInner">
+                    <span class="Title">R*MATCH</span>
                 </div>
             </div>
-            <div class="RestartContainer">
-                <button id="Restart" class="Restart">Rematch!</button>
+            <div class="ScoreContainer">
+                <span id="Score">0</span>
+                <span id="AvailableRules">*</span>
             </div>
         </div>
-        <input id="HiddenInput" class="HiddenInput " pattern="[a-zA-Z]+"/>
+        <div class="GameContainer">
+            <div class="RuleContainer">
+                <span id="Rule" class="RuleText">R*match</span>
+            </div>
+            <div id="GuessContainer" class="GuessContainer">
+                <span id="Guess" class="Hidden"></span>
+                <input id="MobileGuess" class="MobileGuess Hidden"></div>
+            </div>
+            <div id="ResultContainer" class="ResultContainer Hidden">
+                <span id="FinalScore" class="ResultText">0</span>
+                <div class="WinnerContainer">
+                    <div class="SinglePlaceContainer">
+                        <div class="ResultingPlaceContainer ResultText">
+                            <span id="Highscore" class="ResultingPlace">High Score:</span>
+                        </div>
+                    </div>
+                    <div class="SinglePlaceContainer">
+                        <div id="NewHighScore" class="ResultingPlaceContainer ResultText Hidden">
+                            <span class="ResultingPlace">New High Score!</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="RestartContainer">
+                    <button id="Restart" class="Restart">Rematch!</button>
+                </div>
+            </div>
+            <input id="HiddenInput" class="HiddenInput " pattern="[a-zA-Z]+"/>
+        </div>
     </div>
 </body>
 

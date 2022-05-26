@@ -25,6 +25,14 @@ body {
     border-radius: 4px;
 }
 
+.Container{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    justify-content: center;
+}
+
 .TimerTextContainer{
     width: 33.33333%;
     text-align: left;
@@ -89,7 +97,6 @@ body {
 }
 
 .GameContainer {
-    height: 85%;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -188,6 +195,12 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.MobileGuess{
+    border-radius: 25px;
+    color: #0B132B;
+    text-align: center;
 }
 
 .HiddenInput {
