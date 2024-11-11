@@ -53,10 +53,10 @@ export default class ConnectionHandler{
         // Peer with id == lobbyid is the host
         this.peerHost = new Peer(this.lobbyId, {
             // debug:3,
-            host: GlobalConfig.HOST,
-            port: GlobalConfig.PORT,
-            path: GlobalConfig.PATH,
-            secure: true
+            //host: GlobalConfig.HOST,
+            //port: GlobalConfig.PORT,
+            //path: GlobalConfig.PATH,
+            // secure: true
         });
 
         this.peerHost.on("open", (peerid: string) => {
@@ -87,10 +87,10 @@ export default class ConnectionHandler{
     private CreatePeerClient(){
         this.peerClient = new Peer({
             // debug:3,
-            host: GlobalConfig.HOST,
-            port: GlobalConfig.PORT,
-            path: GlobalConfig.PATH,
-            secure: true
+            // host: GlobalConfig.HOST,
+            // port: GlobalConfig.PORT,
+            // path: GlobalConfig.PATH,
+            // secure: true
         });
 
         this.peerClient.on("error", (err)=>{

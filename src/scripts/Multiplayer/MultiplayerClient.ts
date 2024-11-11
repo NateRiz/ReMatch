@@ -53,7 +53,7 @@ export default class MultiplayerClient{
 
     private RestartGame(){
         var lobbyId = window.location.pathname.replace("/", "");
-        lobbyId = lobbyId.slice(1,) + lobbyId[0]
+        lobbyId = "rematchgame_"+lobbyId.slice(1,) + lobbyId[0]
         window.location.href = `/${lobbyId}`
     }
 
